@@ -1,0 +1,11 @@
+tweet_id,author,text,timestamp_utc,is_retweet,is_deleted
+1,trump,We will drill baby drill — American energy dominance!,2024-02-05T13:00:00Z,False,False
+2,trump,"Massive tariffs on China, our manufacturing comes home",2024-02-06T16:00:00Z,False,False
+3,trump,Our brave military needs more funding for defense,2024-02-07T22:00:00Z,False,False
+4,trump,The big banks and the Fed are ripping off Americans,2024-02-10T15:00:00Z,False,False
+5,trump,American chip makers and semiconductors will lead,2024-02-12T13:00:00Z,False,False
+6,trump,Lower drug prices now — big pharma is on notice,2024-02-13T16:00:00Z,False,False
+7,trump,"Buy American cars, the auto industry is booming",2024-02-14T22:00:00Z,False,False
+8,trump,Tech and technology are the future of America,2024-02-19T17:00:00Z,False,False
+9,trump,"Oil prices too high, OPEC must increase supply",2024-02-21T16:00:00Z,False,False
+10,trump,"Trade war with China escalates, factory jobs hit",2024-02-22T13:00:00Z,False,False
