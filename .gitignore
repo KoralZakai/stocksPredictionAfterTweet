@@ -17,3 +17,6 @@ wheels/
 .mypy_cache/
 .pytest_cache/
 .ruff_cache/
+
+# Pipeline run artifacts
+runs/

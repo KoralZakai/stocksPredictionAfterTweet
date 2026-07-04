@@ -8,6 +8,7 @@ strictly < t0; label side is strictly > t0 — they never touch.
 
 from __future__ import annotations
 
+import json
 from collections.abc import Sequence
 from dataclasses import dataclass
 from datetime import date, datetime, timezone
@@ -61,3 +62,41 @@ def build_dataset(
                 m.confidence, features, outcome.ret, labels)
         )
     return rows
+
+
+# --- artifact (de)serialization for the job DAG (§13) ------------------------
+
+
+def rows_to_json(rows: Sequence[Row]) -> str:
+    return json.dumps(
+        [
+            {
+                "tweet_id": r.tweet_id,
+                "ticker": r.ticker,
+                "t0": r.t0.isoformat(),
+                "s0_date": r.s0_date.isoformat(),
+                "map_confidence": r.map_confidence,
+                "features": r.features,
+                "ret": {str(h): v for h, v in r.ret.items()},
+                "label": {str(h): v for h, v in r.label.items()},
+            }
+            for r in rows
+        ],
+        indent=2,
+    )
+
+
+def rows_from_json(text: str) -> list[Row]:
+    return [
+        Row(
+            tweet_id=d["tweet_id"],
+            ticker=d["ticker"],
+            t0=datetime.fromisoformat(d["t0"]),
+            s0_date=date.fromisoformat(d["s0_date"]),
+            map_confidence=d["map_confidence"],
+            features=d["features"],
+            ret={int(h): v for h, v in d["ret"].items()},
+            label={int(h): v for h, v in d["label"].items()},
+        )
+        for d in json.loads(text)
+    ]

@@ -1,7 +1,7 @@
 from datetime import datetime, timezone
 
 from data.sources.interfaces import DailyBar, PriceSource, Tweet
-from dataset.build import build_dataset
+from dataset.build import build_dataset, rows_from_json, rows_to_json
 
 UTC = timezone.utc
 
@@ -31,3 +31,10 @@ def test_build_dataset_joins_features_and_labels() -> None:
     assert r.ticker == "XLE"
     assert set(r.label) == {1, 2, 3}
     assert "topic_XLE" in r.features and r.features["topic_XLE"] == 1.0
+
+
+def test_json_round_trip() -> None:
+    tweets = [Tweet("1", "trump", "drill baby drill energy",
+                    datetime(2024, 2, 6, 22, tzinfo=UTC))]
+    rows = build_dataset(tweets, _FakePrices())
+    assert rows_from_json(rows_to_json(rows)) == rows
