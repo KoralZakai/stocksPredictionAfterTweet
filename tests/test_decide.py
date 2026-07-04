@@ -29,3 +29,15 @@ def test_no_train_serve_skew() -> None:
 def test_phase0_abstains() -> None:
     d = decide(TWEET, STATE)
     assert d.abstain and d.direction == "ABSTAIN"
+
+
+class _StubPredictor:
+    def predict_direction(self, features: dict[str, float]) -> tuple[str, float, bool]:
+        return "UP", 0.8, False
+
+
+def test_decide_routes_through_predictor() -> None:
+    # A predictor's verdict flows out, but features are still the one path's.
+    d = decide(TWEET, STATE, _StubPredictor())
+    assert d.direction == "UP" and d.confidence == 0.8 and d.abstain is False
+    assert d.features == decide(TWEET, STATE).features  # features independent of predictor

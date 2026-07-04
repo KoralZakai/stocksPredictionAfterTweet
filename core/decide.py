@@ -14,10 +14,20 @@ from __future__ import annotations
 
 from collections.abc import Sequence
 from dataclasses import dataclass
+from typing import Protocol
 
 from core.features import build_features
 from core.market_state import MarketState
 from data.sources.interfaces import Tweet
+
+
+class DirectionPredictor(Protocol):
+    """Structural type a model bundle satisfies (models.Predictor). Kept as a
+    Protocol so core/ never imports models/ (would be circular via dataset)."""
+
+    def predict_direction(self, features: dict[str, float]) -> tuple[str, float, bool]:
+        """-> (direction, confidence, abstain)."""
+        ...
 
 
 @dataclass(frozen=True)
@@ -29,14 +39,21 @@ class Decision:
     abstain: bool
 
 
-def decide(tweet: Tweet, state: MarketState) -> Decision:
+def decide(
+    tweet: Tweet, state: MarketState, predictor: DirectionPredictor | None = None
+) -> Decision:
     features = build_features(tweet, state)
-    # No model yet -> abstain (step 8 attaches the GBT + conformal calibrator here).
-    return Decision(state.ticker, features, "ABSTAIN", 0.0, True)
+    if predictor is None:
+        # No model -> abstain (the honest Phase-0 / cold-start output).
+        return Decision(state.ticker, features, "ABSTAIN", 0.0, True)
+    direction, confidence, abstain = predictor.predict_direction(features)
+    return Decision(state.ticker, features, direction, confidence, abstain)
 
 
 def decide_batch(
-    tweets: Sequence[Tweet], states: Sequence[MarketState]
+    tweets: Sequence[Tweet],
+    states: Sequence[MarketState],
+    predictor: DirectionPredictor | None = None,
 ) -> list[Decision]:
     """Offline batch runner — a thin map over the SAME decide(). No second path."""
-    return [decide(t, s) for t, s in zip(tweets, states, strict=True)]
+    return [decide(t, s, predictor) for t, s in zip(tweets, states, strict=True)]

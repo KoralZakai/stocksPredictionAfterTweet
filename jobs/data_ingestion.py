@@ -33,7 +33,9 @@ def run(tweets_csv: str, bars_csv: str, out_dir: str) -> None:
     price = LocalPriceSource(bars_csv)
     bars = [b for tk in tickers for b in price.get_daily_bars(tk, *WIDE)]
 
-    store = Store(str(out / "store.duckdb"))  # validates on ingest, raises on bad data
+    store_path = out / "store.duckdb"
+    store_path.unlink(missing_ok=True)  # fresh snapshot each run (idempotent re-runs)
+    store = Store(str(store_path))  # validates on ingest, raises on bad data
     store.ingest_tweets(tweets)
     store.ingest_bars(bars)
 

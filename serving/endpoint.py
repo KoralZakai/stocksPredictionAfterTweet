@@ -23,7 +23,7 @@ from typing import Any
 
 from config.settings import SETTINGS, Settings
 from core.calendar import TradingCalendar
-from core.decide import decide
+from core.decide import DirectionPredictor, decide
 from core.market_state import market_state_as_of
 from data.sources.interfaces import PriceSource, Tweet
 from data.sources.local import LocalPriceSource
@@ -33,7 +33,11 @@ WIDE = (datetime(1990, 1, 1, tzinfo=timezone.utc), datetime(2100, 1, 1, tzinfo=t
 
 
 def predict(
-    tweet_text: str, timestamp: str, prices: PriceSource, cfg: Settings = SETTINGS
+    tweet_text: str,
+    timestamp: str,
+    prices: PriceSource,
+    predictor: DirectionPredictor | None = None,
+    cfg: Settings = SETTINGS,
 ) -> dict[str, Any]:
     t0 = datetime.fromisoformat(timestamp)
     if t0.tzinfo is None:
@@ -52,12 +56,14 @@ def predict(
         return {"ticker": m.ticker, "direction": "ABSTAIN", "confidence": 0.0,
                 "abstain": True, "reason": "no_history_before_t0"}
 
-    d = decide(Tweet("live", "endpoint", tweet_text, t0), state)
+    d = decide(Tweet("live", "endpoint", tweet_text, t0), state, predictor)
     return {"ticker": d.ticker, "direction": d.direction, "confidence": d.confidence,
             "abstain": d.abstain, "map_confidence": m.confidence}
 
 
-def _make_handler(prices: PriceSource) -> type[BaseHTTPRequestHandler]:
+def _make_handler(
+    prices: PriceSource, predictor: DirectionPredictor | None
+) -> type[BaseHTTPRequestHandler]:
     class Handler(BaseHTTPRequestHandler):
         def _send(self, code: int, payload: dict[str, Any]) -> None:
             body = json.dumps(payload).encode()
@@ -79,7 +85,7 @@ def _make_handler(prices: PriceSource) -> type[BaseHTTPRequestHandler]:
             n = int(self.headers.get("Content-Length", 0))
             try:
                 req = json.loads(self.rfile.read(n) or b"{}")
-                result = predict(req["tweet_text"], req["timestamp"], prices)
+                result = predict(req["tweet_text"], req["timestamp"], prices, predictor)
             except (KeyError, ValueError) as e:
                 self._send(400, {"error": str(e)})
                 return
@@ -95,7 +101,18 @@ def main() -> None:
     bars_csv = os.environ.get("BARS_CSV", "data/fixtures/bars.csv")
     port = int(os.environ.get("PORT", "8080"))
     prices = LocalPriceSource(Path(bars_csv))
-    server = HTTPServer(("0.0.0.0", port), _make_handler(prices))
+
+    predictor: DirectionPredictor | None = None
+    model_dir = os.environ.get("MODEL_DIR")
+    if model_dir:
+        from models.predictor import Predictor  # local import: keeps xgboost off the cold path
+
+        predictor = Predictor.load(model_dir)
+        print(f"loaded model from {model_dir}")
+    else:
+        print("no MODEL_DIR set — endpoint will abstain (no model).")
+
+    server = HTTPServer(("0.0.0.0", port), _make_handler(prices, predictor))
     print(f"serving /predict on :{port} (bars={bars_csv})")
     server.serve_forever()
 
