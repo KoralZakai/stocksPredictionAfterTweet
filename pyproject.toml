@@ -1,19 +1,25 @@
 [project]
 name = "stockspredictionaftertweet"
 version = "0.1.0"
-description = "Add your description here"
+description = "Political-tweet -> sector-ETF signal pipeline: a null-result-honest, point-in-time ML research system (Nebius Serverless)."
 requires-python = ">=3.11"
+# Runtime deps are deliberately minimal (see AGENTS.md "Dependencies"). Most of
+# the pipeline runs on the standard library (zoneinfo, statistics, random,
+# http.server, json, csv, dataclasses).
 dependencies = [
-    "duckdb>=1.5.4",
-    "pandas>=3.0.3",
-    "pydantic>=2.13.4",
+    "duckdb>=1.5.4",   # data/storage: schema-versioned store, atomic ingest, future ASOF joins
+    "pandas>=3.0.3",   # data/sources/local + jobs: CSV/parquet IO only (pulls pyarrow at 3.x)
+    "pydantic>=2.13.4",# config/settings: frozen, validated pre-registered config
 ]
+# NOTE: no ML dependency yet. The primary model (XGBoost, build step 8) is not
+# wired — until then serving/endpoint.py abstains by design. The /predict server
+# uses stdlib http.server (no FastAPI/uvicorn dependency).
 
 [dependency-groups]
 dev = [
-    "mypy>=2.1.0",
-    "pytest>=9.1.1",
-    "ruff>=0.15.20",
+    "mypy>=2.1.0",     # `mypy .` strict type gate (CI-mandatory, see AGENTS.md)
+    "pytest>=9.1.1",   # `pytest -q` — includes the correctness-invariant tests
+    "ruff>=0.15.20",   # `ruff check .` lint + format
 ]
 
 [tool.pytest.ini_options]
