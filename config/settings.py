@@ -33,6 +33,9 @@ class Settings(BaseModel):
     embargo_sessions: int = 3
     alpha: float = 0.05
 
+    # Conformal abstention target coverage (§8), pre-registered.
+    conformal_coverage: float = 0.9
+
     # Reproducibility (§12).
     seed: int = 0
     schema_version: int = 1

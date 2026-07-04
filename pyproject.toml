@@ -34,6 +34,6 @@ namespace_packages = true
 mypy_path = "."
 
 [[tool.mypy.overrides]]
-module = ["duckdb", "pandas", "pandas.*", "numpy", "numpy.*"]
+module = ["duckdb", "pandas", "pandas.*", "numpy", "numpy.*", "xgboost", "xgboost.*"]
 ignore_missing_imports = true
 follow_imports = "skip"
