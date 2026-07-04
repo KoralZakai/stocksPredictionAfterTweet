@@ -10,10 +10,11 @@ dependencies = [
     "duckdb>=1.5.4",   # data/storage: schema-versioned store, atomic ingest, future ASOF joins
     "pandas>=3.0.3",   # data/sources/local + jobs: CSV/parquet IO only (pulls pyarrow at 3.x)
     "pydantic>=2.13.4",# config/settings: frozen, validated pre-registered config
+    "xgboost>=3.2.0",  # models/gbt (build step 8) — primary model on structured features
 ]
-# NOTE: no ML dependency yet. The primary model (XGBoost, build step 8) is not
-# wired — until then serving/endpoint.py abstains by design. The /predict server
-# uses stdlib http.server (no FastAPI/uvicorn dependency).
+# NOTE: xgboost is installed but NOT yet wired into decide() — models/gbt.py and
+# conformal abstain are still to build (step 8), so serving/endpoint.py abstains
+# by design until then. The /predict server uses stdlib http.server (no FastAPI).
 
 [dependency-groups]
 dev = [
