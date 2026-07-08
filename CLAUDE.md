@@ -1,6 +1,15 @@
 CLAUDE.md — Political-Tweet -> Sector-ETF Signal Pipeline (V1, offline, daily bars; Nebius-serverless-deployed)
 Drop this at repo root. Claude Code loads it as standing context. Treat the Hard Correctness Invariants and Non-Goals as non-negotiable; they override convenience.
 Deployment target: the pipeline runs as **Nebius Serverless AI Jobs** (batch) plus one **Nebius Serverless AI Endpoint** (`/predict`), per the Serverless Builders Challenge. The serverless layer is orchestration + packaging ONLY — it wraps the pure modules below and adds no second feature path (§3.2). See §13.
+
+> **SUPERSEDED design choices (see `NEBIUS_SERVERLESS_CHALLANGE_ARCHITECTURE.md`, v2 — latest).** v2 wins on these non-invariant decisions; where anything below still reads the old way, v2 is authoritative:
+> - **Horizons: 1d / 3d / 5d** (was 1/2/3). Per-horizon thresholds `thr[h]`, tighter at 1d.
+> - **Labels off _abnormal_ (SPY-adjusted) return** `abnormal_ret_h = raw_ret_h − spy_ret_h`, still vol-scaled/backward-only.
+> - **Multi-sector**: one tweet → zero/one/many candidate ETFs; dataset is a `(tweet × ETF × horizon)` cross-product; purge by `tweet_id`. (v1 argmax single-sector demoted to a diagnostic.)
+> - **`/predict` returns a ranked multi-sector list** with relevance scores + explanation.
+>
+> The **Hard Correctness Invariants (§3) and Non-Goals (§2) below still win** — v2 was designed within them, not against them.
+
 1. Objective & scientific frame
 A rigor exercise in ML-systems design under weak/near-null signal, not a trading system. Success = correctness, labeling rigor, calibrated abstention, and an evaluation that cannot fool itself. Predictive accuracy is NOT a success metric. A rigorous null result is a full success.
 Scope of the measurement: with daily OHLCV we measure 1–3 trading-day drift-association between a tweet and its mapped sector ETF. We do NOT claim to measure the causal reaction — that is priced in seconds and is invisible to daily bars. Any finding is an association at the drift horizon, guilty until it survives §4.

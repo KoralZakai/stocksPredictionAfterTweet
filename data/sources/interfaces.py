@@ -19,6 +19,8 @@ class Tweet:
     timestamp_utc: datetime  # tz-aware; §9 asserts precision is sufficient to place vs session
     is_retweet: bool = False
     is_deleted: bool = False  # observed deleted in a later crawl; survivorship flag, §9
+    platform: str = "twitter"  # unified-corpus metadata (twitter|truth_social); NOT a model branch
+    source: str = ""  # provenance: which archive/dataset the post came from (§9 audit)
 
 
 @dataclass(frozen=True)

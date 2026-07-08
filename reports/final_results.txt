@@ -1,0 +1,196 @@
+
+==============================================================================
+1. DATASET SUMMARY
+==============================================================================
+market-relevant posts :     2385   (market_events.csv)
+event rows (post x asset): 23238   (stock_event_dataset.csv)
+unique posts w/ rows  :     2358
+assets                :       47 (ETFs+SPY rows 6219, stock rows 17019)
+coverage              : 2025-01-01 .. 2026-06-29
+by platform (rows)    : {'truth_social': 23238}
+by source (rows)      : {'truth_social_dataset': 14011, 'cnn_truth_archive': 9227}
+by link layer (rows)  : {'sector': 12456, 'theme': 7787, 'macro': 2358, 'direct': 637}
+label balance + 1s    : {'NEUTRAL': 12380, 'DOWN': 5517, 'UP': 5341}
+label balance + 5s    : {'NEUTRAL': 10144, 'UP': 6893, 'DOWN': 6201}
+label balance +21s    : {'NEUTRAL': 8831, 'UP': 6565, 'DOWN': 6290, nan: 1552}
+
+==============================================================================
+2. GLOBAL INSIGHTS (descriptive — outcome-ranked, NOT features)
+==============================================================================
+
+A) top affected SECTORS (ETF rows, median |abnormal 5s|, n>=30):
+   XLE   n=  555   median |abn_5s| = 2.70%
+   SMH   n=  426   median |abn_5s| = 2.27%
+   XLV   n=   69   median |abn_5s| = 1.72%
+   ITA   n= 1097   median |abn_5s| = 1.45%
+   XLY   n=  362   median |abn_5s| = 1.26%
+   XLB   n=  469   median |abn_5s| = 1.26%
+   XLK   n=   36   median |abn_5s| = 1.00%
+   XLF   n=  180   median |abn_5s| = 0.75%
+   XLI   n=  472   median |abn_5s| = 0.71%
+
+B) top affected STOCKS (median |abnormal 5s|, n>=30):
+   INTC  n=   38   median |abn_5s| = 4.95%
+   TSLA  n=   57   median |abn_5s| = 4.48%
+   AVGO  n=   33   median |abn_5s| = 4.44%
+   DJT   n=  504   median |abn_5s| = 4.31%
+   AMD   n=   35   median |abn_5s| = 4.30%
+   NVDA  n=   41   median |abn_5s| = 3.98%
+   SLB   n=  170   median |abn_5s| = 3.55%
+   NKE   n=   31   median |abn_5s| = 3.53%
+   ABBV  n=   59   median |abn_5s| = 3.34%
+   AMZN  n=   50   median |abn_5s| = 2.97%
+   LMT   n=  828   median |abn_5s| = 2.93%
+   XOM   n=  170   median |abn_5s| = 2.92%
+
+C) which tweet TYPES coincide with the biggest moves (theme, vol-normalized):
+   oil_energy_geopolitics     n=  271   median |abn_5s| / expected vol = 0.83x
+   pharma_healthcare          n=  215   median |abn_5s| / expected vol = 0.72x
+   defense_geopolitics        n= 1544   median |abn_5s| / expected vol = 0.62x
+   agriculture                n= 1420   median |abn_5s| / expected vol = 0.61x
+   evs_autos                  n=   96   median |abn_5s| / expected vol = 0.59x
+   manufacturing_reshoring    n=  692   median |abn_5s| / expected vol = 0.57x
+   jobs_economy               n=  481   median |abn_5s| / expected vol = 0.54x
+   semis_tech_supplychain     n=  219   median |abn_5s| / expected vol = 0.51x
+   tariffs_trade              n= 3199   median |abn_5s| / expected vol = 0.50x
+   fed_rates                  n= 1221   median |abn_5s| / expected vol = 0.50x
+   stock_market_macro         n=  692   median |abn_5s| / expected vol = 0.50x
+   china                      n= 1012   median |abn_5s| / expected vol = 0.48x
+   aerospace_aviation         n=   71   median |abn_5s| / expected vol = 0.46x
+   taxes                      n=  236   median |abn_5s| / expected vol = 0.42x
+   banks_regulation           n=    8   median |abn_5s| / expected vol = 0.14x
+
+   (1.00x = moves after these tweets match the asset's normal volatility)
+
+==============================================================================
+3. TWENTY EXAMPLE TWEETS (source, date+hour UTC, matched assets, reaction)
+==============================================================================
+
+-- 10 with the STRONGEST post-tweet abnormal moves (tail-picked, illustrative) --
+
+[2025-12-17 03:00 UTC] truth_social / truth_social_dataset
+  "Unreasonable Search and Seizure!!! That was the FBI’s CRIMINAL RAID on Mar-a-Lago. This can never be allowed t"
+  DJT   rel=1.00  1s -1.17%  5s +30.39%  21s +27.23%  lab5=UP  [post names DJT (or its exec/brand) directly]
+  SPY   rel=0.20  1s -1.25%  5s +1.49%  21s +2.03%  lab5=UP  [macro post (themes [keywords]) -> market benchmark]
+
+[2025-12-17 05:00 UTC] truth_social / truth_social_dataset
+  "Why did Brown University have so few Security Cameras? There can be no excuse for that. In the modern age, it "
+  DJT   rel=1.00  1s -1.17%  5s +30.39%  21s +27.23%  lab5=UP  [post names DJT (or its exec/brand) directly]
+  SPY   rel=0.20  1s -1.25%  5s +1.49%  21s +2.03%  lab5=UP  [macro post (themes [keywords]) -> market benchmark]
+
+[2025-05-11 22:00 UTC] truth_social / truth_social_dataset
+  "For many years the World has wondered why Prescription Drugs and Pharmaceuticals in the United States States o"
+  XLV   rel=1.00  1s +2.06%  5s -2.03%  21s -1.61%  lab5=DOWN  [sector keywords in post -> XLV]
+  ABBV  rel=0.50  1s +5.33%  5s +0.04%  21s +1.56%  lab5=NEUTRAL  [sector keywords in post -> XLV]
+  PFE   rel=0.50  1s +3.61%  5s +0.51%  21s +5.60%  lab5=NEUTRAL  [sector keywords in post -> XLV]
+
+[2025-03-11 15:00 UTC] truth_social / cnn_truth_archive
+  "Why would our Country allow another Country to supply us with electricity, even for a small area? Who made the"
+  SMH   rel=1.00  1s +0.68%  5s +2.52%  21s -2.19%  lab5=NEUTRAL  [sector keywords in post -> SMH]
+  AVGO  rel=0.50  1s -0.43%  5s -3.64%  21s -3.24%  lab5=NEUTRAL  [sector keywords in post -> XLK/SMH]
+  AMD   rel=0.50  1s +2.34%  5s +4.71%  21s -0.11%  lab5=UP  [sector keywords in post -> XLK/SMH]
+
+[2026-04-22 03:00 UTC] truth_social / cnn_truth_archive
+  "US intel secretly flagged major 2020 election vulnerabilities, including voter data, memo: https://justthenews"
+  INTC  rel=1.00  1s -4.22%  5s +24.05%  21s +70.57%  lab5=UP  [post names INTC (or its exec/brand) directly]
+  SPY   rel=0.20  1s +0.29%  5s +0.36%  21s +4.53%  lab5=NEUTRAL  [macro post (themes [keywords]) -> market benchmark]
+
+[2025-06-26 13:00 UTC] truth_social / cnn_truth_archive
+  "The cars and small trucks at the site were those of concrete workers trying to cover up the top of the shafts."
+  XLY   rel=1.00  1s +0.36%  5s +1.29%  21s +0.84%  lab5=UP  [sector keywords in post -> XLY]
+  HD    rel=0.50  1s -0.40%  5s +0.49%  21s -1.28%  lab5=NEUTRAL  [sector keywords in post -> XLY]
+  AMZN  rel=0.50  1s +1.40%  5s +1.31%  21s +3.98%  lab5=NEUTRAL  [sector keywords in post -> XLY]
+
+[2025-03-19 01:00 UTC] truth_social / cnn_truth_archive
+  "Wow. What a great interview of Elon Musk by Sean Hannity. A must watch. TWO GREAT AMERICANS!!!  DJT"
+  DJT   rel=1.00  1s +0.71%  5s +10.16%  21s +3.61%  lab5=UP  [post names DJT (or its exec/brand) directly]
+  TSLA  rel=1.00  1s +1.07%  5s +21.86%  21s +10.61%  lab5=UP  [post names TSLA (or its exec/brand) directly]
+  SPY   rel=0.20  1s +0.76%  5s +2.55%  21s -6.32%  lab5=UP  [macro post (themes [keywords]) -> market benchmark]
+
+[2025-04-11 13:00 UTC] truth_social / cnn_truth_archive
+  "The House and Senate should push hard for more Daylight at the end of a day. Very popular and, most importantl"
+  DJT   rel=1.00  1s -1.26%  5s +21.77%  21s +28.16%  lab5=UP  [post names DJT (or its exec/brand) directly]
+  SPY   rel=0.20  1s -0.91%  5s -5.55%  21s +7.87%  lab5=DOWN  [macro post (themes [keywords]) -> market benchmark]
+
+[2025-01-18 04:00 UTC] truth_social / cnn_truth_archive
+  "Coming up, THE MOST IMPORTANT WEEKEND, PLUS, IN AMERICAN HISTORY. ENJOY!  DJT"
+  DJT   rel=1.00  1s -5.72%  5s -21.21%  21s -26.89%  lab5=DOWN  [post names DJT (or its exec/brand) directly]
+  SPY   rel=0.20  1s +0.40%  5s -0.22%  21s +2.04%  lab5=NEUTRAL  [macro post (themes [keywords]) -> market benchmark]
+
+[2025-09-14 18:00 UTC] truth_social / cnn_truth_archive
+  "When Foreign Companies who are building extremely complex products, machines, and various other "things," come"
+  SMH   rel=1.00  1s +0.91%  5s +3.02%  21s +11.03%  lab5=UP  [sector keywords in post -> SMH]
+  AMD   rel=0.50  1s +0.53%  5s -2.53%  21s +34.46%  lab5=NEUTRAL  [sector keywords in post -> XLK/SMH]
+  TSM   rel=0.50  1s +0.34%  5s +1.30%  21s +16.07%  lab5=NEUTRAL  [sector keywords in post -> SMH]
+
+-- 10 RANDOM market-relevant tweets (seeded; the honest typical case) --
+
+[2025-10-29 22:00 UTC] truth_social / cnn_truth_archive
+  "https://truthsocial.com/users/traleecan/statuses/115459728361788892Such an honor. Millions of lives saved. Tha"
+  DJT   rel=1.00  1s -2.29%  5s -9.31%  21s -26.82%  lab5=DOWN  [post names DJT (or its exec/brand) directly]
+  SPY   rel=0.20  1s -0.60%  5s -0.92%  21s -0.07%  lab5=NEUTRAL  [macro post (themes [keywords]) -> market benchmark]
+
+[2025-07-23 13:00 UTC] truth_social / truth_social_dataset
+  "Remember, Japan is, for the first time ever, OPENING ITS MAKET TO THE USA, even to cars, SUV’s, Trucks, -and e"
+  XLI   rel=0.60  1s +0.53%  5s -0.28%  21s -1.73%  lab5=NEUTRAL  [sector keywords in post -> XLI]
+  XLB   rel=0.50  1s -0.48%  5s -2.33%  21s -3.39%  lab5=DOWN  [policy themes [tariffs_trade/agriculture] -> XLB]
+  SMH   rel=0.40  1s +0.04%  5s +2.08%  21s +0.24%  lab5=UP  [policy themes [tariffs_trade/agriculture] -> SMH]
+
+[2025-06-19 13:00 UTC] truth_social / cnn_truth_archive
+  "The Wall Street Journal has No Idea what my thoughts are concerning Iran!"
+  XLF   rel=1.00  1s +0.67%  5s +0.92%  21s -0.71%  lab5=NEUTRAL  [sector keywords in post -> XLF]
+  BAC   rel=0.50  1s +1.10%  5s +2.49%  21s -0.29%  lab5=UP  [sector keywords in post -> XLF]
+  GS    rel=0.50  1s +0.99%  5s +5.31%  21s +5.44%  lab5=UP  [sector keywords in post -> XLF]
+
+[2025-02-11 16:00 UTC] truth_social / truth_social_dataset
+  "I am pleased to announce that Terry Cole will be the next Drug Enforcement Administration (DEA) Administrator."
+  XLK   rel=1.00  1s +0.52%  5s +1.65%  21s -2.90%  lab5=NEUTRAL  [sector keywords in post -> XLK]
+  AVGO  rel=0.50  1s +1.91%  5s -3.00%  21s -8.96%  lab5=NEUTRAL  [sector keywords in post -> XLK/SMH]
+  AMD   rel=0.50  1s +1.31%  5s +2.43%  21s -2.44%  lab5=NEUTRAL  [sector keywords in post -> XLK/SMH]
+
+[2025-06-30 06:00 UTC] truth_social / cnn_truth_archive
+  "The Trump Administration has gotten costs down, very substantially, for the American Consumer. There has never"
+  XLY   rel=1.00  1s -0.62%  5s -0.59%  21s -0.10%  lab5=NEUTRAL  [sector keywords in post -> XLY]
+  HD    rel=0.50  1s -0.79%  5s -0.98%  21s -0.71%  lab5=NEUTRAL  [sector keywords in post -> XLY]
+  AMZN  rel=0.50  1s -1.92%  5s -0.56%  21s +0.45%  lab5=NEUTRAL  [sector keywords in post -> XLY]
+
+[2025-06-10 13:00 UTC] truth_social / truth_social_dataset
+  "If I didn’t “SEND IN THE TROOPS” to Los Angeles the last three nights, that once beautiful and great City woul"
+  ITA   rel=1.00  1s +1.18%  5s +1.51%  21s +2.35%  lab5=UP  [sector keywords in post -> ITA]
+  GD    rel=0.50  1s +0.24%  5s +2.85%  21s +6.35%  lab5=UP  [sector keywords in post -> ITA]
+  BA    rel=0.50  1s -0.23%  5s -5.97%  21s +1.74%  lab5=DOWN  [sector keywords in post -> XLI/ITA]
+
+[2025-12-02 10:00 UTC] truth_social / cnn_truth_archive
+  "Great news! QDallas County, Texas, just went to all PAPER BALLOTS. Many others are following suit! More accura"
+  DJT   rel=1.00  1s +1.14%  5s +0.02%  21s +19.31%  lab5=NEUTRAL  [post names DJT (or its exec/brand) directly]
+  SPY   rel=0.20  1s -0.06%  5s +0.25%  21s +0.30%  lab5=NEUTRAL  [macro post (themes [keywords]) -> market benchmark]
+
+[2025-11-10 15:00 UTC] truth_social / cnn_truth_archive
+  "All money left over from the $2000 payments made to low and middle income USA Citizens, from the massive Tarif"
+  DJT   rel=1.00  1s -3.89%  5s -16.69%  21s -16.54%  lab5=DOWN  [post names DJT (or its exec/brand) directly]
+  XLI   rel=1.00  1s -0.43%  5s -0.29%  21s +0.08%  lab5=NEUTRAL  [sector keywords in post -> XLI]
+  GE    rel=0.50  1s -0.38%  5s -1.24%  21s -9.78%  lab5=NEUTRAL  [sector keywords in post -> XLI]
+
+[2026-06-17 05:00 UTC] truth_social / cnn_truth_archive
+  "Congratulations to Rick Jackson, who very successfully campaigned on being "TRUMP," and won. He will be your n"
+  DJT   rel=1.00  1s +1.35%  5s -5.03%  21s n/a  lab5=DOWN  [post names DJT (or its exec/brand) directly]
+  SPY   rel=0.20  1s -1.38%  5s -2.15%  21s n/a  lab5=DOWN  [macro post (themes [keywords]) -> market benchmark]
+
+[2025-09-05 10:00 UTC] truth_social / truth_social_dataset
+  "Looks like we’ve lost India and Russia to deepest, darkest, China. May they have a long and prosperous future "
+  SMH   rel=0.50  1s +0.04%  5s +2.06%  21s +11.10%  lab5=UP  [policy themes [china] -> SMH]
+  XLI   rel=0.40  1s +0.11%  5s -0.25%  21s -0.83%  lab5=NEUTRAL  [policy themes [china] -> XLI]
+  XLB   rel=0.30  1s +0.98%  5s +0.09%  21s -4.50%  lab5=NEUTRAL  [policy themes [china] -> XLB]
+
+==============================================================================
+4. CONCLUSION — SIGNAL OR NOISE? (empirical)
+==============================================================================
+
+median |abn_5s| / expected 5-session vol, linked rows : 0.58x
+  direct   layer: 0.57x
+  sector   layer: 0.60x
+  theme    layer: 0.50x
+  SPY (market itself, raw): 0.66x
+
+VERDICT: MOSTLY NOISE: post-tweet abnormal moves are at or below the assets' normal volatility.
+Direction balance of labels (UP vs DOWN) is near-symmetric — no exploitable directional edge is claimed from this table. The tail examples in §3 are selected on outcomes and carry no evidential weight (§3.1).

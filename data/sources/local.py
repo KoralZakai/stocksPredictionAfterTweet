@@ -46,6 +46,52 @@ class LocalTweetSource(TweetSource):
         return out
 
 
+def load_corpus(
+    path: str | Path,
+    start: datetime,
+    end: datetime,
+    *,
+    originals_only: bool = True,
+    exclude_reblogs: bool = True,
+    platforms: tuple[str, ...] | None = None,
+) -> list[Tweet]:
+    """Load the unified event corpus (§ data strategy) as Tweet objects.
+
+    Maps the platform-agnostic schema onto the pipeline's Tweet: post_id->tweet_id,
+    is_reblog->is_retweet, author constant 'trump'. The training-time filters
+    (originals-only, reblog/quote exclusion, platform, date range) live here so
+    the choice is one reproducible call, not scattered downstream.
+    """
+    df = _read(Path(path))
+    ts = pd.to_datetime(df["timestamp_utc"], utc=True)
+    keep = (ts >= start) & (ts < end)
+    if originals_only:
+        keep &= df["is_original"].astype(str) == "True"
+    if exclude_reblogs:
+        keep &= df["is_reblog"].astype(str) != "True"
+    if platforms is not None:
+        keep &= df["platform"].isin(platforms)
+    # DATASEARCH §1 dedup: the same post ingested from two archives (same id, or
+    # identical timestamp+text under different ids) must yield ONE event row.
+    sub = df[keep].assign(ts_utc=ts[keep])
+    sub = sub.drop_duplicates(subset=["post_id"]).drop_duplicates(subset=["ts_utc", "text"])
+    out = [
+        Tweet(
+            tweet_id=str(r.post_id),
+            author="trump",
+            text=str(r.text),
+            timestamp_utc=r.ts_utc.to_pydatetime(),
+            is_retweet=str(r.is_reblog) == "True",
+            is_deleted=False,
+            platform=str(r.platform),
+            source=str(getattr(r, "source_dataset", "")),
+        )
+        for r in sub.itertuples(index=False)
+    ]
+    out.sort(key=lambda x: x.timestamp_utc)
+    return out
+
+
 class LocalPriceSource(PriceSource):
     def __init__(self, path: str | Path) -> None:
         self.path = Path(path)

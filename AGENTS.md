@@ -76,6 +76,18 @@ The FEATURE and LABEL sets never overlap: features use bars closed **before**
 | `scripts/phase0_mvp.py` | MVP-10 harness | `main` | Phase-0 correctness demo (§10) |
 | `scripts/phase1_report.py` | Report runner | `main` | prints signal-or-null table |
 
+### Real-data pipeline (DATASEARCH.md, runs in this order)
+
+| Script | Input -> Output | Notes |
+|---|---|---|
+| `scripts/normalize_trump_tweets.py` | 2 raw archives -> `data/real/tweets.csv` | 2009-2021; snowflake UTC; pre-snowflake rows use empirically-tz'd Time col (`ts_confidence=min`) |
+| `scripts/build_corpus.py` | tweets + HF Truth parquet -> `corpus.csv` | unified schema, dedup earliest-wins |
+| `scripts/build_corpus_v3.py` | + CNN Truth parquet -> `corpus_v3.csv` | dedup prefers ms-precision; 2009-2026 |
+| `scripts/fetch_real_bars.py` | yfinance -> `data/real/bars.csv` | 47 tickers (10 ETFs+SPY+35 stocks+DJT), 2008-2026 |
+| `scripts/build_stock_dataset_v3.py` | corpus_v3 + bars -> `market_events.csv` + `stock_event_dataset.csv` | relevance filter + (post x asset) events; SPY always included; sector-adjusted `sec_h`; provenance + `explanation` per row |
+| `scripts/final_results.py` | events -> `reports/final_results.txt` | summary + global insights + 20 examples + signal-or-noise verdict |
+| `scripts/explore_v3.py` | legacy `stock_events_v3.csv` | older exploratory view (superseded by final_results) |
+
 ## Entry points
 
 ```bash

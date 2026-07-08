@@ -17,7 +17,7 @@ import statistics
 from config.settings import SETTINGS
 from core.market_state import MarketState
 from data.sources.interfaces import Tweet
-from sector_mapping.rules import SECTOR_KEYWORDS
+from sector_mapping.rules import SECTOR_TRIGGERS, sector_scores
 
 _TREND_WINDOW = 5
 
@@ -25,10 +25,11 @@ _TREND_WINDOW = 5
 def build_features(tweet: Tweet, state: MarketState) -> dict[str, float]:
     f: dict[str, float] = {}
 
-    # Topic one-hots / entity flags from the tweet text (§5).
-    tl = tweet.text.lower()
-    for tk, words in SECTOR_KEYWORDS.items():
-        f[f"topic_{tk}"] = float(any(w in tl for w in words))
+    # Topic one-hots from the tweet text (§5) — same stricter mapper the causal
+    # chain uses, so features and sector assignment can't disagree.
+    scores = sector_scores(tweet.text)
+    for tk in SECTOR_TRIGGERS:
+        f[f"topic_{tk}"] = float(scores.get(tk, 0) > 0)
 
     f["weekday"] = float(tweet.timestamp_utc.weekday())
 

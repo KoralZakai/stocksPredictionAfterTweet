@@ -31,16 +31,27 @@ class TradingCalendar:
         self._dates: list[date] = sorted(set(session_dates))
         self._half: frozenset[date] = frozenset(half_days)
         self._idx: dict[date, int] = {d: i for i, d in enumerate(self._dates)}
+        # ponytail: pure memo caches — zoneinfo conversion dominates bulk dataset
+        # builds (millions of open/close lookups over ~2.6k distinct dates).
+        self._open_memo: dict[date, datetime] = {}
+        self._close_memo: dict[date, datetime] = {}
 
     @property
     def dates(self) -> list[date]:
         return list(self._dates)
 
     def open_utc(self, d: date) -> datetime:
-        return _et_to_utc(d, REGULAR_OPEN)
+        v = self._open_memo.get(d)
+        if v is None:
+            v = self._open_memo[d] = _et_to_utc(d, REGULAR_OPEN)
+        return v
 
     def close_utc(self, d: date) -> datetime:
-        return _et_to_utc(d, HALF_DAY_CLOSE if d in self._half else REGULAR_CLOSE)
+        v = self._close_memo.get(d)
+        if v is None:
+            t = HALF_DAY_CLOSE if d in self._half else REGULAR_CLOSE
+            v = self._close_memo[d] = _et_to_utc(d, t)
+        return v
 
     def resolve_s0(self, t0: datetime) -> date | None:
         """First session whose open is strictly after t0, or None if past the data."""

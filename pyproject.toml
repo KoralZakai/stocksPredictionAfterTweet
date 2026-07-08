@@ -11,6 +11,7 @@ dependencies = [
     "pandas>=3.0.3",   # data/sources/local + jobs: CSV/parquet IO only (pulls pyarrow at 3.x)
     "pydantic>=2.13.4",# config/settings: frozen, validated pre-registered config
     "xgboost>=3.2.0",  # models/gbt (build step 8) — primary model on structured features
+    "yfinance>=0.2.40",# data ingestion: free daily OHLCV for the 10 ETFs + SPY (no API key)
 ]
 # NOTE: xgboost is installed but NOT yet wired into decide() — models/gbt.py and
 # conformal abstain are still to build (step 8), so serving/endpoint.py abstains
@@ -34,6 +35,6 @@ namespace_packages = true
 mypy_path = "."
 
 [[tool.mypy.overrides]]
-module = ["duckdb", "pandas", "pandas.*", "numpy", "numpy.*", "xgboost", "xgboost.*"]
+module = ["duckdb", "pandas", "pandas.*", "numpy", "numpy.*", "xgboost", "xgboost.*", "yfinance"]
 ignore_missing_imports = true
 follow_imports = "skip"
