@@ -1,0 +1,7 @@
+ticker,what_is_it,tweet_stance_on_this_stock,prev_close_before_tweet,session_open,open+1h,end_of_day,pct_vs_prev_close_session_open,pct_vs_prev_close_open+1h,pct_vs_prev_close_end_of_day,actual_direction_eod,matches_tweet_stance
+XLE,Energy Select Sector SPDR ETF - basket of the whole US oil & gas sector,negative,53.84,54.09,53.96,53.58,0.47,0.22,-0.48,down,"MATCH (moved down, as bearish-for-revenue stance implies)"
+XOM,Exxon Mobil - integrated oil & gas major (production + refining),negative,136.54,136.85,136.28,136.06,0.23,-0.19,-0.35,down,"MATCH (moved down, as bearish-for-revenue stance implies)"
+CVX,Chevron - integrated oil & gas major (production + refining),negative,171.06,,169.18,168.47,,-1.1,-1.51,down,"MATCH (moved down, as bearish-for-revenue stance implies)"
+COP,"ConocoPhillips - independent oil & gas producer (E&P, no refining)",negative,105.96,106.01,105.28,104.2,0.05,-0.64,-1.66,down,"MATCH (moved down, as bearish-for-revenue stance implies)"
+SLB,"SLB (Schlumberger) - oilfield services (drilling/equipment, not a producer)",negative,47.0,47.02,46.81,46.38,0.04,-0.4,-1.32,down,"MATCH (moved down, as bearish-for-revenue stance implies)"
+EOG,EOG Resources - independent shale oil & gas producer (E&P),negative,132.6,132.94,134.16,131.93,0.26,1.18,-0.51,down,"MATCH (moved down, as bearish-for-revenue stance implies)"
