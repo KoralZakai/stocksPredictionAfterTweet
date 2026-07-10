@@ -116,20 +116,80 @@ HEADLINE: 0 of 3 cells survive BH correction (alpha=0.05).
 
 Real Trump tweets + real ETF OHLCV drop into the same pipeline unchanged.
 
+## Reproduce the whole DAG (no Nebius account needed)
+
+`scripts/run_dag.sh` runs the exact six Jobs that `deploy/nebius/deploy.sh`
+submits — same entrypoints, same argument shapes, same order — so a reviewer can
+reproduce the pipeline locally and the serverless manifests are exercised in
+shape before they touch a tenant.
+
+```bash
+./scripts/run_dag.sh fixture   # synthetic 10-tweet fixture, seconds
+./scripts/run_dag.sh real      # real posts + real bars
+```
+
+## Deploy to Nebius Serverless
+
+Six batch **Jobs** (the DAG) + one **Endpoint** (`/predict`), all from the one
+CPU image, so batch and serve cannot drift (§3.2).
+
+```bash
+cp deploy/nebius/env.example deploy/nebius/.env   # fill in project/subnet/image/bucket
+DRY_RUN=1 ./deploy/nebius/deploy.sh all           # print every command, change nothing
+./deploy/nebius/deploy.sh image                   # build + push (linux/amd64)
+./deploy/nebius/deploy.sh jobs                    # submit the DAG in order
+./deploy/nebius/deploy.sh endpoint                # stand up /predict
+./deploy/nebius/deploy.sh urls                    # endpoint URL + smoke-test curl
+```
+
+`.env` is gitignored; no secrets are committed. Follow a job with
+`nebius ai job logs <job_id> --follow`.
+
+> **Not yet executed against a tenant.** The commands are written from the public
+> [Jobs](https://docs.nebius.com/serverless/jobs/manage) and
+> [Endpoints](https://docs.nebius.com/serverless/endpoints/manage) docs, and the
+> full `DRY_RUN` output has been reviewed, but no job has run on real Nebius
+> infrastructure yet. Proof-of-execution (job logs, endpoint URL) goes below once
+> it has.
+
+### Proof of execution
+
+<!-- Paste job IDs / log screenshots / the endpoint URL here after the first real run. -->
+_Pending first tenant run._
+
 ## Hardware, runtime, cost
 
-- **CPU-only** (classical-ML track). No GPU.
-- The full fixture DAG + endpoint smoke run in **seconds**; the test suite in
-  **~6 s**. On Nebius Serverless this is a few minutes of CPU-job time —
-  effectively negligible cost / within free trial credits.
+- **CPU-only** (classical-ML track). No GPU. Platform `cpu-e2`, preset
+  `2vcpu-8gb` — the smallest Nebius offers, and more than this workload needs.
+- Measured on the fixture DAG (`./scripts/run_dag.sh fixture`, Apple M-series):
+
+  | Job | Runtime |
+  |---|---|
+  | `data_ingestion` | 2 s |
+  | `llm_features` | <1 s (keyword fallback; ~seconds/1k posts with Claude) |
+  | `dataset_build` | 1 s |
+  | `training` | <1 s |
+  | `evaluation` | 8 s |
+  | `reporting` (23,236 real rows) | 2 s |
+  | **total** | **13 s** |
+
+- Test suite: ~7 s (84 tests).
+- **Cost:** the DAG is minutes of `2vcpu-8gb` CPU time per run — negligible, and
+  within the free trial credits. Rates: [Nebius compute pricing](https://docs.nebius.com/compute/resources/pricing).
+  The one variable cost is `llm_features` if you supply `ANTHROPIC_API_KEY`; it
+  is a one-time, cached, offline pass over the corpus (unset the key and it uses
+  the deterministic keyword fallback for free).
 
 ## Status & roadmap
 
-Built and green (42 tests): config, storage, calendar, point-in-time market
-state, labeling, sector mapping, dataset build, full eval harness, serverless
-jobs + endpoint. **Not yet built:** the XGBoost/LightGBM model + conformal
-abstention (until then `/predict` abstains by design), the transformer overfit
-canary, and text-ablation. See `CLAUDE.md` §10–11 for the build order.
+Built and green (84 tests): config, storage, calendar, point-in-time market
+state, labeling, sector mapping, dataset build, full eval harness (purged CV,
+baselines, permutation null, BH, power gate, **text-ablation**), GBT + conformal
+abstention, serverless jobs + endpoint, offline LLM signal layer (`llm/`), and
+the `reporting` job that regenerates the dashboard from data.
+
+**Not yet built:** the transformer overfit canary; intraday (30m/1h) horizons;
+the prediction log + nightly outcome-backfill loop. See `CLAUDE.md` §10–11.
 
 ## License
 
