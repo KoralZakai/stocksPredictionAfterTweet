@@ -1,0 +1,258 @@
+<title>Tweet &rarr; sector &rarr; stocks, with the eden signal layer</title>
+<style>
+:root{--bg:#f4f5f2;--surface:#fff;--surface-2:#eef0ec;--ink:#191c1f;--ink-2:#5a6067;
+ --ink-3:#878d94;--line:#dee1db;--grid:#c9cdc6;--accent:#a8792f;--etf:#2f7ec0;
+ --up:#17805f;--up-bg:#e4f1ea;--down:#c0432f;--down-bg:#f7e5e0;--flat:#9aa0a6;
+ --font:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+ --mono:ui-monospace,"Cascadia Code","SF Mono",Menlo,Consolas,monospace;
+ --serif:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,ui-serif,serif;}
+@media (prefers-color-scheme:dark){:root{--bg:#0d1014;--surface:#161a20;--surface-2:#1e242c;
+ --ink:#e7eaed;--ink-2:#9aa2ab;--ink-3:#6a727b;--line:#262d36;--grid:#39424d;--accent:#cfa35a;
+ --etf:#5aa9ec;--up:#45A87F;--up-bg:#132a22;--down:#DB6A52;--down-bg:#2c1813;--flat:#6c757e;}}
+:root[data-theme="light"]{--bg:#f4f5f2;--surface:#fff;--surface-2:#eef0ec;--ink:#191c1f;
+ --ink-2:#5a6067;--ink-3:#878d94;--line:#dee1db;--grid:#c9cdc6;--accent:#a8792f;--etf:#2f7ec0;
+ --up:#17805f;--up-bg:#e4f1ea;--down:#c0432f;--down-bg:#f7e5e0;--flat:#9aa0a6;}
+:root[data-theme="dark"]{--bg:#0d1014;--surface:#161a20;--surface-2:#1e242c;--ink:#e7eaed;
+ --ink-2:#9aa2ab;--ink-3:#6a727b;--line:#262d36;--grid:#39424d;--accent:#cfa35a;--etf:#5aa9ec;
+ --up:#45A87F;--up-bg:#132a22;--down:#DB6A52;--down-bg:#2c1813;--flat:#6c757e;}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font);line-height:1.55}
+.wrap{max-width:900px;margin:0 auto;padding:34px 20px 80px}
+.eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;
+ color:var(--accent);margin:0 0 10px}
+h1{font-family:var(--serif);font-size:clamp(26px,3.9vw,38px);margin:0 0 10px;
+ letter-spacing:-.015em;text-wrap:balance;font-weight:600}
+.dek{color:var(--ink-2);font-size:16.5px;margin:0;max-width:66ch}
+h2{font-family:var(--serif);font-size:22px;font-weight:600;margin:44px 0 4px;letter-spacing:-.01em}
+.lede{color:var(--ink-2);margin:0 0 18px;max-width:70ch;font-size:15px}
+.prov{background:var(--surface);border:1px solid var(--line);border-left:3px solid var(--accent);
+ border-radius:8px;padding:14px 16px;margin:24px 0 0;font-size:14px;color:var(--ink-2)}
+.prov b{color:var(--ink)}
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin:22px 0 6px}
+.tile{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:13px 14px}
+.tile .k{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3)}
+.tile .v{font-size:24px;font-weight:650;margin-top:6px;font-variant-numeric:tabular-nums;letter-spacing:-.02em}
+.tile .s{font-size:12px;color:var(--ink-3)}
+.answer{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:20px;margin:18px 0 0}
+.answer .big{font-family:var(--serif);font-size:20px;font-weight:600;margin:0 0 8px;text-wrap:balance}
+.answer p{margin:0;color:var(--ink-2);font-size:14.5px}
+.tw{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:14px}
+th{text-align:left;font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;
+ color:var(--ink-3);font-weight:600;padding:9px 7px;border-bottom:1px solid var(--line);white-space:nowrap}
+th:nth-child(n+3){text-align:right}
+td{padding:8px 7px;border-bottom:1px solid var(--line);vertical-align:middle}
+tr:last-child td{border-bottom:none}
+td.tk{font-family:var(--mono);font-weight:600;font-size:13px;white-space:nowrap}
+td.v{text-align:right;font-family:var(--mono);font-variant-numeric:tabular-nums;font-size:13px;white-space:nowrap}
+td.v.muted{color:var(--ink-3)} td.v.sig{color:var(--accent);font-weight:700}
+.up{color:var(--up)} .down{color:var(--down)} .flat{color:var(--flat)}
+.etfrow{background:var(--surface-2)}
+.tag{font-family:var(--mono);font-size:9px;letter-spacing:.08em;background:var(--etf);color:#fff;
+ border-radius:4px;padding:1px 5px;margin-left:7px;vertical-align:2px}
+.spark{display:block} td.spk{width:110px;padding:2px 8px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:18px 18px 14px;margin:14px 0}
+.chd{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;flex-wrap:wrap}
+.sig{display:flex;gap:6px;flex-wrap:wrap}
+.chip{font-family:var(--mono);font-size:10.5px;color:var(--ink-3);background:var(--surface-2);
+ border:1px solid var(--line);border-radius:20px;padding:3px 9px}
+.chip b{color:var(--ink);margin-left:5px;font-weight:600}
+.chd time{font-family:var(--mono);font-size:11.5px;color:var(--ink-3);white-space:nowrap}
+blockquote{margin:13px 0;padding:0 0 0 14px;border-left:2px solid var(--accent);
+ font-family:var(--serif);font-size:16px;line-height:1.5;color:var(--ink)}
+.route{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin:0 0 8px;font-size:13px}
+.rl{font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3)}
+.sect{font-family:var(--mono);font-weight:700;color:#fff;background:var(--etf);border-radius:5px;padding:2px 8px;font-size:12px}
+.sn{color:var(--ink-2)} .conf{margin-left:auto;font-family:var(--mono);font-size:11px;color:var(--ink-3)}
+.unit{font-size:11.5px;color:var(--ink-3);margin:10px 0 0}
+.gauge{width:100%;min-width:120px}
+.track{position:relative;height:12px;background:var(--surface-2);border:1px solid var(--line);border-radius:6px}
+.fill{position:absolute;inset:0 auto 0 0;border-radius:5px 0 0 5px;background:currentColor;opacity:.85}
+.fill.up{color:var(--up)} .fill.down{color:var(--down)}
+.mark{position:absolute;top:-4px;bottom:-4px;width:2px;background:var(--ink);border-radius:1px}
+.verdict{font-family:var(--mono);font-size:10.5px;font-weight:700;letter-spacing:.06em;
+ text-transform:uppercase;padding:2px 8px;border-radius:20px}
+.verdict.fail{color:var(--down);background:var(--down-bg)}
+.verdict.ok{color:var(--up);background:var(--up-bg)}
+.dbar{width:40%;min-width:110px}
+.dtrack{position:relative;height:16px}
+.zero{position:absolute;left:50%;top:-2px;bottom:-2px;width:1px;background:var(--grid)}
+.dfill{position:absolute;top:5px;height:6px;border-radius:3px;background:currentColor}
+.dfill.up{color:var(--up)} .dfill.down{color:var(--down)} .dfill.flat{color:var(--flat)}
+.err{position:absolute;top:7px;height:2px;background:var(--ink-3);opacity:.45;border-radius:1px}
+ul.mix{list-style:none;padding:0;margin:0;display:grid;gap:6px}
+ul.mix li{display:grid;grid-template-columns:minmax(120px,190px) 1fr 60px;align-items:center;gap:12px;font-size:13.5px}
+.mk{color:var(--ink-2)} .mb{background:var(--surface-2);border-radius:4px;height:9px;display:block}
+.mb i{display:block;height:9px;border-radius:4px;background:var(--accent);opacity:.75}
+.mn{text-align:right;font-family:var(--mono);font-size:12.5px;color:var(--ink-3);font-variant-numeric:tabular-nums}
+.note{background:var(--surface);border:1px solid var(--line);border-left:3px solid var(--down);
+ border-radius:8px;padding:15px 17px;margin-top:16px;font-size:14.5px;color:var(--ink-2)}
+.note strong{color:var(--ink)}
+.foot{margin-top:38px;font-size:13px;color:var(--ink-3)}
+a{color:var(--accent)} code{font-family:var(--mono);font-size:.9em}
+</style>
+<div class="wrap">
+  <p class="eyebrow">eden branch &middot; generated by jobs/reporting.py</p>
+  <h1>A tweet, the sector it names, and what those stocks actually did</h1>
+  <p class="dek">Every post is real, every return is measured against real SPY-adjusted bars, and the
+    sector is assigned by the repo's deterministic keyword rules &mdash; not by a model. The
+    <strong>eden</strong> layer adds the structured signal chips on each card.</p>
+
+  <div class="prov"><b>Provenance.</b> Signals produced by <code>HeuristicExtractor (deterministic offline fallback -- no API key; Claude did not run)</code>.
+    Run id <code>ec93f9450336</code> over <code>23,236</code> rows. Regenerate at any time with
+    <code>python jobs/reporting.py</code> &mdash; nothing on this page is hand-written.</div>
+
+  <section class="tiles">
+    <div class="tile"><div class="k">Posts</div><div class="v">2,357</div>
+      <div class="s">2025-01-01 &rarr; 2026-06-29</div></div>
+    <div class="tile"><div class="k">Tweet &times; asset rows</div><div class="v">23,236</div>
+      <div class="s">real abnormal returns</div></div>
+    <div class="tile"><div class="k">Assets</div><div class="v">47</div>
+      <div class="s">sector ETFs + names</div></div>
+    <div class="tile"><div class="k">Benchmark</div><div class="v">SPY</div>
+      <div class="s">abnormal = raw &minus; SPY</div></div>
+  </section>
+
+  <h2>Does the signal actually predict direction?</h2>
+  <p class="lede">For every post the extractor called bullish or bearish, does the sign of the sector ETF's
+    abnormal return agree? The black tick is the <strong>majority-class baseline</strong> &mdash; the score you
+    get by always guessing the more common direction and reading no tweets at all. <code>z</code> is clustered
+    by post, because one post spawns many correlated rows.</p>
+  <div class="tw"><table>
+    <thead><tr><th>Horizon</th><th>Hit rate vs baseline</th><th>Hit</th><th>Baseline</th>
+      <th>Posts</th><th>z</th><th></th></tr></thead>
+    <tbody><tr><td class="tk">1d</td><td class="gauge"><div class="track"><div class="fill down" style="width:48.5%"></div><div class="mark" style="left:50.1%"></div></div></td><td class="v">48.5%</td><td class="v muted">50.1%</td><td class="v muted">1,005</td><td class="v muted">-1.79</td><td><span class="verdict fail">loses</span></td></tr><tr><td class="tk">3d</td><td class="gauge"><div class="track"><div class="fill down" style="width:51.4%"></div><div class="mark" style="left:55.5%"></div></div></td><td class="v">51.4%</td><td class="v muted">55.5%</td><td class="v muted">1,005</td><td class="v muted">+3.15</td><td><span class="verdict fail">loses</span></td></tr><tr><td class="tk">5d</td><td class="gauge"><div class="track"><div class="fill down" style="width:52.7%"></div><div class="mark" style="left:55.4%"></div></div></td><td class="v">52.7%</td><td class="v muted">55.4%</td><td class="v muted">1,005</td><td class="v muted">+4.56</td><td><span class="verdict fail">loses</span></td></tr></tbody></table></div>
+
+  <div class="answer">
+    <p class="big">At every horizon, the signal loses to the dumbest possible baseline.</p>
+    <p>One-day accuracy sits below a coin flip. The 3- and 5-day numbers rise but never reach the
+      majority-class bar, so a model that ignored the tweets entirely would score higher. This is the
+      expected outcome, not a defect.</p>
+  </div>
+
+  <h2>Mean 1-day abnormal return by event type</h2>
+  <p class="lede">Sector-ETF rows only, in basis points, with &plusmn;1 standard error. <code>|t| &ge; 2</code>
+    is the bare minimum before any of this deserves a second look &mdash; and that is <em>before</em> correcting
+    for having tested 8 event types at once.</p>
+  <div class="tw"><table>
+    <thead><tr><th>Event type</th><th>n</th><th>Mean abnormal return (bps)</th>
+      <th>Mean</th><th>SE</th><th>t</th></tr></thead>
+    <tbody><tr><td class="tk">Drug pricing</td><td class="v muted">39</td><td class="dbar"><div class="dtrack"><div class="zero"></div><div class="err" style="left:5.42%;width:48.41%"></div><div class="dfill down" style="left:29.62%;width:20.38%"></div></div></td><td class="v down">-14.4</td><td class="v muted">&plusmn;17.1</td><td class="v muted">-0.84</td></tr><tr><td class="tk">Energy policy</td><td class="v muted">123</td><td class="dbar"><div class="dtrack"><div class="zero"></div><div class="err" style="left:27.07%;width:30.29%"></div><div class="dfill down" style="left:42.22%;width:7.78%"></div></div></td><td class="v down">-5.5</td><td class="v muted">&plusmn;10.7</td><td class="v muted">-0.51</td></tr><tr><td class="tk">Not market-relevant</td><td class="v muted">4,340</td><td class="dbar"><div class="dtrack"><div class="zero"></div><div class="err" style="left:49.86%;width:3.96%"></div><div class="dfill up" style="left:50.00%;width:1.84%"></div></div></td><td class="v up">+1.3</td><td class="v muted">&plusmn;1.4</td><td class="v muted">+0.93</td></tr><tr><td class="tk">Military threat</td><td class="v muted">241</td><td class="dbar"><div class="dtrack"><div class="zero"></div><div class="err" style="left:42.22%;width:20.38%"></div><div class="dfill up" style="left:50.00%;width:2.41%"></div></div></td><td class="v up">+1.7</td><td class="v muted">&plusmn;7.2</td><td class="v muted">+0.23</td></tr><tr><td class="tk">Macro claim</td><td class="v muted">156</td><td class="dbar"><div class="dtrack"><div class="zero"></div><div class="err" style="left:44.62%;width:17.83%"></div><div class="dfill up" style="left:50.00%;width:3.54%"></div></div></td><td class="v up">+2.5</td><td class="v muted">&plusmn;6.3</td><td class="v muted">+0.40</td></tr><tr><td class="tk">Tariffs &amp; trade</td><td class="v muted">1,099</td><td class="dbar"><div class="dtrack"><div class="zero"></div><div class="err" style="left:53.82%;width:8.21%"></div><div class="dfill up" style="left:50.00%;width:7.93%"></div></div></td><td class="v up">+5.6</td><td class="v muted">&plusmn;2.9</td><td class="v muted">+1.91</td></tr><tr><td class="tk">Monetary policy</td><td class="v muted">171</td><td class="dbar"><div class="dtrack"><div class="zero"></div><div class="err" style="left:50.57%;width:17.83%"></div><div class="dfill up" style="left:50.00%;width:9.48%"></div></div></td><td class="v up">+6.7</td><td class="v muted">&plusmn;6.3</td><td class="v muted">+1.05</td></tr><tr><td class="tk">Sanction</td><td class="v muted">43</td><td class="dbar"><div class="dtrack"><div class="zero"></div><div class="err" style="left:55.52%;width:40.48%"></div><div class="dfill up" style="left:50.00%;width:25.76%"></div></div></td><td class="v up">+18.2</td><td class="v muted">&plusmn;14.3</td><td class="v muted">+1.27</td></tr></tbody></table></div>
+
+  <h2>What the model actually sees per row</h2>
+  <p class="lede">Beyond the tweet and its sector, every (post &times; asset) row carries a point-in-time
+    market-regime block computed strictly before <code>t0</code>. These are the "other data points" &mdash;
+    they already exist in the dataset and are what a model consumes alongside the signal.</p>
+  <div class="tw"><table>
+    <thead><tr><th>Group</th><th>Cols</th><th>Coverage</th><th>Columns</th></tr></thead>
+    <tbody><tr><td class="tk">Pre-event market regime (strictly < t0)</td><td class="v muted">11</td><td class="v muted">100.0%</td><td style="font-family:var(--mono);font-size:11.5px;color:var(--ink-3)">pre_vol, pre_ret_1, pre_abn_1, pre_ret_3, pre_abn_3, pre_ret_5&hellip;</td></tr><tr><td class="tk">Asset linkage</td><td class="v muted">6</td><td class="v muted">99.6%</td><td style="font-family:var(--mono);font-size:11.5px;color:var(--ink-3)">asset, is_etf, sectors, relevance, rel_source, is_direct</td></tr><tr><td class="tk">Text / policy themes</td><td class="v muted">1</td><td class="v muted">68.2%</td><td style="font-family:var(--mono);font-size:11.5px;color:var(--ink-3)">themes</td></tr><tr><td class="tk">Event-time context</td><td class="v muted">4</td><td class="v muted">100.0%</td><td style="font-family:var(--mono);font-size:11.5px;color:var(--ink-3)">weekday, hour_utc, after_hours, trump_exposed</td></tr></tbody></table></div>
+
+  <h2>What the extractor saw across 2,357 posts</h2>
+  <p class="lede">Most posts are marked not market-relevant. That conservatism is deliberate: a rule that fires
+    on everything manufactures signal out of noise.</p>
+  <ul class="mix"><li><span class="mk">Not market-relevant</span><span class="mb"><i style="width:78.0%"></i></span><span class="mn">1,838</span></li><li><span class="mk">Tariffs &amp; trade</span><span class="mb"><i style="width:8.9%"></i></span><span class="mn">209</span></li><li><span class="mk">Military threat</span><span class="mb"><i style="width:4.4%"></i></span><span class="mn">104</span></li><li><span class="mk">Macro claim</span><span class="mb"><i style="width:2.9%"></i></span><span class="mn">69</span></li><li><span class="mk">Monetary policy</span><span class="mb"><i style="width:2.5%"></i></span><span class="mn">58</span></li><li><span class="mk">Energy policy</span><span class="mb"><i style="width:2.0%"></i></span><span class="mn">46</span></li><li><span class="mk">Sanction</span><span class="mb"><i style="width:0.6%"></i></span><span class="mn">15</span></li><li><span class="mk">Drug pricing</span><span class="mb"><i style="width:0.6%"></i></span><span class="mn">14</span></li><li><span class="mk">Regulation</span><span class="mb"><i style="width:0.2%"></i></span><span class="mn">4</span></li></ul>
+
+  <h2>Worked examples</h2>
+  <p class="lede">Each card is one real post: the eden signal chips, the sector the deterministic mapper
+    assigned, and how that sector's ETF and member stocks moved. Positive is right-of-zero and green, negative
+    left and red &mdash; sign is carried by position and the <code>+</code>/<code>&minus;</code> label too,
+    never by color alone.</p>
+  
+  <article class="card">
+    <div class="chd"><div class="sig"><span class="chip">event<b>Military threat</b></span><span class="chip">intent<b>bearish</b></span><span class="chip">urgency<b>high</b></span><span class="chip">magnitude<b>medium</b></span></div><time>2025-02-01 17:18Z</time></div>
+    <blockquote>This morning I ordered precision Military air strikes on the Senior ISIS Attack Planner and other terrorists he recruited and led in Somalia. These killers, who we found hiding in caves, threatened th</blockquote>
+    <div class="route">
+      <span class="rl">rules mapper &rarr;</span>
+      <span class="sect">ITA</span>
+      <span class="sn">Aerospace &amp; Defense</span>
+      <span class="conf">map confidence 1.00</span>
+    </div>
+    <div class="tw"><table>
+      <thead><tr><th>Asset</th><th>Cumulative abnormal return</th>
+        <th>1d</th><th>3d</th><th>5d</th></tr></thead>
+      <tbody><tr class="etfrow"><td class="tk">ITA<span class="tag">ETF</span></td><td class="spk"><svg class="spark" viewBox="0 0 104 32" width="104" height="32" role="img"><title>ITA: 1d +64 / 3d -11 / 5d -9 bps</title><line x1="0" y1="16.0" x2="104" y2="16.0" stroke="var(--grid)" stroke-width="1" stroke-dasharray="2 2"/><polyline points="5.0,16.0 36.3,14.6 67.7,16.2 99.0,16.2" fill="none" stroke="var(--down)" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/><circle cx="99" cy="16.2" r="3.2" fill="var(--down)" stroke="var(--surface)" stroke-width="2"/></svg></td><td class="v up">+64</td><td class="v down">-11</td><td class="v down">-9</td></tr><tr class=""><td class="tk">LMT</td><td class="spk"><svg class="spark" viewBox="0 0 104 32" width="104" height="32" role="img"><title>LMT: 1d -160 / 3d -390 / 5d -451 bps</title><line x1="0" y1="16.0" x2="104" y2="16.0" stroke="var(--grid)" stroke-width="1" stroke-dasharray="2 2"/><polyline points="5.0,16.0 36.3,19.5 67.7,24.6 99.0,26.0" fill="none" stroke="var(--down)" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/><circle cx="99" cy="26.0" r="3.2" fill="var(--down)" stroke="var(--surface)" stroke-width="2"/></svg></td><td class="v down">-160</td><td class="v down">-390</td><td class="v down">-451</td></tr><tr class=""><td class="tk">NOC</td><td class="spk"><svg class="spark" viewBox="0 0 104 32" width="104" height="32" role="img"><title>NOC: 1d -100 / 3d -524 / 5d -543 bps</title><line x1="0" y1="16.0" x2="104" y2="16.0" stroke="var(--grid)" stroke-width="1" stroke-dasharray="2 2"/><polyline points="5.0,16.0 36.3,18.2 67.7,27.6 99.0,28.0" fill="none" stroke="var(--down)" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/><circle cx="99" cy="28.0" r="3.2" fill="var(--down)" stroke="var(--surface)" stroke-width="2"/></svg></td><td class="v down">-100</td><td class="v down">-524</td><td class="v down">-543</td></tr><tr class=""><td class="tk">RTX</td><td class="spk"><svg class="spark" viewBox="0 0 104 32" width="104" height="32" role="img"><title>RTX: 1d +24 / 3d -144 / 5d -180 bps</title><line x1="0" y1="16.0" x2="104" y2="16.0" stroke="var(--grid)" stroke-width="1" stroke-dasharray="2 2"/><polyline points="5.0,16.0 36.3,15.5 67.7,19.2 99.0,20.0" fill="none" stroke="var(--down)" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/><circle cx="99" cy="20.0" r="3.2" fill="var(--down)" stroke="var(--surface)" stroke-width="2"/></svg></td><td class="v up">+24</td><td class="v down">-144</td><td class="v down">-180</td></tr><tr class=""><td class="tk">GD</td><td class="spk"><svg class="spark" viewBox="0 0 104 32" width="104" height="32" role="img"><title>GD: 1d -63 / 3d -94 / 5d -182 bps</title><line x1="0" y1="16.0" x2="104" y2="16.0" stroke="var(--grid)" stroke-width="1" stroke-dasharray="2 2"/><polyline points="5.0,16.0 36.3,17.4 67.7,18.1 99.0,20.0" fill="none" stroke="var(--down)" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/><circle cx="99" cy="20.0" r="3.2" fill="var(--down)" stroke="var(--surface)" stroke-width="2"/></svg></td><td class="v down">-63</td><td class="v down">-94</td><td class="v down">-182</td></tr><tr class=""><td class="tk">BA</td><td class="spk"><svg class="spark" viewBox="0 0 104 32" width="104" height="32" role="img"><title>BA: 1d +15 / 3d +249 / 5d +287 bps</title><line x1="0" y1="16.0" x2="104" y2="16.0" stroke="var(--grid)" stroke-width="1" stroke-dasharray="2 2"/><polyline points="5.0,16.0 36.3,15.7 67.7,10.5 99.0,9.6" fill="none" stroke="var(--up)" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/><circle cx="99" cy="9.6" r="3.2" fill="var(--up)" stroke="var(--surface)" stroke-width="2"/></svg></td><td class="v up">+15</td><td class="v up">+249</td><td class="v up">+287</td></tr></tbody></table></div>
+    <p class="unit">Abnormal return vs SPY, basis points (100 bps = 1%).
+      Sparkline runs 0 &rarr; 1d &rarr; 3d &rarr; 5d on a shared scale within this card.</p>
+  </article>
+  <article class="card">
+    <div class="chd"><div class="sig"><span class="chip">event<b>Energy policy</b></span><span class="chip">intent<b>neutral</b></span><span class="chip">urgency<b>low</b></span><span class="chip">magnitude<b>medium</b></span></div><time>2025-02-25 01:00Z</time></div>
+    <blockquote>Our Country&#8217;s doing really well, and today, I was just thinking, that the company building the Keystone XL Pipeline that was viciously jettisoned by the incompetent Biden Administration should come ba</blockquote>
+    <div class="route">
+      <span class="rl">rules mapper &rarr;</span>
+      <span class="sect">XLE</span>
+      <span class="sn">Energy</span>
+      <span class="conf">map confidence 1.00</span>
+    </div>
+    <div class="tw"><table>
+      <thead><tr><th>Asset</th><th>Cumulative abnormal return</th>
+        <th>1d</th><th>3d</th><th>5d</th></tr></thead>
+      <tbody><tr class="etfrow"><td class="tk">XLE<span class="tag">ETF</span></td><td class="spk"><svg class="spark" viewBox="0 0 104 32" width="104" height="32" role="img"><title>XLE: 1d -93 / 3d +58 / 5d -118 bps</title><line x1="0" y1="16.0" x2="104" y2="16.0" stroke="var(--grid)" stroke-width="1" stroke-dasharray="2 2"/><polyline points="5.0,16.0 36.3,17.5 67.7,15.1 99.0,17.9" fill="none" stroke="var(--down)" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/><circle cx="99" cy="17.9" r="3.2" fill="var(--down)" stroke="var(--surface)" stroke-width="2"/></svg></td><td class="v down">-93</td><td class="v up">+58</td><td class="v down">-118</td></tr><tr class=""><td class="tk">XOM</td><td class="spk"><svg class="spark" viewBox="0 0 104 32" width="104" height="32" role="img"><title>XOM: 1d -92 / 3d +99 / 5d -94 bps</title><line x1="0" y1="16.0" x2="104" y2="16.0" stroke="var(--grid)" stroke-width="1" stroke-dasharray="2 2"/><polyline points="5.0,16.0 36.3,17.5 67.7,14.4 99.0,17.5" fill="none" stroke="var(--down)" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/><circle cx="99" cy="17.5" r="3.2" fill="var(--down)" stroke="var(--surface)" stroke-width="2"/></svg></td><td class="v down">-92</td><td class="v up">+99</td><td class="v down">-94</td></tr><tr class=""><td class="tk">CVX</td><td class="spk"><svg class="spark" viewBox="0 0 104 32" width="104" height="32" role="img"><title>CVX: 1d -51 / 3d +119 / 5d -86 bps</title><line x1="0" y1="16.0" x2="104" y2="16.0" stroke="var(--grid)" stroke-width="1" stroke-dasharray="2 2"/><polyline points="5.0,16.0 36.3,16.8 67.7,14.1 99.0,17.4" fill="none" stroke="var(--down)" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/><circle cx="99" cy="17.4" r="3.2" fill="var(--down)" stroke="var(--surface)" stroke-width="2"/></svg></td><td class="v down">-51</td><td class="v up">+119</td><td class="v down">-86</td></tr><tr class=""><td class="tk">COP</td><td class="spk"><svg class="spark" viewBox="0 0 104 32" width="104" height="32" role="img"><title>COP: 1d -173 / 3d +10 / 5d -446 bps</title><line x1="0" y1="16.0" x2="104" y2="16.0" stroke="var(--grid)" stroke-width="1" stroke-dasharray="2 2"/><polyline points="5.0,16.0 36.3,18.8 67.7,15.8 99.0,23.3" fill="none" stroke="var(--down)" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/><circle cx="99" cy="23.3" r="3.2" fill="var(--down)" stroke="var(--surface)" stroke-width="2"/></svg></td><td class="v down">-173</td><td class="v up">+10</td><td class="v down">-446</td></tr><tr class=""><td class="tk">SLB</td><td class="spk"><svg class="spark" viewBox="0 0 104 32" width="104" height="32" role="img"><title>SLB: 1d -55 / 3d +75 / 5d -167 bps</title><line x1="0" y1="16.0" x2="104" y2="16.0" stroke="var(--grid)" stroke-width="1" stroke-dasharray="2 2"/><polyline points="5.0,16.0 36.3,16.9 67.7,14.8 99.0,18.7" fill="none" stroke="var(--down)" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/><circle cx="99" cy="18.7" r="3.2" fill="var(--down)" stroke="var(--surface)" stroke-width="2"/></svg></td><td class="v down">-55</td><td class="v up">+75</td><td class="v down">-167</td></tr><tr class=""><td class="tk">EOG</td><td class="spk"><svg class="spark" viewBox="0 0 104 32" width="104" height="32" role="img"><title>EOG: 1d -101 / 3d -1 / 5d -734 bps</title><line x1="0" y1="16.0" x2="104" y2="16.0" stroke="var(--grid)" stroke-width="1" stroke-dasharray="2 2"/><polyline points="5.0,16.0 36.3,17.7 67.7,16.0 99.0,28.0" fill="none" stroke="var(--down)" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/><circle cx="99" cy="28.0" r="3.2" fill="var(--down)" stroke="var(--surface)" stroke-width="2"/></svg></td><td class="v down">-101</td><td class="v down">-1</td><td class="v down">-734</td></tr></tbody></table></div>
+    <p class="unit">Abnormal return vs SPY, basis points (100 bps = 1%).
+      Sparkline runs 0 &rarr; 1d &rarr; 3d &rarr; 5d on a shared scale within this card.</p>
+  </article>
+  <article class="card">
+    <div class="chd"><div class="sig"><span class="chip">event<b>Tariffs &amp; trade</b></span><span class="chip">intent<b>bearish</b></span><span class="chip">urgency<b>low</b></span><span class="chip">magnitude<b>medium</b></span></div><time>2025-01-01 21:02Z</time></div>
+    <blockquote>The Tariffs, and Tariffs alone, created this vast wealth for our Country. Then we switched over to Income Tax. We were never so wealthy as during this period. Tariffs will pay off our debt and, MAKE A</blockquote>
+    <div class="route">
+      <span class="rl">rules mapper &rarr;</span>
+      <span class="sect">XLI</span>
+      <span class="sn">Industrials</span>
+      <span class="conf">map confidence 1.00</span>
+    </div>
+    <div class="tw"><table>
+      <thead><tr><th>Asset</th><th>Cumulative abnormal return</th>
+        <th>1d</th><th>3d</th><th>5d</th></tr></thead>
+      <tbody><tr class="etfrow"><td class="tk">XLI<span class="tag">ETF</span></td><td class="spk"><svg class="spark" viewBox="0 0 104 32" width="104" height="32" role="img"><title>XLI: 1d -27 / 3d -124 / 5d +5 bps</title><line x1="0" y1="16.0" x2="104" y2="16.0" stroke="var(--grid)" stroke-width="1" stroke-dasharray="2 2"/><polyline points="5.0,16.0 36.3,16.6 67.7,18.8 99.0,15.9" fill="none" stroke="var(--up)" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/><circle cx="99" cy="15.9" r="3.2" fill="var(--up)" stroke="var(--surface)" stroke-width="2"/></svg></td><td class="v down">-27</td><td class="v down">-124</td><td class="v up">+5</td></tr><tr class=""><td class="tk">BA</td><td class="spk"><svg class="spark" viewBox="0 0 104 32" width="104" height="32" role="img"><title>BA: 1d -281 / 3d -524 / 5d -369 bps</title><line x1="0" y1="16.0" x2="104" y2="16.0" stroke="var(--grid)" stroke-width="1" stroke-dasharray="2 2"/><polyline points="5.0,16.0 36.3,22.4 67.7,28.0 99.0,24.5" fill="none" stroke="var(--down)" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/><circle cx="99" cy="24.5" r="3.2" fill="var(--down)" stroke="var(--surface)" stroke-width="2"/></svg></td><td class="v down">-281</td><td class="v down">-524</td><td class="v down">-369</td></tr><tr class=""><td class="tk">CAT</td><td class="spk"><svg class="spark" viewBox="0 0 104 32" width="104" height="32" role="img"><title>CAT: 1d -76 / 3d -137 / 5d -123 bps</title><line x1="0" y1="16.0" x2="104" y2="16.0" stroke="var(--grid)" stroke-width="1" stroke-dasharray="2 2"/><polyline points="5.0,16.0 36.3,17.8 67.7,19.1 99.0,18.8" fill="none" stroke="var(--down)" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/><circle cx="99" cy="18.8" r="3.2" fill="var(--down)" stroke="var(--surface)" stroke-width="2"/></svg></td><td class="v down">-76</td><td class="v down">-137</td><td class="v down">-123</td></tr><tr class=""><td class="tk">GE</td><td class="spk"><svg class="spark" viewBox="0 0 104 32" width="104" height="32" role="img"><title>GE: 1d +120 / 3d +168 / 5d +294 bps</title><line x1="0" y1="16.0" x2="104" y2="16.0" stroke="var(--grid)" stroke-width="1" stroke-dasharray="2 2"/><polyline points="5.0,16.0 36.3,13.2 67.7,12.1 99.0,9.3" fill="none" stroke="var(--up)" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/><circle cx="99" cy="9.3" r="3.2" fill="var(--up)" stroke="var(--surface)" stroke-width="2"/></svg></td><td class="v up">+120</td><td class="v up">+168</td><td class="v up">+294</td></tr><tr class=""><td class="tk">RTX</td><td class="spk"><svg class="spark" viewBox="0 0 104 32" width="104" height="32" role="img"><title>RTX: 1d -2 / 3d -347 / 5d -92 bps</title><line x1="0" y1="16.0" x2="104" y2="16.0" stroke="var(--grid)" stroke-width="1" stroke-dasharray="2 2"/><polyline points="5.0,16.0 36.3,16.0 67.7,23.9 99.0,18.1" fill="none" stroke="var(--down)" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/><circle cx="99" cy="18.1" r="3.2" fill="var(--down)" stroke="var(--surface)" stroke-width="2"/></svg></td><td class="v down">-2</td><td class="v down">-347</td><td class="v down">-92</td></tr><tr class=""><td class="tk">UNP</td><td class="spk"><svg class="spark" viewBox="0 0 104 32" width="104" height="32" role="img"><title>UNP: 1d +43 / 3d -100 / 5d +78 bps</title><line x1="0" y1="16.0" x2="104" y2="16.0" stroke="var(--grid)" stroke-width="1" stroke-dasharray="2 2"/><polyline points="5.0,16.0 36.3,15.0 67.7,18.3 99.0,14.2" fill="none" stroke="var(--up)" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/><circle cx="99" cy="14.2" r="3.2" fill="var(--up)" stroke="var(--surface)" stroke-width="2"/></svg></td><td class="v up">+43</td><td class="v down">-100</td><td class="v up">+78</td></tr></tbody></table></div>
+    <p class="unit">Abnormal return vs SPY, basis points (100 bps = 1%).
+      Sparkline runs 0 &rarr; 1d &rarr; 3d &rarr; 5d on a shared scale within this card.</p>
+  </article>
+  <article class="card">
+    <div class="chd"><div class="sig"><span class="chip">event<b>Monetary policy</b></span><span class="chip">intent<b>neutral</b></span><span class="chip">urgency<b>low</b></span><span class="chip">magnitude<b>medium</b></span></div><time>2025-03-17 20:49Z</time></div>
+    <blockquote>I am pleased to announce that Michelle &#8220;Miki&#8221; Bowman will be the Federal Reserve&#8217;s new Vice Chair of Supervision. Miki has been serving honorably on the Fed&#8217;s Board of Governors since 2018, and has gr</blockquote>
+    <div class="route">
+      <span class="rl">rules mapper &rarr;</span>
+      <span class="sect">XLF</span>
+      <span class="sn">Financials</span>
+      <span class="conf">map confidence 1.00</span>
+    </div>
+    <div class="tw"><table>
+      <thead><tr><th>Asset</th><th>Cumulative abnormal return</th>
+        <th>1d</th><th>3d</th><th>5d</th></tr></thead>
+      <tbody><tr class="etfrow"><td class="tk">XLF<span class="tag">ETF</span></td><td class="spk"><svg class="spark" viewBox="0 0 104 32" width="104" height="32" role="img"><title>XLF: 1d +47 / 3d +92 / 5d +50 bps</title><line x1="0" y1="16.0" x2="104" y2="16.0" stroke="var(--grid)" stroke-width="1" stroke-dasharray="2 2"/><polyline points="5.0,16.0 36.3,14.6 67.7,13.2 99.0,14.5" fill="none" stroke="var(--up)" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/><circle cx="99" cy="14.5" r="3.2" fill="var(--up)" stroke="var(--surface)" stroke-width="2"/></svg></td><td class="v up">+47</td><td class="v up">+92</td><td class="v up">+50</td></tr><tr class=""><td class="tk">JPM</td><td class="spk"><svg class="spark" viewBox="0 0 104 32" width="104" height="32" role="img"><title>JPM: 1d +95 / 3d +188 / 5d +392 bps</title><line x1="0" y1="16.0" x2="104" y2="16.0" stroke="var(--grid)" stroke-width="1" stroke-dasharray="2 2"/><polyline points="5.0,16.0 36.3,13.1 67.7,10.2 99.0,4.0" fill="none" stroke="var(--up)" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/><circle cx="99" cy="4.0" r="3.2" fill="var(--up)" stroke="var(--surface)" stroke-width="2"/></svg></td><td class="v up">+95</td><td class="v up">+188</td><td class="v up">+392</td></tr><tr class=""><td class="tk">BAC</td><td class="spk"><svg class="spark" viewBox="0 0 104 32" width="104" height="32" role="img"><title>BAC: 1d +50 / 3d +170 / 5d +129 bps</title><line x1="0" y1="16.0" x2="104" y2="16.0" stroke="var(--grid)" stroke-width="1" stroke-dasharray="2 2"/><polyline points="5.0,16.0 36.3,14.5 67.7,10.8 99.0,12.1" fill="none" stroke="var(--up)" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/><circle cx="99" cy="12.1" r="3.2" fill="var(--up)" stroke="var(--surface)" stroke-width="2"/></svg></td><td class="v up">+50</td><td class="v up">+170</td><td class="v up">+129</td></tr><tr class=""><td class="tk">WFC</td><td class="spk"><svg class="spark" viewBox="0 0 104 32" width="104" height="32" role="img"><title>WFC: 1d +81 / 3d +200 / 5d +266 bps</title><line x1="0" y1="16.0" x2="104" y2="16.0" stroke="var(--grid)" stroke-width="1" stroke-dasharray="2 2"/><polyline points="5.0,16.0 36.3,13.5 67.7,9.9 99.0,7.9" fill="none" stroke="var(--up)" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/><circle cx="99" cy="7.9" r="3.2" fill="var(--up)" stroke="var(--surface)" stroke-width="2"/></svg></td><td class="v up">+81</td><td class="v up">+200</td><td class="v up">+266</td></tr><tr class=""><td class="tk">GS</td><td class="spk"><svg class="spark" viewBox="0 0 104 32" width="104" height="32" role="img"><title>GS: 1d +94 / 3d +213 / 5d +347 bps</title><line x1="0" y1="16.0" x2="104" y2="16.0" stroke="var(--grid)" stroke-width="1" stroke-dasharray="2 2"/><polyline points="5.0,16.0 36.3,13.1 67.7,9.5 99.0,5.4" fill="none" stroke="var(--up)" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/><circle cx="99" cy="5.4" r="3.2" fill="var(--up)" stroke="var(--surface)" stroke-width="2"/></svg></td><td class="v up">+94</td><td class="v up">+213</td><td class="v up">+347</td></tr><tr class=""><td class="tk">MS</td><td class="spk"><svg class="spark" viewBox="0 0 104 32" width="104" height="32" role="img"><title>MS: 1d +53 / 3d +173 / 5d +312 bps</title><line x1="0" y1="16.0" x2="104" y2="16.0" stroke="var(--grid)" stroke-width="1" stroke-dasharray="2 2"/><polyline points="5.0,16.0 36.3,14.4 67.7,10.7 99.0,6.5" fill="none" stroke="var(--up)" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/><circle cx="99" cy="6.5" r="3.2" fill="var(--up)" stroke="var(--surface)" stroke-width="2"/></svg></td><td class="v up">+53</td><td class="v up">+173</td><td class="v up">+312</td></tr></tbody></table></div>
+    <p class="unit">Abnormal return vs SPY, basis points (100 bps = 1%).
+      Sparkline runs 0 &rarr; 1d &rarr; 3d &rarr; 5d on a shared scale within this card.</p>
+  </article>
+  <article class="card">
+    <div class="chd"><div class="sig"><span class="chip">event<b>Drug pricing</b></span><span class="chip">intent<b>neutral</b></span><span class="chip">urgency<b>low</b></span><span class="chip">magnitude<b>medium</b></span></div><time>2025-01-31 13:09Z</time></div>
+    <blockquote>AMERICA FIRST DRUG PRICES!!!</blockquote>
+    <div class="route">
+      <span class="rl">rules mapper &rarr;</span>
+      <span class="sect">XLV</span>
+      <span class="sn">Health Care</span>
+      <span class="conf">map confidence 1.00</span>
+    </div>
+    <div class="tw"><table>
+      <thead><tr><th>Asset</th><th>Cumulative abnormal return</th>
+        <th>1d</th><th>3d</th><th>5d</th></tr></thead>
+      <tbody><tr class="etfrow"><td class="tk">XLV<span class="tag">ETF</span></td><td class="spk"><svg class="spark" viewBox="0 0 104 32" width="104" height="32" role="img"><title>XLV: 1d +45 / 3d +58 / 5d -12 bps</title><line x1="0" y1="16.0" x2="104" y2="16.0" stroke="var(--grid)" stroke-width="1" stroke-dasharray="2 2"/><polyline points="5.0,16.0 36.3,15.5 67.7,15.4 99.0,16.1" fill="none" stroke="var(--down)" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/><circle cx="99" cy="16.1" r="3.2" fill="var(--down)" stroke="var(--surface)" stroke-width="2"/></svg></td><td class="v up">+45</td><td class="v up">+58</td><td class="v down">-12</td></tr><tr class=""><td class="tk">UNH</td><td class="spk"><svg class="spark" viewBox="0 0 104 32" width="104" height="32" role="img"><title>UNH: 1d +80 / 3d +135 / 5d -224 bps</title><line x1="0" y1="16.0" x2="104" y2="16.0" stroke="var(--grid)" stroke-width="1" stroke-dasharray="2 2"/><polyline points="5.0,16.0 36.3,15.1 67.7,14.5 99.0,18.4" fill="none" stroke="var(--down)" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/><circle cx="99" cy="18.4" r="3.2" fill="var(--down)" stroke="var(--surface)" stroke-width="2"/></svg></td><td class="v up">+80</td><td class="v up">+135</td><td class="v down">-224</td></tr><tr class=""><td class="tk">JNJ</td><td class="spk"><svg class="spark" viewBox="0 0 104 32" width="104" height="32" role="img"><title>JNJ: 1d +63 / 3d +151 / 5d +78 bps</title><line x1="0" y1="16.0" x2="104" y2="16.0" stroke="var(--grid)" stroke-width="1" stroke-dasharray="2 2"/><polyline points="5.0,16.0 36.3,15.3 67.7,14.3 99.0,15.1" fill="none" stroke="var(--up)" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/><circle cx="99" cy="15.1" r="3.2" fill="var(--up)" stroke="var(--surface)" stroke-width="2"/></svg></td><td class="v up">+63</td><td class="v up">+151</td><td class="v up">+78</td></tr><tr class=""><td class="tk">PFE</td><td class="spk"><svg class="spark" viewBox="0 0 104 32" width="104" height="32" role="img"><title>PFE: 1d -70 / 3d -310 / 5d -400 bps</title><line x1="0" y1="16.0" x2="104" y2="16.0" stroke="var(--grid)" stroke-width="1" stroke-dasharray="2 2"/><polyline points="5.0,16.0 36.3,16.8 67.7,19.4 99.0,20.4" fill="none" stroke="var(--down)" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/><circle cx="99" cy="20.4" r="3.2" fill="var(--down)" stroke="var(--surface)" stroke-width="2"/></svg></td><td class="v down">-70</td><td class="v down">-310</td><td class="v down">-400</td></tr><tr class=""><td class="tk">MRK</td><td class="spk"><svg class="spark" viewBox="0 0 104 32" width="104" height="32" role="img"><title>MRK: 1d +65 / 3d -749 / 5d -1,096 bps</title><line x1="0" y1="16.0" x2="104" y2="16.0" stroke="var(--grid)" stroke-width="1" stroke-dasharray="2 2"/><polyline points="5.0,16.0 36.3,15.3 67.7,24.2 99.0,28.0" fill="none" stroke="var(--down)" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/><circle cx="99" cy="28.0" r="3.2" fill="var(--down)" stroke="var(--surface)" stroke-width="2"/></svg></td><td class="v up">+65</td><td class="v down">-749</td><td class="v down">-1,096</td></tr><tr class=""><td class="tk">ABBV</td><td class="spk"><svg class="spark" viewBox="0 0 104 32" width="104" height="32" role="img"><title>ABBV: 1d -88 / 3d +236 / 5d +322 bps</title><line x1="0" y1="16.0" x2="104" y2="16.0" stroke="var(--grid)" stroke-width="1" stroke-dasharray="2 2"/><polyline points="5.0,16.0 36.3,17.0 67.7,13.4 99.0,12.5" fill="none" stroke="var(--up)" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/><circle cx="99" cy="12.5" r="3.2" fill="var(--up)" stroke="var(--surface)" stroke-width="2"/></svg></td><td class="v down">-88</td><td class="v up">+236</td><td class="v up">+322</td></tr></tbody></table></div>
+    <p class="unit">Abnormal return vs SPY, basis points (100 bps = 1%).
+      Sparkline runs 0 &rarr; 1d &rarr; 3d &rarr; 5d on a shared scale within this card.</p>
+  </article>
+
+  <div class="note">
+    <strong>Read the defense example again.</strong> The post announces precision air strikes &mdash; the
+    textbook "attack &rArr; defense stocks up" prior, and the exact intuition that motivated this feature.
+    <code>ITA</code> ticked +64 bps on day one, then gave it back, and the biggest names fell hard by
+    day five. The prior is not merely weak here; for those names it points the wrong way.
+  </div>
+
+  <div class="note" style="border-left-color:var(--accent)">
+    <strong>What this page is and isn't.</strong> It shows the eden layer wired end-to-end against real data and
+    reports a null result &mdash; the expected, correct outcome for this repo. It is a <em>descriptive</em> read,
+    not the purged, embargoed, BH-corrected evaluation in <code>eval/</code>. Treat every number as a diagnostic,
+    not a finding.
+  </div>
+
+  <p class="foot">Generated by <code>jobs/reporting.py</code> &middot; signals via <code>llm/extract.py</code>
+    &middot; sectors via <code>sector_mapping/rules.py</code> &middot; run <code>ec93f9450336</code></p>
+</div>
