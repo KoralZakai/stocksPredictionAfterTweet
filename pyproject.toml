@@ -12,6 +12,7 @@ dependencies = [
     "pydantic>=2.13.4",# config/settings: frozen, validated pre-registered config
     "xgboost>=3.2.0",  # models/gbt (build step 8) — primary model on structured features
     "yfinance>=0.2.40",# data ingestion: free daily OHLCV for the 10 ETFs + SPY (no API key)
+    "anthropic>=0.40.0",# product fork: OFFLINE llm/ signal extractor (jobs/llm_features); unused on /predict
 ]
 # NOTE: xgboost is installed but NOT yet wired into decide() — models/gbt.py and
 # conformal abstain are still to build (step 8), so serving/endpoint.py abstains
@@ -35,6 +36,6 @@ namespace_packages = true
 mypy_path = "."
 
 [[tool.mypy.overrides]]
-module = ["duckdb", "pandas", "pandas.*", "numpy", "numpy.*", "xgboost", "xgboost.*", "yfinance"]
+module = ["duckdb", "pandas", "pandas.*", "numpy", "numpy.*", "xgboost", "xgboost.*", "yfinance", "anthropic", "anthropic.*"]
 ignore_missing_imports = true
 follow_imports = "skip"
