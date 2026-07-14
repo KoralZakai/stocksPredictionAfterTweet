@@ -1,0 +1,46 @@
+# Nebius Serverless AI Job — distillation training (GPU). EXPERIMENTAL track.
+# Verify presets/IDs against your tenant before applying:
+#   nebius compute gpu-platform list --parent-id "$NB_PROJECT_ID"
+#   nebius iam project list
+#
+# Apply (illustrative — match your CLI/version):
+#   nebius ai job create -f experiments/distill/nebius_job.yaml
+apiVersion: ai.nebius.io/v1
+kind: Job
+metadata:
+  name: distill-train
+  labels:
+    track: experimental
+    purpose: knowledge-distillation
+spec:
+  # CUDA training image built from experiments/distill/Dockerfile.train and pushed
+  # to a registry Nebius can pull from.
+  image: ${NB_REGISTRY}/distill-train:latest
+  command: ["python", "experiments/distill/train_distill.py"]
+  args:
+    - "--base-model"
+    - "Qwen/Qwen2.5-7B-Instruct"
+    - "--out"
+    - "/data/distill/adapter"
+    - "--epochs"
+    - "3"
+  resources:
+    # Single mid-range GPU is enough for 4-bit QLoRA on a 7-8B model.
+    gpu:
+      type: ${NB_GPU_PRESET}      # e.g. nvidia-l40s / nvidia-h100 — verify availability
+      count: 1
+    cpu: 8
+    memoryGiB: 64
+  env:
+    - name: HF_TOKEN
+      valueFrom:
+        secret: hf-token          # gated base models; never commit the value
+    - name: HF_HOME
+      value: /data/hf_cache
+  # Shared artifact store: reads teacher outputs, writes the adapter.
+  volumes:
+    - name: bucket
+      bucket: ${NB_BUCKET}
+      mountPath: /data
+  timeoutSeconds: 10800           # 3h ceiling for the SFT run
+  restartPolicy: Never

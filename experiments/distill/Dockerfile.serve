@@ -1,0 +1,28 @@
+# Nebius Serverless AI Endpoint (GPU) — serve the distilled student. EXPERIMENTAL.
+# A 7-8B model needs a GPU for usable latency; use a runtime (not devel) CUDA base.
+# Build from repo root:  docker build -f experiments/distill/Dockerfile.serve -t distill-serve .
+FROM nvidia/cuda:12.1.1-runtime-ubuntu22.04
+
+ENV DEBIAN_FRONTEND=noninteractive \
+    PYTHONUNBUFFERED=1 \
+    PYTHONPATH=/app
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+        python3.10 python3-pip && \
+    rm -rf /var/lib/apt/lists/* && \
+    ln -sf /usr/bin/python3.10 /usr/bin/python
+
+WORKDIR /app
+COPY experiments/distill/requirements.txt ./distill-requirements.txt
+RUN python -m pip install --no-cache-dir --upgrade pip && \
+    python -m pip install --no-cache-dir -r distill-requirements.txt
+
+COPY . .
+
+# Adapter + manifest are mounted from the shared bucket at run time.
+ENV ADAPTER_DIR=/data/distill/adapter \
+    MANIFEST_PATH=/data/reports/validation_manifest.json \
+    BASE_MODEL=Qwen/Qwen2.5-7B-Instruct
+
+EXPOSE 8080
+CMD ["uvicorn", "experiments.distill.serve_distilled:app", "--host", "0.0.0.0", "--port", "8080"]

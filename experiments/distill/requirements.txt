@@ -1,0 +1,13 @@
+# EXPERIMENTAL distillation track ONLY — do NOT merge into the root pyproject.toml
+# / uv.lock. These heavy GPU deps must never touch the shipped, reproducible
+# CPU image. Pin exact versions for a real run; these are known-compatible floors.
+torch>=2.4.0
+transformers>=4.45.0
+peft>=0.13.0
+trl>=0.11.0
+bitsandbytes>=0.44.0
+accelerate>=0.34.0
+datasets>=3.0.0
+# serving the student:
+fastapi>=0.115.0
+uvicorn[standard]>=0.30.0

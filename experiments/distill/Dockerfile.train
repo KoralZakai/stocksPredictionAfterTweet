@@ -1,0 +1,25 @@
+# Nebius Serverless AI Job (GPU) — distillation training. EXPERIMENTAL track.
+# Build from repo root:  docker build -f experiments/distill/Dockerfile.train -t distill-train .
+FROM nvidia/cuda:12.1.1-devel-ubuntu22.04
+
+ENV DEBIAN_FRONTEND=noninteractive \
+    PYTHONUNBUFFERED=1 \
+    PYTHONPATH=/app
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+        python3.10 python3-pip git && \
+    rm -rf /var/lib/apt/lists/* && \
+    ln -sf /usr/bin/python3.10 /usr/bin/python
+
+WORKDIR /app
+# Install the isolated GPU deps FIRST (layer-cached), then the code.
+COPY experiments/distill/requirements.txt ./distill-requirements.txt
+RUN python -m pip install --no-cache-dir --upgrade pip && \
+    python -m pip install --no-cache-dir -r distill-requirements.txt
+
+COPY . .
+
+# HF token (gated base models) + cache dir come from Nebius secrets/mounts at run.
+ENV HF_HOME=/data/hf_cache
+ENTRYPOINT ["python", "experiments/distill/train_distill.py"]
+CMD ["--base-model", "Qwen/Qwen2.5-7B-Instruct", "--out", "/data/distill/adapter"]
