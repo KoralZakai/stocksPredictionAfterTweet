@@ -31,6 +31,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import shutil
 import subprocess
 import sys
 from datetime import datetime, timezone
@@ -204,6 +205,8 @@ def main() -> None:
     ap.add_argument("--band", type=float, default=0.0, help="beat-SPY noise band (0 = strict)")
     ap.add_argument("--alpha", type=float, default=0.05, help="BH significance level")
     ap.add_argument("--manifest", default=MANIFEST)
+    ap.add_argument("--dataset-out", default="",
+                    help="also copy macro_dataset.csv here (e.g. /data/reports/... on the bucket)")
     a = ap.parse_args()
 
     results = _load_or_run(a)
@@ -220,6 +223,13 @@ def main() -> None:
     _print_manifest(manifest)
     print(f"\n-> manifest -> {a.manifest}")
     print("-> dataset  -> reports/macro_dataset.csv")
+
+    # Publish the dataset to the shared bucket too (the Endpoint needs only the
+    # manifest, but the challenge lists macro_dataset.csv as a Job artifact).
+    if a.dataset_out and Path(a.dataset_out) != Path("reports/macro_dataset.csv"):
+        Path(a.dataset_out).parent.mkdir(parents=True, exist_ok=True)
+        shutil.copyfile("reports/macro_dataset.csv", a.dataset_out)
+        print(f"-> dataset  -> {a.dataset_out}")
 
 
 if __name__ == "__main__":
