@@ -52,7 +52,7 @@ CHECKPOINTS = {
 # same backward-only convention labeling/windows.py already uses.
 
 
-def price_at(series: dict, tk: str, t: datetime) -> float | None:
+def price_at(series: dict[str, tuple[list[int], list[float]]], tk: str, t: datetime) -> float | None:
     from bisect import bisect_right
     if tk not in series:
         return None
@@ -95,11 +95,14 @@ def main() -> None:
                "tweet_stance_on_this_stock": TWEET_STANCE_ON_ENERGY,
                "prev_close_before_tweet": round(base, 2) if base else None,
                **{k: (round(v, 2) if v else None) for k, v in vals.items()}}
+        eod_pct: float | None = None
         for k in ("session_open", "open+1h", "end_of_day"):
             v = vals[k]
-            row[f"pct_vs_prev_close_{k}"] = None if not (base and v) else round((v / base - 1) * 100, 2)
+            pct = None if not (base and v) else round((v / base - 1) * 100, 2)
+            row[f"pct_vs_prev_close_{k}"] = pct
+            if k == "end_of_day":
+                eod_pct = pct
 
-        eod_pct = row["pct_vs_prev_close_end_of_day"]
         actual_direction = "n/a" if eod_pct is None else (
             "up" if eod_pct > 0.1 else "down" if eod_pct < -0.1 else "flat")
         row["actual_direction_eod"] = actual_direction

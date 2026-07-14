@@ -1,0 +1,85 @@
+post_date,hour_utc,phase,weekend_flag,market_closed,intensity,ticker,ticker_name,indices,sector,n_peers,track,is_targeted_action,has_action_verbs,execution_window,summary,macro_link,label_eod,label_eod_soft,label_1mo_soft,hit_30m,hit_1h,hit_1mo,split
+2025-01-06,12.4,premarket,0,1,6,TSLA,Tesla,SPY QQQ,XLY,4,micro,1,0,Monday_Open_Shock,Elon Musk praises Trump,Pro-Trump sentiment may boost TSLA,0,0,0,,,0,train
+2025-01-29,2.07,premarket,0,1,8,TSLA,Tesla,SPY QQQ,XLY,4,micro,1,0,Noise_Zone,Elon Musk to rescue astronauts,showcases Tesla's tech capability,0,0,0,,,0,train
+2025-02-17,15.78,regular,0,0,6,AMZN,Amazon,SPY QQQ DIA,XLY,4,micro,1,0,Regular_Hours,Amazon mentioned as book retailer,increased book sales,0,0,0,,,0,train
+2025-02-19,0.68,premarket,0,1,6,TSLA,Tesla,SPY QQQ,XLY,4,micro,1,0,Noise_Zone,Elon Musk interview tonight,Positive publicity,1,1,0,,,0,train
+2025-02-24,12.27,premarket,0,1,9,AAPL,Apple,SPY QQQ DIA,XLK,4,micro,1,1,Monday_Open_Shock,Apple invests $500B in US,boosts US economy,1,1,0,,,0,train
+2025-02-24,16.82,regular,0,0,4,TSLA,Tesla,SPY QQQ,XLY,4,micro,1,0,Regular_Hours,Musk implies gov't spending cut,less gov't spending may hurt TSLA subsidies,-1,1,1,,,1,train
+2025-02-26,11.27,premarket,0,1,8,TSLA,Tesla,SPY QQQ,XLY,4,micro,1,0,Noise_Zone,Trump endorses Elon Musk,Boosts Tesla's public image,0,0,0,,,0,train
+2025-02-26,13.02,premarket,0,1,6,AAPL,Apple,SPY QQQ DIA,XLK,4,micro,1,0,Noise_Zone,criticizes Apple's DEI rules,negative sentiment may hurt brand,-1,1,1,,,1,train
+2025-03-11,4.23,premarket,0,1,9,TSLA,Tesla,SPY QQQ,XLY,4,micro,1,0,Noise_Zone,Elon Musk/Tesla praised,Boycott backlash,1,1,1,,,1,train
+2025-03-12,20.08,afterhours,0,1,6,GS,Goldman Sachs,SPY DIA,XLF,4,micro,1,0,Noise_Zone,GS CEO praises administration's engagement,Pro-business stance benefits GS,0,0,0,,,0,train
+2025-03-12,20.38,afterhours,0,1,8,AAPL,Apple,SPY QQQ DIA,XLK,4,micro,1,1,Noise_Zone,Apple invests $500B in US,domestic investment boost,0,0,0,,,0,train
+2025-03-17,5.82,premarket,0,1,6,TSLA,Tesla,SPY QQQ,XLY,4,micro,1,0,Monday_Open_Shock,Astronauts thank Musk,Positive PR,0,0,1,,,1,train
+2025-03-19,1.72,premarket,0,1,8,TSLA,Tesla,SPY QQQ,XLY,4,micro,1,0,Noise_Zone,Elon Musk praised,positive sentiment boosts TSLA,1,1,1,,,1,train
+2025-03-20,12.98,premarket,0,1,8,NVDA,NVIDIA,SPY QQQ DIA,XLK SMH,6,micro,1,0,Noise_Zone,NVIDIA to spend hundreds of billions in US,US investment boost,1,1,0,,,0,train
+2025-03-20,15.37,regular,0,0,6,AAPL,Apple,SPY QQQ DIA,XLK,4,micro,1,1,Regular_Hours,Apple invests in US,US investment plans,1,1,1,,,0,train
+2025-03-21,3.0,premarket,0,1,6,TSLA,Tesla,SPY QQQ,XLY,4,micro,1,0,Noise_Zone,Fake news about Elon Musk,TSLA vs auto/tech peers,1,1,1,,,1,train
+2025-03-31,22.98,afterhours,0,1,6,TSLA,Tesla,SPY QQQ,XLY,4,micro,1,0,Noise_Zone,GOP supports Musk,Pro-Musk stance boosts TSLA,1,1,1,,,1,train
+2025-04-01,23.33,afterhours,0,1,2,TSLA,Tesla,SPY QQQ,XLY,4,micro,1,0,Noise_Zone,Elon Musk criticizes judges,CEO controversy,0,0,0,,,0,train
+2025-04-09,11.73,premarket,0,1,8,AAPL,Apple,SPY QQQ DIA,XLK,4,micro,1,0,Noise_Zone,Apple is thriving in US,favorable business climate,1,1,0,,,0,train
+2025-04-09,13.42,premarket,0,1,8,JPM,JPMorgan Chase,SPY DIA,XLF,4,micro,1,0,Noise_Zone,JPM CEO optimistic on trade,positive trade outlook boosts banks,0,0,1,,,0,train
+2025-04-14,14.87,regular,0,0,8,NVDA,NVIDIA,SPY QQQ DIA,XLK SMH,6,micro,1,0,Regular_Hours,NVIDIA to make AI supercomputers in US,domestic production boosts NVDA vs foreign peers,1,1,1,,,1,train
+2025-04-15,11.6,premarket,0,1,9,NVDA,NVIDIA,SPY QQQ DIA,XLK SMH,6,micro,1,0,Noise_Zone,NVIDIA invests $500B in A.I. supercomputers,US investment boost,1,1,1,,,1,train
+2025-04-15,14.77,regular,0,0,8,BA,Boeing,SPY DIA,XLI ITA,7,micro,1,0,Regular_Hours,China reneged on Boeing deal,trade tensions,0,0,0,,,0,train
+2025-04-20,20.25,weekend,1,1,6,AMD,AMD,SPY QQQ,XLK SMH,6,micro,1,0,Monday_Open_Shock,Potential business with US,Increased global trade,1,1,1,,,1,train
+2025-04-24,13.55,regular,0,0,8,AAPL,Apple,SPY QQQ DIA,XLK,4,micro,1,1,Regular_Hours,"CEO criticizes Harvard, implies lawyer is bad",negative PR for Apple,0,1,1,,,1,train
+2025-04-24,14.72,regular,0,0,8,BA,Boeing,SPY DIA,XLI ITA,7,micro,1,0,Regular_Hours,Boeing should default China,trade tensions,1,1,1,,,1,train
+2025-05-01,14.08,regular,0,0,8,NVDA,NVIDIA,SPY QQQ DIA,XLK SMH,6,micro,1,0,Regular_Hours,NVIDIA to build next-gen tech in US,US manufacturing boost,0,0,1,,,1,train
+2025-05-01,14.17,regular,0,0,6,JNJ,Johnson & Johnson,SPY DIA,XLV,4,micro,1,0,Regular_Hours,JNJ recognized for US investment,boosts US presence,0,1,1,,,0,train
+2025-05-09,16.32,regular,0,0,8,BA,Boeing,SPY DIA,XLI ITA,7,micro,1,1,Regular_Hours,Boeing gets $10B order,UK deal boosts BA,0,1,1,,,1,train
+2025-05-13,23.83,afterhours,0,1,6,BA,Boeing,SPY DIA,XLI ITA,7,micro,1,0,Noise_Zone,Boeing loses potential sale,reduced defense spending on BA,0,1,1,,,1,train
+2025-05-18,2.48,weekend,1,1,8,BA,Boeing,SPY DIA,XLI ITA,7,micro,1,0,Monday_Open_Shock,Qatar donating Boeing 747 to US Air Force,positive publicity for Boeing,0,1,0,,,0,train
+2025-05-23,11.32,premarket,0,1,8,AAPL,Apple,SPY QQQ DIA,XLK,4,micro,1,0,Noise_Zone,Threat of 25% tariff on iPhones,Trade policy impact,0,0,1,,,1,train
+2025-05-25,23.82,weekend,1,1,6,AMZN,Amazon,SPY QQQ DIA,XLY,4,micro,1,0,Monday_Open_Shock,New book on Amazon,Increased sales,0,0,1,,,1,train
+2025-05-30,0.23,premarket,0,1,8,TSLA,Tesla,SPY QQQ,XLY,4,micro,1,0,Noise_Zone,Elon Musk praised,endorsement boosts sentiment,0,0,0,,,0,train
+2025-07-01,4.73,premarket,0,1,8,TSLA,Tesla,SPY QQQ,XLY,4,micro,1,1,Noise_Zone,"Anti-EV mandate, implies Tesla relies on subsidies",Negative impact on Tesla vs peers due to subsidy dependence,0,1,0,,,0,train
+2025-07-06,22.33,weekend,1,1,8,TSLA,Tesla,SPY QQQ,XLY,4,micro,1,1,Monday_Open_Shock,"EV mandate eliminated, negative for Tesla",reduced EV demand,0,0,0,,,0,train
+2025-07-10,14.47,regular,0,0,9,NVDA,NVIDIA,SPY QQQ DIA,XLK SMH,6,micro,1,0,Regular_Hours,NVIDIA up 47% since Trump tariffs,tariff revenue boosts US economy,1,1,1,,,1,train
+2025-07-15,18.15,regular,0,0,9,BA,Boeing,SPY DIA,XLI ITA,7,micro,1,0,Regular_Hours,Indonesia to buy 50 Boeing jets,major export deal,0,0,0,,,0,train
+2025-07-22,19.35,regular,0,0,9,BA,Boeing,SPY DIA,XLI ITA,7,micro,1,1,Regular_Hours,Indonesia to buy Boeing aircraft,"reduced tariffs, new trade deal",1,1,0,,,0,train
+2025-07-24,2.47,premarket,0,1,6,NVDA,NVIDIA,SPY QQQ DIA,XLK SMH,6,micro,1,0,Noise_Zone,NVIDIA CEO praises Trump,politics may hurt NVDA vs peers,0,0,0,,,0,train
+2025-08-07,11.65,premarket,0,1,8,INTC,Intel,SPY QQQ,SMH,4,micro,1,1,Noise_Zone,CEO under fire,leadership crisis,-1,1,0,,,0,train
+2025-08-11,20.95,afterhours,0,1,6,INTC,Intel,SPY QQQ,SMH,4,micro,1,0,Noise_Zone,Positive meeting with Intel's Lip-Bu Tan,Government support,1,1,1,,,1,train
+2025-08-12,14.27,regular,0,0,8,GS,Goldman Sachs,SPY DIA,XLF,4,micro,1,0,Regular_Hours,GS made bad predictions,GS underperforms peers due to incorrect tariff analysis,0,0,0,,,0,train
+2025-08-22,21.07,afterhours,0,1,8,INTC,Intel,SPY QQQ,SMH,4,micro,1,0,Monday_Open_Shock,US owns 10% of Intel,govt investment boosts confidence,0,0,1,,,1,train
+2025-08-25,13.23,premarket,0,1,9,INTC,Intel,SPY QQQ,SMH,4,micro,1,0,Monday_Open_Shock,Intel's deal benefits USA,Favors US-based companies,0,0,1,,,1,train
+2025-09-01,12.25,premarket,0,1,8,PFE,Pfizer,SPY,XLV,4,micro,1,0,Monday_Open_Shock,Pfizer hiding Covid drug results,transparency concerns vs peers,0,0,1,,,0,train
+2025-09-05,19.02,regular,0,0,8,AAPL,Apple,SPY QQQ DIA,XLK,4,micro,1,0,Regular_Hours,President supports Apple,US protectionism,0,0,1,,,0,train
+2025-09-08,17.42,regular,0,0,6,AMZN,Amazon,SPY QQQ DIA,XLY,4,micro,1,0,Regular_Hours,Book available on Amazon,Increased traffic to Amazon,1,1,0,,,0,train
+2025-09-15,16.7,regular,0,0,8,AMZN,Amazon,SPY QQQ DIA,XLY,4,micro,1,1,Regular_Hours,Book hits #1 on Amazon,Increased traffic/exposure,1,1,0,,,0,train
+2025-09-19,17.97,regular,0,0,8,BA,Boeing,SPY DIA,XLI ITA,7,micro,1,0,Regular_Hours,Boeing aircraft purchase deal,US-Turkey trade deal boost,0,0,0,,,0,train
+2025-09-22,22.48,afterhours,0,1,9,BA,Boeing,SPY DIA,XLI ITA,7,micro,1,1,Noise_Zone,Boeing signs $8B deal,major order boosts US jobs,0,0,0,,,0,val
+2025-09-26,21.23,afterhours,0,1,8,MSFT,Microsoft,SPY QQQ DIA,XLK,4,micro,1,1,Monday_Open_Shock,MSFT hires controversial figure,govt contracts at risk,0,0,1,,,0,val
+2025-11-17,22.03,afterhours,0,1,6,AMZN,Amazon,SPY QQQ DIA,XLY,4,micro,1,0,Noise_Zone,New book available on Amazon,Increased sales on platform,0,0,0,,,0,val
+2025-12-08,21.48,afterhours,0,1,9,NVDA,NVIDIA,SPY QQQ DIA,XLK SMH,6,micro,1,0,Noise_Zone,NVIDIA can ship H200 to China,US-China trade relief,0,0,1,,,0,val
+2025-12-15,21.88,afterhours,0,1,2,AMZN,Amazon,SPY QQQ DIA,XLY,4,micro,1,0,Noise_Zone,Amazon mentioned as book seller,increased traffic,0,0,1,,,1,val
+2025-12-30,21.3,afterhours,0,1,8,AMZN,Amazon,SPY QQQ DIA,XLY,4,micro,1,0,Noise_Zone,Amazon to invest $50B in AI for US gov,New revenue stream,0,0,1,,,1,val
+2026-01-01,21.03,afterhours,0,1,6,AMZN,Amazon,SPY QQQ DIA,XLY,4,micro,1,0,Noise_Zone,Book available on Amazon,Increased traffic/book sales,0,0,1,,,1,val
+2026-01-07,21.03,afterhours,0,1,9,RTX,RTX (Raytheon),SPY,XLI ITA,7,micro,1,0,Noise_Zone,RTX not meeting US military needs,gov contract loss risk,-1,1,1,,,0,val
+2026-01-08,21.2,afterhours,0,1,9,INTC,Intel,SPY QQQ,SMH,4,micro,1,0,Noise_Zone,"Intel launches sub 2nm CPU, US gov benefits",US investment in Intel boosts domestic chip manufacturing,1,1,1,,,1,val
+2026-01-09,22.0,afterhours,0,1,8,AMZN,Amazon,SPY QQQ DIA,XLY,4,micro,1,0,Monday_Open_Shock,Book on Trump economy available on Amazon,Boosts AMZN sales,0,0,0,,,0,val
+2026-01-12,23.63,afterhours,0,1,8,MSFT,Microsoft,SPY QQQ DIA,XLK,4,micro,1,1,Noise_Zone,MSFT working with admin,partnership boost,0,0,0,,,0,val
+2026-01-14,13.35,premarket,0,1,6,INTC,Intel,SPY QQQ,SMH,4,micro,1,0,Noise_Zone,Danish intel warns of threats,Geopolitical tensions boost defense sector,0,0,0,,,0,val
+2026-01-17,16.22,weekend,1,1,8,JPM,JPMorgan Chase,SPY DIA,XLF,4,micro,1,0,Monday_Open_Shock,JPMorgan Chase sued over debanking,negative publicity,-1,1,0,,,0,val
+2026-01-22,18.02,regular,0,0,8,JPM,JPMorgan Chase,SPY DIA,XLF,4,micro,1,0,Regular_Hours,Trump sues JPMorgan Chase for $5B,reputation risk,-1,1,0,,,0,val
+2026-01-23,18.52,regular,0,0,8,AMZN,Amazon,SPY QQQ DIA,XLY,4,micro,1,0,Regular_Hours,Amazon hosts Melania movie,unique content boosts engagement,0,0,0,,,0,val
+2026-01-26,17.02,regular,0,0,6,AMZN,Amazon,SPY QQQ DIA,XLY,4,micro,1,0,Regular_Hours,Amazon selling out movie tickets,increased traffic to Amazon,1,1,0,,,0,val
+2026-01-30,11.8,premarket,0,1,8,MS,Morgan Stanley,SPY,XLF,4,micro,1,1,Noise_Zone,MS alum Kevin Warsh nominated as Fed Chair,Warsh's experience at MS may influence monetary policy,1,1,0,,,0,val
+2026-01-31,1.97,weekend,1,1,8,AMZN,Amazon,SPY QQQ DIA,XLY,4,micro,1,0,Monday_Open_Shock,Promotes Amazon content,Unique offering,1,1,0,,,0,test
+2026-02-11,6.38,premarket,0,1,6,AAPL,Apple,SPY QQQ DIA,XLK,4,micro,1,0,Noise_Zone,Apple News favors left-leaning media,perceived bias may hurt AAPL reputation,0,0,1,,,1,test
+2026-02-27,15.68,regular,0,0,6,AAPL,Apple,SPY QQQ DIA,XLK,4,micro,1,0,Regular_Hours,FTC probes Apple's news app for bias,regulatory risk,-1,1,0,,,0,test
+2026-03-06,20.77,afterhours,0,1,8,BA,Boeing,SPY DIA,XLI ITA,7,micro,1,0,Monday_Open_Shock,Boeing to quadruple production,Defense spending boost,0,0,0,,,0,test
+2026-03-19,20.9,afterhours,0,1,8,JPM,JPMorgan Chase,SPY DIA,XLF,4,micro,1,0,Noise_Zone,JPMorgan's action on Trump sparks fear,regulatory scrutiny,0,1,0,,,0,test
+2026-04-09,23.57,afterhours,0,1,8,AMZN,Amazon,SPY QQQ DIA,XLY,4,micro,1,0,Noise_Zone,Book available on Amazon,Increased traffic/book sales,1,1,1,,,1,test
+2026-04-17,19.35,regular,0,0,8,AAPL,Apple,SPY QQQ DIA,XLK,4,micro,1,0,Regular_Hours,Apple expands US manufacturing,US job creation,1,1,1,,,0,test
+2026-04-20,17.58,regular,0,0,6,BA,Boeing,SPY DIA,XLI ITA,7,micro,1,1,Regular_Hours,BA plane used for cash transfer,negative association with past deal,0,1,1,,,0,test
+2026-04-21,10.7,premarket,0,1,8,AAPL,Apple,SPY QQQ DIA,XLK,4,micro,1,0,Noise_Zone,Praises Tim Cook's leadership,Boosts investor confidence in AAPL,0,0,1,,,0,test
+2026-04-21,23.58,afterhours,0,1,6,BA,Boeing,SPY DIA,XLI ITA,7,micro,1,0,Noise_Zone,Boeing mentioned as delivering cash to Iran,US-Iran tensions may increase defense spending,1,1,0,,,0,test
+2026-04-23,22.85,afterhours,0,1,8,WFC,Wells Fargo,SPY,XLF,4,micro,1,1,Noise_Zone,Wells Fargo difficult to deal with,regulatory scrutiny,-1,1,1,,,1,test
+2026-04-29,22.33,afterhours,0,1,8,INTC,Intel,SPY QQQ,SMH,4,micro,1,0,Noise_Zone,Praises Intel's success,US investment boost,0,0,1,,,1,test
+2026-04-29,23.07,afterhours,0,1,2,AMZN,Amazon,SPY QQQ DIA,XLY,4,micro,1,0,Noise_Zone,Book available on Amazon,Increased book sales,0,0,0,,,0,test
+2026-05-13,3.15,premarket,0,1,8,GS,Goldman Sachs,SPY DIA,XLF,4,micro,1,0,Noise_Zone,GS CEO invited to China trip,US-China relations improvement,1,1,1,,,0,test
+2026-06-05,23.53,afterhours,0,1,6,AMZN,Amazon,SPY QQQ DIA,XLY,4,micro,1,0,Monday_Open_Shock,New book available on Amazon,Increased traffic to Amazon,0,0,,,,,test
+2026-06-18,4.08,premarket,0,1,8,AMZN,Amazon,SPY QQQ DIA,XLY,4,micro,1,0,Noise_Zone,Promotes book on Amazon,Increased book sales,1,1,,,,,test
+2026-06-18,4.48,premarket,0,1,8,AAPL,Apple,SPY QQQ DIA,XLK,4,micro,1,0,Noise_Zone,Apple to build chips in US with Intel,US chip production boost,0,0,,,,,test

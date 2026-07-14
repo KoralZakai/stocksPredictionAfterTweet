@@ -1,0 +1,155 @@
+-> 40 candidate geopolitical/macro tweets (2025-01-01..2026-06-01), model=meta-llama/Llama-3.3-70B-Instruct
+
+  [1/40] 2025-01-01 Trade Policy               early 0/0 -> late 2/4  
+  [2/40] 2025-02-04 Geopolitics / Trade        early 0/2 -> late 1/2  
+  [3/40] 2025-02-26 Economy / Inflation        early 3/6 -> late 0/3  
+  [4/40] 2025-03-14 Geopolitics / Conflict     early 0/0 -> late 0/1  
+  [5/40] 2025-03-29 US Politics / Election     early 2/4 -> late 2/3  
+  [6/40] 2025-04-10 Geopolitics / Trade        early 3/4 -> late 2/3  
+  [7/40] 2025-04-27 Fiscal Policy              early 1/4 -> late 3/3  Structural Drift
+  [8/40] 2025-05-08 Domestic Politics          early 0/6 -> late 3/3  Structural Drift
+  [9/40] 2025-05-23 Energy Policy              early 5/6 -> late 3/3  
+  [10/40] 2025-06-06 Economic Growth            early 5/6 -> late 3/3  
+  [11/40] 2025-06-19 Geopolitics / Security     early 1/2 -> late 1/1  
+  [12/40] 2025-06-25 Geopolitics / Conflict     early 2/4 -> late 2/3  
+  [13/40] 2025-07-02 Immigration Policy         early 4/4 -> late 2/2  
+  [14/40] 2025-07-18 Domestic Politics          early 4/8 -> late 2/4  
+  [15/40] 2025-07-30 Trade Deals                early 6/6 -> late 2/3  
+  [16/40] 2025-08-11 US Politics                early 1/2 -> late 1/1  
+  [17/40] 2025-08-21 Geopolitics / War          early 3/6 -> late 1/3  
+  [18/40] 2025-09-16 Geopolitics / Peace        early 0/4 -> late 1/2  
+  [19/40] 2025-10-10 Geopolitics / Trade War    early 4/8 -> late 2/4  
+  [20/40] 2025-10-25 Politics / Election        early 0/4 -> late 1/3  
+  [21/40] 2025-10-29 Geopolitics / Defense      early 0/0 -> late 0/2  
+  [22/40] 2025-11-03 Domestic Politics          early 0/0 -> late 0/1  
+  [23/40] 2025-11-03 Domestic Politics          early 0/2 -> late 1/3  
+  [24/40] 2025-11-08 US Politics                early 0/2 -> late 2/4  
+  [25/40] 2025-11-29 Trade Policy               early 0/2 -> late 4/4  Structural Drift
+  [26/40] 2025-12-18 US Politics                early 0/0 -> late 2/2  
+  [27/40] 2026-01-07 Geopolitics / Peace        early 1/4 -> late 2/2  Structural Drift
+  [28/40] 2026-01-21 Geopolitics / Trade        early 8/8 -> late 2/4  Flash Shock
+  [29/40] 2026-01-26 US Politics                early 0/0 -> late 0/0  
+  [30/40] 2026-02-05 Geopolitics / Military     early 2/4 -> late 2/2  
+  [31/40] 2026-02-20 Trade War                  early 4/10 -> late 4/5  Structural Drift
+  [32/40] 2026-03-03 Geopolitics / War          early 3/4 -> late 2/3  
+  [33/40] 2026-03-14 Geopolitics / Peace        early 3/4 -> late 2/3  
+  [34/40] 2026-03-25 Geopolitics / Peace        early 0/6 -> late 3/3  Structural Drift
+  [35/40] 2026-04-08 Geopolitics / Disinformati early 4/4 -> late 0/2  Flash Shock
+  [36/40] 2026-04-14 US Politics                early 5/6 -> late 2/3  
+  [37/40] 2026-04-20 Geopolitics / Conflict     early 4/6 -> late 1/3  Flash Shock
+  [38/40] 2026-05-01 US Politics                early 5/6 -> late 3/4  
+  [39/40] 2026-05-12 Geopolitics / Conflict     early 2/6 -> late 1/3  
+  [40/40] 2026-05-18 US Politics / Election     early 3/6 -> late 2/3  
+
+====================================================================================
+AGGREGATE HIT-RATE across 40 tweets   model=meta-llama/Llama-3.3-70B-Instruct
+====================================================================================
+horizon       hits     rate       z   p(vs coin-flip)
+30m          42/83    50.6%    0.11            0.4563
+1h           46/83    55.4%    0.99            0.1616
+EOD         54/110    49.1%   -0.19            0.5756
+3d          60/110    54.5%    0.95            0.1702
+1w          61/110    55.5%    1.14            0.1263
+1mo         69/110    62.7%    2.67            0.0038
+
+(above counts every instrument -> inflated N: instruments within a tweet are correlated, NOT independent. The honest aggregate is one call per tweet:)
+
+TWEET-LEVEL HIT-RATE (majority vote per tweet; N = tweets)
+horizon       tweets     rate       z   p(vs coin-flip)
+30m            19/34    55.9%    0.69            0.2464
+1h             21/34    61.8%    1.37            0.0850
+EOD            22/39    56.4%    0.80            0.2117
+3d             23/39    59.0%    1.12            0.1312
+1w             22/39    56.4%    0.80            0.2117
+1mo            29/39    74.4%    3.04            0.0012
+
+p < 0.05 here is the HONEST test (N=tweets). Not multiple-comparison corrected across horizons; treat as suggestive.
+
+CATEGORIES:
+  Flash Shocks     (early 30m/1h right, fades by 1mo): 3
+  Structural Drifts(early noisy, 1mo builds up):       6
+    [Flash Shock     ] 2026-01-21 Geopolitics / Trade            early 8/8 late 2/4
+    [Flash Shock     ] 2026-04-08 Geopolitics / Disinformation   early 4/4 late 0/2
+    [Flash Shock     ] 2026-04-20 Geopolitics / Conflict         early 4/6 late 1/3
+    [Structural Drift] 2025-04-27 Fiscal Policy                  early 1/4 late 3/3
+    [Structural Drift] 2025-05-08 Domestic Politics              early 0/6 late 3/3
+    [Structural Drift] 2025-11-29 Trade Policy                   early 0/2 late 4/4
+
+TOP 5 strongest examples (best correct-calls x move size at ANY horizon):
+  2026-02-20  Trade War                      score=0.696  Structural Drift
+  2026-03-03  Geopolitics / War              score=0.478  
+  2026-03-25  Geopolitics / Peace            score=0.407  Structural Drift
+  2025-02-04  Geopolitics / Trade            score=0.402  
+  2025-05-23  Energy Policy                  score=0.319  
+
+-> top-5 visual gallery -> reports/nebius_backtest_top5.html
+
+####################################################################################
+# CROSS-CORRELATIONS (training-data cleaning signals)
+####################################################################################
+
+(1) ASSET CLASS x HORIZON hit-rate  (decay = early 30m/1h avg  ->  1mo):
+  class                   30m           1h          EOD           3d           1w          1mo     decay
+  commodity_fx     64% (7/11)   64% (7/11)   54% (7/13)   62% (8/13)   62% (8/13)  77% (10/13)     -13pp
+  index           46% (11/24)  46% (11/24)  37% (10/27)  59% (16/27)  59% (16/27)  67% (18/27)     -21pp
+  sector_etf      44% (14/32)  56% (18/32)  50% (23/46)  54% (25/46)  52% (24/46)  63% (29/46)     -13pp
+  single_stock      25% (1/4)    25% (1/4)    67% (4/6)    50% (3/6)    67% (4/6)    67% (4/6)     -42pp
+  volatility       75% (9/12)   75% (9/12)  56% (10/18)   44% (8/18)   50% (9/18)   44% (8/18)     +31pp
+
+  named barometers (VIXY vs CAT vs LMT):
+  VIXY             75% (9/12)   75% (9/12)  56% (10/18)   44% (8/18)   50% (9/18)   44% (8/18)
+  LMT              100% (1/1)     0% (0/1)   100% (2/2)   100% (2/2)    50% (1/2)    50% (1/2)
+  CAT                0% (0/1)     0% (0/1)     0% (0/1)     0% (0/1)   100% (1/1)   100% (1/1)
+
+(2) LLM INTENSITY (1-10) vs drift  (early 30m/1h  ->  late 1mo hit-rate):
+  intensity     tweets           early            late   drift(late-early)
+  low(1-4)           0            n/a             n/a                  n/a
+  mid(5-7)           4       50% (4/8)       57% (4/7)                +7pp
+  high(8-10)        36    53% (84/158)    63% (65/103)               +10pp
+
+(3) SESSION PHASE vs 30m reaction  (hit-rate, data-coverage, |move| distortion):
+  phase         tweets         30m hit    30m coverage  mean|30m move|
+  regular           14     54% (22/41)             95%           0.53%
+  premarket          7      69% (9/13)             72%           0.36%
+  afterhours        13      42% (8/19)             66%           0.31%
+  weekend            6      30% (3/10)             50%           0.37%
+
+====================================================================================
+TRAIN / VALIDATION / TEST DATASET (one row per tweet, chronological 60/20/20)
+====================================================================================
+  -> reports/macro_dataset.csv   (39 tweets: 23 train / 8 val / 8 test)
+  -> reports/macro_dataset_config.json
+  label=label_1mo (1mo basket confirmed), positive_rate=0.744, majority_baseline=0.744
+  features=['intensity', 'phase', 'weekend_flag', 'market_closed', 'n_instruments', 'scenario']
+
+====================================================================================
+VALIDATION EXAMPLES — inspect the model's brain (one per pattern)
+====================================================================================
+
+### Flash Shock  |  2026-01-21  |  Geopolitics / Trade  |  intensity 8  |  split=val
+  TWEET: "Based upon a very productive meeting that I have had with the Secretary General of NATO, Mark Rutte, we have formed the framework of a future deal with respect to Greenland and, in fact, the entire Arctic Region. This solution, if consummat"
+  MEANING:     US and NATO form framework for Arctic deal
+  MACRO LINK:  Reduced tariffs and trade tensions
+  SHORT CALL:  Market relief rally and risk-on sentiment
+  LONG CALL:   Increased trade and cooperation between US and NATO nations
+  REALITY (short 30m/1h vs long 1mo):
+    SPY   pred up       30m    +0.7%  1h    +0.4%  1mo    -0.1%  [MISS@1mo]
+    VIXY  pred down     30m    -3.2%  1h    -1.8%  1mo    +7.5%  [MISS@1mo]
+    XLI   pred up       30m    +0.4%  1h    +0.2%  1mo    +6.4%  [HIT@1mo]
+    ITA   pred up       30m    +0.7%  1h    +0.7%  1mo    +2.0%  [HIT@1mo]
+  CONCLUSION:  The model nailed the immediate reaction (early 100% correct) but the edge decayed to 50% by 1 month — the crowd over-reacted, then re-priced as broader macro forces took over. Rule: trust this signal INTRADAY ONLY.
+
+### Structural Drift  |  2025-11-29  |  Trade Policy  |  intensity 8  |  split=val
+  TWEET: "Tariffs have made our Country Rich, Strong, Powerful, and Safe. They have been successfully used by other Countries against us for Decades, but when it comes to Tariffs, and because of what I have set in place, WE HAVE ALL THE CARDS, and wi"
+  MEANING:     Tariffs made US rich and strong
+  MACRO LINK:  Trade barriers impact economy
+  SHORT CALL:  Markets rise on confidence boost, WHY: perceived strong leadership
+  LONG CALL:   Trade tensions rise, WHY: retaliatory measures
+  REALITY (short 30m/1h vs long 1mo):
+    SPY   pred up       30m    -0.0%  1h    +0.0%  1mo    +1.5%  [HIT@1mo]
+    ITA   pred up       30m     n/a   1h     n/a   1mo    +6.4%  [HIT@1mo]
+    USO   pred down     30m     n/a   1h     n/a   1mo    -1.2%  [HIT@1mo]
+    VIXY  pred down     30m     n/a   1h     n/a   1mo   -20.0%  [HIT@1mo]
+  CONCLUSION:  The first hour was noise (early 0%), but the thesis played out over weeks (1mo 100% correct) as the policy actually took effect. Rule: SLOW-BURN signal — hold to 1 month, ignore the immediate wobble.
+
+-> narrative dashboard -> reports/nebius_validation_examples.html

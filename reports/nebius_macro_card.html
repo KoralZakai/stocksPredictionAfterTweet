@@ -1,0 +1,46 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Nebius macro validation</title><style>
+:root{--bg:#f4f5f2;--surface:#fff;--surface-2:#eef0ec;--ink:#191c1f;--ink-2:#5a6067;
+ --ink-3:#878d94;--line:#dee1db;--accent:#a8792f;
+ --up:#17805f;--up-bg:#e4f1ea;--down:#c0432f;--down-bg:#f7e5e0;--flat:#9aa0a6;
+ --font:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font);font-size:14px;line-height:1.5}
+.wrap{max-width:860px;margin:0 auto;padding:28px 18px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:18px 20px;margin:0 0 18px}
+.ph{font-size:22px;margin:0 0 4px}.psub{color:var(--ink-2);margin:0 0 20px}
+.hl{font-size:18px;font-weight:800;padding:12px 14px;border-radius:9px;margin:0 0 12px;
+ border-left:6px solid var(--flat);background:var(--surface-2)}
+.hl.up{border-left-color:var(--up);background:var(--up-bg);color:var(--up)}
+.hl.down{border-left-color:var(--down);background:var(--down-bg);color:var(--down)}
+.meta{font-size:12px;color:var(--ink-2);margin:0 0 10px}.meta b{color:var(--ink)}
+blockquote{margin:10px 0;padding:9px 13px;border-left:3px solid var(--accent);
+ background:var(--surface-2);border-radius:0 6px 6px 0;font-style:italic}
+.why{font-size:13px;color:var(--ink-2);margin:8px 0 12px}.why b{color:var(--ink)}
+.calls{display:flex;flex-direction:column;gap:6px;margin:0 0 14px}
+.call{font-size:13px;font-weight:600;padding:7px 11px;border-radius:7px}
+.call.up{background:var(--up-bg);color:var(--up)}
+.call.down{background:var(--down-bg);color:var(--down)}
+.grid{width:100%;border-collapse:collapse;margin:4px 0;font-size:13px}
+.grid th{text-align:right;font-size:11px;color:var(--ink-3);padding:6px 8px;border-bottom:1px solid var(--line)}
+.grid th:first-child,.grid th:nth-child(2){text-align:left}
+.grid td{padding:8px;border-bottom:1px solid var(--line);text-align:right;
+ font-variant-numeric:tabular-nums}
+.inst{text-align:left!important}.inst b{display:inline}
+.inst .tkr{color:var(--ink-3);margin-left:6px;font-size:12px}
+.inst .role{display:block;color:var(--ink-3);font-size:11px}
+.pred{text-align:left!important;font-weight:700}
+.pred.up{color:var(--up)}.pred.down{color:var(--down)}.pred.flat{color:var(--ink-3)}
+.ret{font-weight:700;color:var(--ink-3)}
+.ret.up{color:var(--up);background:var(--up-bg)}
+.ret.down{color:var(--down);background:var(--down-bg)}
+.unit{color:var(--ink-3);font-size:12px;margin:12px 0 6px}
+.k{font-weight:700}.k.up{color:var(--up)}.k.down{color:var(--down)}
+.gauge{display:flex;gap:8px;margin:4px 0}
+.gcell{flex:1;text-align:center;padding:10px 4px;border-radius:9px;background:var(--surface-2)}
+.gcell .gh{display:block;font-size:11px;color:var(--ink-2);font-weight:600}
+.gcell .gg{font-size:20px;font-weight:800;color:var(--ink-3)}
+.gcell .gs{display:block;font-size:11px;color:var(--ink-3)}
+.gcell.up{background:var(--up-bg)}.gcell.up .gg{color:var(--up)}
+.gcell.down{background:var(--down-bg)}.gcell.down .gg{color:var(--down)}
+footer{color:var(--ink-3);font-size:11px;margin-top:16px}
+</style></head><body><div class="wrap"><article class="card"><div class="hl up">Geopolitics / Peace: CONFIRMED &#8212; 80% of the LLM&#x27;s calls were right at 1mo (4/5)</div><div class="meta"><b>Scenario:</b> Geopolitics / Peace &nbsp;&#183;&nbsp; <b>Model:</b> meta-llama/Llama-3.3-70B-Instruct &nbsp;&#183;&nbsp; <b>Tweet date:</b> 2025-04-20</div><blockquote>HOPEFULLY RUSSIA AND UKRAINE WILL MAKE A DEAL THIS WEEK. BOTH WILL THEN START TO DO BIG BUSINESS WITH THE UNITED STATES OF AMERICA, WHICH IS THRIVING, AND MAKE A FORTUNE!</blockquote><div class="why"><b>Why the LLM expects this:</b> The post expresses optimism about a potential deal between Russia and Ukraine, which could lead to increased economic cooperation and trade with the US.</div><div class="calls"><span class="call up">&#10003; Biggest hit: VIX Short-Term Futures ETF (VIXY) -27.6% at 1mo, exactly as predicted (down)</span><span class="call down">&#10007; Anomaly: Lockheed Martin Corp. (LMT) predicted down, actually +3.0% at 1mo</span></div><table class="grid"><thead><tr><th>Instrument</th><th>LLM predicted</th><th>30m</th><th>1h</th><th>EOD</th><th>3d</th><th>1w</th><th>1mo</th></tr></thead><tbody><tr><td class="inst"><b>S&amp;P 500 ETF</b><span class="tkr">SPY</span><span class="role">bullish_market</span></td><td class="pred up">&#9650; up</td><td class="ret down">-0.8%</td><td class="ret down">-1.1%</td><td class="ret down">-1.4%</td><td class="ret up">+2.7%</td><td class="ret up">+5.7%</td><td class="ret up">+14.1%</td></tr><tr><td class="inst"><b>Industrial Sector ETF</b><span class="tkr">XLI</span><span class="role">bullish_sector</span></td><td class="pred up">&#9650; up</td><td class="ret down">-0.5%</td><td class="ret down">-0.8%</td><td class="ret down">-1.3%</td><td class="ret up">+1.7%</td><td class="ret up">+4.0%</td><td class="ret up">+16.3%</td></tr><tr><td class="inst"><b>Caterpillar Inc.</b><span class="tkr">CAT</span><span class="role">bullish_barometer</span></td><td class="pred up">&#9650; up</td><td class="ret down">-1.7%</td><td class="ret down">-1.6%</td><td class="ret down">-1.6%</td><td class="ret up">+2.2%</td><td class="ret up">+5.9%</td><td class="ret up">+21.9%</td></tr><tr><td class="inst"><b>Lockheed Martin Corp.</b><span class="tkr">LMT</span><span class="role">bearish_sector</span></td><td class="pred down">&#9660; down</td><td class="ret up">-0.4%</td><td class="ret up">-0.5%</td><td class="ret up">-0.2%</td><td class="ret down">+0.9%</td><td class="ret down">+4.0%</td><td class="ret down">+3.0%</td></tr><tr><td class="inst"><b>VIX Short-Term Futures ETF</b><span class="tkr">VIXY</span><span class="role">fear_gauge</span></td><td class="pred down">&#9660; down</td><td class="ret down">+0.5%</td><td class="ret down">+2.4%</td><td class="ret down">+4.6%</td><td class="ret up">-5.3%</td><td class="ret up">-12.6%</td><td class="ret up">-27.6%</td></tr></tbody></table><p class="unit">Each % is the real move from the first market open after the tweet. <span class="k up">Green</span> = the market moved the way the LLM predicted; <span class="k down">red</span> = it moved the opposite way. Hit-rate per horizon:</p><div class="gauge"><div class="gcell down"><span class="gh">30m</span><span class="gg">20%</span><span class="gs">1/5</span></div><div class="gcell down"><span class="gh">1h</span><span class="gg">20%</span><span class="gs">1/5</span></div><div class="gcell down"><span class="gh">EOD</span><span class="gg">20%</span><span class="gs">1/5</span></div><div class="gcell up"><span class="gh">3d</span><span class="gg">80%</span><span class="gs">4/5</span></div><div class="gcell up"><span class="gh">1w</span><span class="gg">80%</span><span class="gs">4/5</span></div><div class="gcell up"><span class="gh">1mo</span><span class="gg">80%</span><span class="gs">4/5</span></div></div></article><footer>One tweet is descriptive, not proof. A real edge needs this hit-rate to beat a coin-flip across many tweets after correction.</footer></div></body></html>

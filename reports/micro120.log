@@ -1,0 +1,103 @@
+-> 99 MICRO (single-stock) tweets, model=meta-llama/Llama-3.3-70B-Instruct, intraday=off (EOD+1mo full; 30m/1h skipped)
+
+  [1/99] 2025-01-06 TSLA  Tesla              dir=up       EOD-beat-all3=miss
+  [3/99] 2025-01-29 TSLA  Tesla              dir=up       EOD-beat-all3=miss
+  [4/99] 2025-02-17 AMZN  Amazon             dir=up       EOD-beat-all3=miss
+  [5/99] 2025-02-19 TSLA  Tesla              dir=up       EOD-beat-all3=HIT
+  [7/99] 2025-02-24 AAPL  Apple              dir=up       EOD-beat-all3=HIT
+  [8/99] 2025-02-24 TSLA  Tesla              dir=down     EOD-beat-all3=HIT
+  [9/99] 2025-02-26 TSLA  Tesla              dir=up       EOD-beat-all3=miss
+  [10/99] 2025-02-26 AAPL  Apple              dir=down     EOD-beat-all3=HIT
+  [11/99] 2025-03-11 TSLA  Tesla              dir=up       EOD-beat-all3=HIT
+  [13/99] 2025-03-12 GS    Goldman Sachs      dir=up       EOD-beat-all3=miss
+  [14/99] 2025-03-12 AAPL  Apple              dir=up       EOD-beat-all3=miss
+  [15/99] 2025-03-17 TSLA  Tesla              dir=up       EOD-beat-all3=miss
+  [16/99] 2025-03-19 TSLA  Tesla              dir=up       EOD-beat-all3=HIT
+  [17/99] 2025-03-20 NVDA  NVIDIA             dir=up       EOD-beat-all3=HIT
+  [18/99] 2025-03-20 AAPL  Apple              dir=up       EOD-beat-all3=HIT
+  [19/99] 2025-03-21 TSLA  Tesla              dir=up       EOD-beat-all3=HIT
+  [20/99] 2025-03-31 TSLA  Tesla              dir=up       EOD-beat-all3=HIT
+  [21/99] 2025-04-01 TSLA  Tesla              dir=down     EOD-beat-all3=miss
+  [22/99] 2025-04-09 AAPL  Apple              dir=up       EOD-beat-all3=HIT
+  [23/99] 2025-04-09 JPM   JPMorgan Chase     dir=up       EOD-beat-all3=miss
+  [24/99] 2025-04-14 NVDA  NVIDIA             dir=up       EOD-beat-all3=HIT
+  [25/99] 2025-04-15 NVDA  NVIDIA             dir=up       EOD-beat-all3=HIT
+  [26/99] 2025-04-15 BA    Boeing             dir=down     EOD-beat-all3=miss
+  [27/99] 2025-04-20 AMD   AMD                dir=up       EOD-beat-all3=HIT
+  [28/99] 2025-04-24 AAPL  Apple              dir=down     EOD-beat-all3=miss
+  [29/99] 2025-04-24 BA    Boeing             dir=up       EOD-beat-all3=HIT
+  [30/99] 2025-05-01 NVDA  NVIDIA             dir=up       EOD-beat-all3=miss
+  [31/99] 2025-05-01 JNJ   Johnson & Johnson  dir=up       EOD-beat-all3=miss
+  [32/99] 2025-05-09 BA    Boeing             dir=up       EOD-beat-all3=miss
+  [33/99] 2025-05-13 BA    Boeing             dir=down     EOD-beat-all3=miss
+  [34/99] 2025-05-18 BA    Boeing             dir=up       EOD-beat-all3=miss
+  [35/99] 2025-05-23 AAPL  Apple              dir=down     EOD-beat-all3=miss
+  [36/99] 2025-05-25 AMZN  Amazon             dir=up       EOD-beat-all3=miss
+  [37/99] 2025-05-30 TSLA  Tesla              dir=up       EOD-beat-all3=miss
+  [39/99] 2025-07-01 TSLA  Tesla              dir=down     EOD-beat-all3=miss
+  [40/99] 2025-07-06 TSLA  Tesla              dir=down     EOD-beat-all3=miss
+  [42/99] 2025-07-10 NVDA  NVIDIA             dir=up       EOD-beat-all3=HIT
+  [43/99] 2025-07-15 BA    Boeing             dir=up       EOD-beat-all3=miss
+  [44/99] 2025-07-22 BA    Boeing             dir=up       EOD-beat-all3=HIT
+  [45/99] 2025-07-24 NVDA  NVIDIA             dir=down     EOD-beat-all3=miss
+  [46/99] 2025-08-07 INTC  Intel              dir=down     EOD-beat-all3=HIT
+  [47/99] 2025-08-11 INTC  Intel              dir=up       EOD-beat-all3=HIT
+  [48/99] 2025-08-12 GS    Goldman Sachs      dir=down     EOD-beat-all3=miss
+  [50/99] 2025-08-22 INTC  Intel              dir=up       EOD-beat-all3=miss
+  [51/99] 2025-08-25 INTC  Intel              dir=up       EOD-beat-all3=miss
+  [52/99] 2025-09-01 PFE   Pfizer             dir=down     EOD-beat-all3=miss
+  [53/99] 2025-09-05 AAPL  Apple              dir=up       EOD-beat-all3=miss
+  [54/99] 2025-09-08 AMZN  Amazon             dir=up       EOD-beat-all3=HIT
+  [55/99] 2025-09-15 AMZN  Amazon             dir=up       EOD-beat-all3=HIT
+  [56/99] 2025-09-19 BA    Boeing             dir=up       EOD-beat-all3=miss
+  [57/99] 2025-09-22 BA    Boeing             dir=up       EOD-beat-all3=miss
+  [58/99] 2025-09-26 MSFT  Microsoft          dir=down     EOD-beat-all3=miss
+  [59/99] 2025-11-17 AMZN  Amazon             dir=up       EOD-beat-all3=miss
+  [62/99] 2025-12-08 NVDA  NVIDIA             dir=up       EOD-beat-all3=miss
+  [63/99] 2025-12-15 AMZN  Amazon             dir=up       EOD-beat-all3=miss
+  [64/99] 2025-12-30 AMZN  Amazon             dir=up       EOD-beat-all3=miss
+  [65/99] 2026-01-01 AMZN  Amazon             dir=up       EOD-beat-all3=miss
+  [66/99] 2026-01-07 RTX   RTX (Raytheon)     dir=down     EOD-beat-all3=HIT
+  [67/99] 2026-01-08 INTC  Intel              dir=up       EOD-beat-all3=HIT
+  [68/99] 2026-01-09 AMZN  Amazon             dir=up       EOD-beat-all3=miss
+  [69/99] 2026-01-12 MSFT  Microsoft          dir=up       EOD-beat-all3=miss
+  [70/99] 2026-01-14 INTC  Intel              dir=up       EOD-beat-all3=miss
+  [71/99] 2026-01-17 JPM   JPMorgan Chase     dir=down     EOD-beat-all3=HIT
+  [72/99] 2026-01-22 JPM   JPMorgan Chase     dir=down     EOD-beat-all3=HIT
+  [73/99] 2026-01-23 AMZN  Amazon             dir=up       EOD-beat-all3=miss
+  [74/99] 2026-01-26 AMZN  Amazon             dir=up       EOD-beat-all3=HIT
+  [75/99] 2026-01-30 MS    Morgan Stanley     dir=up       EOD-beat-all3=HIT
+  [76/99] 2026-01-31 AMZN  Amazon             dir=up       EOD-beat-all3=HIT
+  [77/99] 2026-02-11 AAPL  Apple              dir=down     EOD-beat-all3=miss
+  [79/99] 2026-02-27 AAPL  Apple              dir=down     EOD-beat-all3=HIT
+  [80/99] 2026-03-06 BA    Boeing             dir=up       EOD-beat-all3=miss
+  [82/99] 2026-03-19 JPM   JPMorgan Chase     dir=down     EOD-beat-all3=miss
+  [83/99] 2026-04-09 AMZN  Amazon             dir=up       EOD-beat-all3=HIT
+  [84/99] 2026-04-17 AAPL  Apple              dir=up       EOD-beat-all3=HIT
+  [86/99] 2026-04-20 BA    Boeing             dir=down     EOD-beat-all3=miss
+  [87/99] 2026-04-21 AAPL  Apple              dir=up       EOD-beat-all3=miss
+  [88/99] 2026-04-21 BA    Boeing             dir=up       EOD-beat-all3=HIT
+  [90/99] 2026-04-23 WFC   Wells Fargo        dir=down     EOD-beat-all3=HIT
+  [91/99] 2026-04-29 INTC  Intel              dir=up       EOD-beat-all3=miss
+  [92/99] 2026-04-29 AMZN  Amazon             dir=up       EOD-beat-all3=miss
+  [93/99] 2026-05-13 GS    Goldman Sachs      dir=up       EOD-beat-all3=HIT
+  [95/99] 2026-06-05 AMZN  Amazon             dir=up       EOD-beat-all3=miss
+  [98/99] 2026-06-18 AMZN  Amazon             dir=up       EOD-beat-all3=HIT
+  [99/99] 2026-06-18 AAPL  Apple              dir=up       EOD-beat-all3=miss
+
+================================================================================
+MICRO DATASET (single-stock, dynamic benchmark, EOD relative alpha)
+================================================================================
+  -> reports/micro_dataset.csv   (84 tweets: 50 train / 17 val / 17 test)
+  -> reports/micro_dataset_config.json
+  positive_rate: strict=0.417  soft=0.512
+
+  STRICT (beat all 3 walls) — EOD hit-rate by split (null ~50%):
+    train n= 50  hit-rate= 42.0%  (21/50)
+    val   n= 17  hit-rate= 35.3%  (6/17)
+    test  n= 17  hit-rate= 47.1%  (8/17)
+
+  SOFT (beat blended mean) — EOD hit-rate by split (null ~50%):
+    train n= 50  hit-rate= 54.0%  (27/50)
+    val   n= 17  hit-rate= 35.3%  (6/17)
+    test  n= 17  hit-rate= 58.8%  (10/17)

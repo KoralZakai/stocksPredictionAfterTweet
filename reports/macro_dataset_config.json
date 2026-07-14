@@ -1,0 +1,55 @@
+{
+  "label": "label_eod",
+  "label_type": "signed_multiclass",
+  "classes": {
+    "+1": "LLM predicted UP and the basket BEAT SPY (winning LONG)",
+    "-1": "LLM predicted DOWN and the basket LAGGED SPY (winning SHORT)",
+    "0": "wrong direction / noise / inside the band"
+  },
+  "primary_horizon": "EOD",
+  "secondary_horizons": [
+    "30m",
+    "1h",
+    "1mo"
+  ],
+  "engineered_features": [
+    "is_targeted_action",
+    "has_action_verbs",
+    "execution_window"
+  ],
+  "features": [
+    "intensity",
+    "phase",
+    "weekend_flag",
+    "market_closed",
+    "n_instruments",
+    "scenario",
+    "is_targeted_action",
+    "has_action_verbs",
+    "execution_window"
+  ],
+  "excluded_from_features": [
+    "hit_30m",
+    "hit_1h",
+    "hit_1mo",
+    "summary",
+    "macro_link (text -> vectorized separately)",
+    "(hits observed after t0)"
+  ],
+  "split": "time_ordered_60_20_20",
+  "split_purpose": {
+    "train": "fit the model",
+    "val": "inspect errors + tune hyperparameters",
+    "test": "SACRED \u2014 touch only once, for the final number"
+  },
+  "n_total": 443,
+  "n_train": 266,
+  "n_val": 88,
+  "n_test": 89,
+  "class_balance": {
+    "+1_long": 211,
+    "-1_short": 47,
+    "0_noise": 185
+  },
+  "win_rate": 0.582
+}

@@ -1,0 +1,625 @@
+$MON: possibly delisted; no timezone found
+
+1 Failed download:
+['MON']: possibly delisted; no timezone found
+$KOL: possibly delisted; no price data found  (1d 2025-03-07 -> 2025-05-01)
+
+1 Failed download:
+['KOL']: possibly delisted; no price data found  (1d 2025-03-07 -> 2025-05-01)
+HTTP Error 404: {"quoteSummary":{"result":null,"error":{"code":"Not Found","description":"Quote not found for symbol: ERJ"}}}
+$ERJ: possibly delisted; no timezone found
+
+1 FailHTTP Error 404: {"quoteSummary":{"result":null,"error":{"code$CBS: possibly delisted; no timezone found
+
+1 Failed download:
+['CBS']: possibly delisted; no timezone found
+$TGNA: possibly delisted; no timezone found
+
+1 Failed download:
+['TGNA']: possibly delisted; no timezone found
+-> 500 candidate geopolitical/macro tweets (2025-01-01..2026-06-01), model=meta-llama/Llama-3.3-70B-Instruct
+
+  [1/500] 2025-01-01 Trade Policy               early 0/0 -> late 1-> 500 candidate geopolitical/macro tweets (2025-01-01..2026-06-01), model=meta-llama/Llama-3.3-70B-Instruct
+
+  [1/500] 2025-01-01 Trade Policy               early 0/0 -> late 1/3  
+  [2/500] 2025-01-03 Geopolitics / Diplomacy    early 0/0 -> late 0/0  
+  [3/500] 2025-01-06 Trade Policy               early 0/0 -> late 0/2  
+  [4/500] 2025-01-07 Trade Policy               early 4/6 -> late 1/4  Flash Shock
+  [5/500] 2025-01-15 Geopolitics / Peace        early 2/2 -> late 1/1  
+  [6/500] 2025-01-16 Geopolitics / Trade        early 4/4 -> late 3/3  
+  [7/500] 2025-01-18 Geopolitics / Defense      early 0/0 -> late 0/2  
+  [8/500] 2025-01-23 Energy Policy              early 0/0 -> late 3/3  
+  [9/500] 2025-01-26 Geopolitics / Trade War    early 0/0 -> late 1/4  
+  [10/500] 2025-02-01 Geopolitics / Immigration  early 0/0 -> late 0/2  
+  [11/500] 2025-02-02 Trade War                  early 0/0 -> late 2/3  
+  [12/500] 2025-02-03 Geopolitics / Trade        early 3/6 -> late 3/3  
+  [13/500] 2025-02-03 Geopolitics / Peace        early 0/0 -> late 0/1  
+  [14/500] 2025-02-05 Social Policy              early 0/0 -> late 0/0  
+  [15/500] 2025-02-11 Law and Order              early 1/4 -> late 1/2  
+  [16/500] 2025-02-12 Geopolitics / Peace        early 6/6 -> late 0/3  Flash Shock
+  [17/500] 2025-02-13 Geopolitics / Peace        early 0/0 -> late 0/1  
+  [18/500] 2025-02-14 Trade Policy               early 0/0 -> late 3/3  
+  [19/500] 2025-02-14 Trade War                  early 0/0 -> late 3/3  
+  [20/500] 2025-02-16 Geopolitics / Trade        early 0/0 -> late 3/3  
+  [21/500] 2025-02-20 Geopolitics / Peace        early 0/0 -> late 0/1  
+  [22/500] 2025-02-20 Immigration Policy         early 0/0 -> late 2/2  
+  [23/500] 2025-02-22 Geopolitics / Leadership   early 0/0 -> late 3/3  
+  [24/500] 2025-02-24 Geopolitics / War          early 2/2 -> late 2/2  
+  [25/500] 2025-02-25 Trade Policy               early 0/0 -> late 3/4  
+  [26/500] 2025-02-26 Economy / Inflation        early 3/4 -> late 0/2  Flash Shock
+  [27/500] 2025-02-27 Trade War                  early 0/0 -> late 1/3  
+  [28/500] 2025-03-01 Immigration Policy         early 0/0 -> late 1/2  
+  [29/500] 2025-03-03 Geopolitics / Conflict     early 1/8 -> late 4/4  Structural Drift
+  [30/500] 2025-03-04 Trade Policy               early 3/4 -> late 2/2  
+  [31/500] 2025-03-05 Geopolitics / Trade        early 1/2 -> late 0/1  
+  [32/500] 2025-03-06 Geopolitics / Trade        early 1/2 -> late 1/1  
+  [33/500] 2025-03-07 Trade War                  early 6/6 -> late 3/3  
+  [34/500] 2025-03-08 Geopolitics / Peace        early 0/0 -> late 0/1  
+  [35/500] 2025-03-10 Geopolitics / Leadership   early 0/0 -> late 0/0  
+  [36/500] 2025-03-11 Trade War                  early 8/10 -> late 3/5  
+  [37/500] 2025-03-13 Trade War                  early 2/2 -> late 2/3  
+  [38/500] 2025-03-14 Geopolitics / Peace        early 1/2 -> late 0/1  
+  [39/500] 2025-03-15 Geopolitics / Peace        early 0/0 -> late 0/1  
+  [40/500] 2025-03-17 Immigration Policy         early 4/4 -> late 2/2  
+  [41/500] 2025-03-17 Energy Policy              early 2/2 -> late 1/2  Flash Shock
+  [42/500] 2025-03-19 Geopolitics / Peace        early 1/4 -> late 0/2  
+  [43/500] 2025-03-19 Energy Policy              early 4/6 -> late 1/3  Flash Shock
+  [44/500] 2025-03-19 Geopolitics / Peace        early 0/0 -> late 0/1  
+  [45/500] 2025-03-20 Immigration Policy         early 1/4 -> late 2/2  Structural Drift
+  [46/500] 2025-03-24 Immigration Policy         early 0/2 -> late 1/1  Structural Drift
+  [47/500] 2025-03-26 Geopolitics / Peace        early 0/4 -> late 1/2  
+  [48/500] 2025-03-26 Politics / Endorsement     early 0/4 -> late 1/2  
+  [49/500] 2025-03-27 Law and Order              early 0/0 -> late 0/0  
+  [50/500] 2025-03-27 US Politics                early 0/4 -> late 2/2  Structural Drift
+  [51/500] 2025-03-29 US Politics / Election     early 2/2 -> late 1/2  Flash Shock
+  [52/500] 2025-03-31 Geopolitics / Conflict     early 0/6 -> late 1/3  
+  [53/500] 2025-04-01 Geopolitics / Trade        early 1/4 -> late 1/3  
+  [54/500] 2025-04-01 US Politics / Election     early 1/4 -> late 1/2  
+  [55/500] 2025-04-02 Fiscal Policy              early 0/4 -> late 1/3  
+  [56/500] 2025-04-04 Geopolitics / Trade        early 3/4 -> late 2/2  
+  [57/500] 2025-04-05 US Politics                early 0/0 -> late 0/0  
+  [58/500] 2025-04-07 Trade War                  early 4/4 -> late 2/3  
+  [59/500] 2025-04-07 Economic Policy            early 0/2 -> late 2/2  Structural Drift
+  [60/500] 2025-04-08 Immigration                early 0/0 -> late 0/0  
+  [61/500] 2025-04-09 Business Investment        early 2/4 -> late 1/2  
+  [62/500] 2025-04-09 Trade War                  early 4/6 -> late 0/3  Flash Shock
+  [63/500] 2025-04-10 Domestic Politics          early 0/0 -> late 0/0  
+  [64/500] 2025-04-11 Geopolitics / Peace        early 1/2 -> late 0/1  
+  [65/500] 2025-04-14 Geopolitics / Peace        early 2/2 -> late 0/1  Flash Shock
+  [66/500] 2025-04-15 Trade War                  early 4/8 -> late 2/4  
+  [67/500] 2025-04-16 Immigration                early 1/2 -> late 0/2  
+  [68/500] 2025-04-17 Monetary Policy            early 2/4 -> late 1/2  
+  [69/500] 2025-04-20 Geopolitics / Peace        early 0/0 -> late 0/0  
+  [70/500] 2025-04-20 Geopolitics / Tension      early 2/2 -> late 0/1  Flash Shock
+  [71/500] 2025-04-20 Trade War                  early 2/4 -> late 0/3  
+  [72/500] 2025-04-22 Geopolitics / Peace        early 2/2 -> late 1/1  
+  [73/500] 2025-04-24 Corporate Governance       early 2/4 -> late 1/2  
+  [74/500] 2025-04-25 Geopolitics / Peace        early 1/2 -> late 1/2  
+  [75/500] 2025-04-26 Geopolitics / Conflict     early 0/2 -> late 1/3  
+  [76/500] 2025-04-27 Fiscal Policy              early 2/2 -> late 2/2  
+  [77/500] 2025-04-28 Geopolitics / Union        early 2/4 -> late 2/3  
+  [78/500] 2025-04-28 Geopolitics / Domestic Pol early 2/2 -> late 2/2  
+  [79/500] 2025-04-29 Trade Deals                early 0/4 -> late 1/2  
+  [80/500] 2025-04-30 Economic Policy            early 0/0 -> late 1/2  
+  [81/500] 2025-05-02 US Politics                early 0/4 -> late 0/3  
+  [82/500] 2025-05-04 Trade War                  early 0/2 -> late 0/2  
+  [83/500] 2025-05-05 Geopolitics / Nationalism  early 0/0 -> late 1/1  
+  [84/500] 2025-05-07 Domestic Politics          early 0/4 -> late 1/2  
+  [85/500] 2025-05-08 Trade Deal                 early 0/2 -> late 2/2  Structural Drift
+  [86/500] 2025-05-08 Geopolitics / Peace        early 2/4 -> late 1/3  
+  [87/500] 2025-05-08 Geopolitics / Peace        early 0/4 -> late 1/2  
+  [88/500] 2025-05-08 Geopolitics / Peace        early 0/2 -> late 1/2  
+  [89/500] 2025-05-08 Domestic Politics          early 0/4 -> late 1/2  
+  [90/500] 2025-05-09 Trade Deals                early 0/0 -> late 1/1  
+  [91/500] 2025-05-09 Domestic Politics          early 0/0 -> late 0/0  
+  [92/500] 2025-05-09 Domestic Politics          early 0/4 -> late 1/2  
+  [93/500] 2025-05-10 Geopolitics / Peace        early 2/2 -> late 1/1  
+  [94/500] 2025-05-11 Geopolitics / Peace        early 5/6 -> late 2/3  
+  [95/500] 2025-05-12 Geopolitics / Domestic Pol early 2/4 -> late 1/2  
+  [96/500] 2025-05-13 Geopolitics / Diplomacy    early 0/0 -> late 0/0  
+  [97/500] 2025-05-15 Immigration Policy         early 0/0 -> late 1/1  
+  [98/500] 2025-05-16 Domestic Politics          early 0/2 -> late 1/1  Structural Drift
+  [99/500] 2025-05-17 Trade Policy               early 3/4 -> late 2/3  
+  [100/500] 2025-05-21 Geopolitics / Defense      early 0/0 -> late 1/1  
+  [101/500] 2025-05-23 Energy Policy              early 5/6 -> late 3/3  
+  [102/500] 2025-05-23 Economic Policy            early 2/6 -> late 1/3  
+  [103/500] 2025-05-25 Trade Policy               early 0/0 -> late 0/2  
+  [104/500] 2025-05-25 Domestic Politics          early 0/0 -> late 0/0  
+  [105/500] 2025-05-26 Immigration / Law and Orde early 0/0 -> late 1/2  
+  [106/500] 2025-05-27 Trade Policy               early 2/4 -> late 0/2  
+  [107/500] 2025-05-27 Geopolitics / Domestic Pol early 0/4 -> late 1/2  
+  [108/500] 2025-05-29 Domestic Politics          early 0/0 -> late 0/0  
+  [109/500] 2025-05-30 Trade War                  early 1/6 -> late 2/4  
+  [110/500] 2025-06-02 Geopolitics / Security     early 3/6 -> late 2/3  
+  [111/500] 2025-06-02 Trade War                  early 0/2 -> late 1/3  
+  [112/500] 2025-06-04 Geopolitics / Conflict     early 2/4 -> late 1/3  
+  [113/500] 2025-06-05 Fiscal Policy              early 3/4 -> late 1/2  Flash Shock
+  [114/500] 2025-06-06 Economic Growth            early 2/4 -> late 1/2  
+  [115/500] 2025-06-06 Economic Policy            early 1/4 -> late 2/2  Structural Drift
+  [116/500] 2025-06-08 Geopolitics / Domestic Sec early 0/2 -> late 0/2  
+  [117/500] 2025-06-11 Geopolitics / Law and Orde early 1/4 -> late 2/3  Structural Drift
+  [118/500] 2025-06-12 Trade Deal                 early 0/4 -> late 2/2  Structural Drift
+  [119/500] 2025-06-12 Geopolitics / Peace        early 2/2 -> late 2/2  
+  [120/500] 2025-06-13 Geopolitics / Peace        early 1/2 -> late 2/2  
+  [121/500] 2025-06-15 Geopolitics / Peace        early 3/4 -> late 1/2  Flash Shock
+  [122/500] 2025-06-16 Geopolitics / Conflict     early 3/4 -> late 1/3  Flash Shock
+  [123/500] 2025-06-17 Geopolitics / Conflict     early 1/2 -> late 1/2  
+  [124/500] 2025-06-17 Immigration Policy         early 0/2 -> late 2/2  Structural Drift
+  [125/500] 2025-06-18 Immigration Policy         early 0/0 -> late 0/1  
+  [126/500] 2025-06-19 Geopolitics / Security     early 2/2 -> late 1/1  
+  [127/500] 2025-06-20 Geopolitics / Peace        early 2/2 -> late 2/2  
+  [128/500] 2025-06-21 Energy Policy              early 0/4 -> late 0/2  
+  [129/500] 2025-06-22 Geopolitics / War          early 0/4 -> late 1/3  
+  [130/500] 2025-06-22 Geopolitics / Conflict     early 0/4 -> late 1/3  
+  [131/500] 2025-06-23 Geopolitics / Energy       early 2/2 -> late 1/1  
+  [132/500] 2025-06-23 Geopolitics / Peace        early 4/4 -> late 2/2  
+  [133/500] 2025-06-23 Geopolitics / Peace        early 4/4 -> late 2/3  
+  [134/500] 2025-06-24 Geopolitics / Peace        early 1/2 -> late 1/1  
+  [135/500] 2025-06-24 Geopolitics / Trade        early 3/4 -> late 0/2  Flash Shock
+  [136/500] 2025-06-24 Geopolitics / Peace        early 1/4 -> late 1/2  
+  [137/500] 2025-06-25 Geopolitics / War          early 2/4 -> late 1/3  
+  [138/500] 2025-06-25 Geopolitics / Conflict     early 2/4 -> late 1/3  
+  [139/500] 2025-06-25 Geopolitics / Peace        early 2/2 -> late 0/1  Flash Shock
+  [140/500] 2025-06-25 Geopolitics / Conflict     early 2/4 -> late 1/2  
+  [141/500] 2025-06-26 Geopolitics / Peace        early 0/0 -> late 1/2  
+  [142/500] 2025-06-26 Immigration                early 2/2 -> late 2/2  
+  [143/500] 2025-06-28 Geopolitics / Disinformati early 3/4 -> late 1/2  Flash Shock
+  [144/500] 2025-06-28 Geopolitics / Peace        early 1/2 -> late 0/1  
+  [145/500] 2025-06-29 Domestic Politics          early 0/4 -> late 2/2  Structural Drift
+  [146/500] 2025-06-29 Immigration                early 3/4 -> late 2/2  
+  [147/500] 2025-06-30 Trade Policy               early 0/0 -> late 1/2  
+  [148/500] 2025-07-01 Law and Order              early 4/6 -> late 2/3  
+  [149/500] 2025-07-02 Geopolitics / Peace        early 0/0 -> late 1/1  
+  [150/500] 2025-07-02 Trade Deal                 early 0/2 -> late 0/1  
+  [151/500] 2025-07-02 Immigration Policy         early 0/2 -> late 1/2  
+  [152/500] 2025-07-05 Geopolitics / Strength     early 1/2 -> late 1/1  
+  [153/500] 2025-07-09 Geopolitics / Peace        early 2/4 -> late 1/2  
+  [154/500] 2025-07-10 Domestic Politics          early 0/0 -> late 0/0  
+  [155/500] 2025-07-10 US Politics                early 0/0 -> late 0/0  
+  [156/500] 2025-07-11 Geopolitics / Military     early 3/4 -> late 1/2  Flash Shock
+  [157/500] 2025-07-12 Fiscal Policy              early 2/4 -> late 0/2  
+  [158/500] 2025-07-15 US Politics                early 0/0 -> late 0/0  
+  [159/500] 2025-07-16 Domestic Politics          early 2/4 -> late 0/2  
+  [160/500] 2025-07-17 Immigration                early 0/0 -> late 0/0  
+  [161/500] 2025-07-18 Domestic Politics          early 2/4 -> late 1/2  
+  [162/500] 2025-07-18 Geopolitics / Peace        early 0/4 -> late 0/2  
+  [163/500] 2025-07-18 Domestic Politics          early 0/2 -> late 1/2  
+  [164/500] 2025-07-18 Geopolitics / Domestic Pol early 0/2 -> late 0/1  
+  [165/500] 2025-07-20 Immigration Policy         early 4/4 -> late 2/2  
+  [166/500] 2025-07-21 Crime / Justice            early 0/0 -> late 0/0  
+  [167/500] 2025-07-21 Geopolitics / Peace        early 0/2 -> late 1/1  Structural Drift
+  [168/500] 2025-07-22 Geopolitics / Trade        early 4/6 -> late 1/3  Flash Shock
+  [169/500] 2025-07-23 Trade Deal                 early 4/4 -> late 1/2  Flash Shock
+  [170/500] 2025-07-23 Trade Policy               early 1/2 -> late 0/1  
+  [171/500] 2025-07-24 Election                   early 1/6 -> late 1/3  
+  [172/500] 2025-07-25 Domestic Politics          early 0/4 -> late 1/2  
+  [173/500] 2025-07-26 Geopolitics / Peace        early 1/4 -> late 2/2  Structural Drift
+  [174/500] 2025-07-28 Geopolitics / Peace        early 0/0 -> late 1/1  
+  [175/500] 2025-07-29 Geopolitics / Conflict     early 2/2 -> late 0/2  Flash Shock
+  [176/500] 2025-07-30 Trade Deals                early 0/4 -> late 1/2  
+  [177/500] 2025-07-31 Geopolitics / Trade        early 0/0 -> late 0/1  
+  [178/500] 2025-07-31 Geopolitics / Trade        early 3/6 -> late 1/3  
+  [179/500] 2025-08-01 US Politics                early 3/6 -> late 2/3  
+  [180/500] 2025-08-02 Immigration                early 2/2 -> late 0/1  Flash Shock
+  [181/500] 2025-08-04 Geopolitics / Trade        early 2/4 -> late 0/1  
+  [182/500] 2025-08-07 Trade War                  early 4/6 -> late 1/4  Flash Shock
+  [183/500] 2025-08-07 Trade War                  early 2/2 -> late 0/2  Flash Shock
+  [184/500] 2025-08-07 Geopolitics / Peace        early 3/6 -> late 2/3  
+  [185/500] 2025-08-08 Geopolitics / Peace        early 0/2 -> late 1/1  Structural Drift
+  [186/500] 2025-08-08 Trade Policy               early 3/4 -> late 0/3  Flash Shock
+  [187/500] 2025-08-10 Law and Order              early 2/4 -> late 1/3  
+  [188/500] 2025-08-11 Trade War                  early 1/4 -> late 1/2  
+  [189/500] 2025-08-12 Trade Policy               early 3/4 -> late 0/2  Flash Shock
+  [190/500] 2025-08-13 Geopolitics / Peace        early 0/0 -> late 0/0  
+  [191/500] 2025-08-14 Geopolitics / Scandal      early 0/2 -> late 0/1  
+  [192/500] 2025-08-14 Social Security            early 1/2 -> late 0/1  
+  [193/500] 2025-08-17 Geopolitics / Peace        early 2/2 -> late 1/1  
+  [194/500] 2025-08-18 Geopolitics / Peace        early 0/0 -> late 0/1  
+  [195/500] 2025-08-18 Geopolitics / Peace        early 0/0 -> late 0/1  
+  [196/500] 2025-08-19 Fiscal Policy              early 2/2 -> late 1/2  Flash Shock
+  [197/500] 2025-08-19 US Politics                early 2/4 -> late 2/2  
+  [198/500] 2025-08-19 Elections / Politics       early 4/4 -> late 2/3  
+  [199/500] 2025-08-19 Domestic Politics          early 2/2 -> late 2/2  
+  [200/500] 2025-08-20 Geopolitics / Peace        early 0/2 -> late 0/1  
+  [201/500] 2025-08-21 Geopolitics / War          early 3/4 -> late 0/2  Flash Shock
+  [202/500] 2025-08-22 Trade Policy               early 1/2 -> late 0/1  
+  [203/500] 2025-08-26 Trade War                  early 0/2 -> late 0/3  
+  [204/500] 2025-08-31 Geopolitics / Peace        early 0/0 -> late 0/0  
+  [205/500] 2025-08-31 Sports / Hall of Fame      early 0/0 -> late 0/0  
+  [206/500] 2025-09-01 Trade Policy               early 0/0 -> late 0/2  
+  [207/500] 2025-09-05 Geopolitics / Trade        early 1/4 -> late 1/2  
+  [208/500] 2025-09-06 Geopolitics / War          early 0/4 -> late 2/2  Structural Drift
+  [209/500] 2025-09-08 Geopolitics / Peace        early 0/0 -> late 0/0  
+  [210/500] 2025-09-09 Geopolitics / Peace        early 2/4 -> late 0/2  
+  [211/500] 2025-09-10 Geopolitics / Conflict     early 1/4 -> late 1/2  
+  [212/500] 2025-09-15 Immigration / Law Enforcem early 3/4 -> late 1/4  Flash Shock
+  [213/500] 2025-09-15 Geopolitics / Trade        early 3/6 -> late 2/3  
+  [214/500] 2025-09-18 Geopolitics / Immigration  early 0/0 -> late 0/0  
+  [215/500] 2025-09-19 Geopolitics / Conflict     early 2/4 -> late 3/3  
+  [216/500] 2025-09-25 Trade War                  early 4/6 -> late 1/4  Flash Shock
+  [217/500] 2025-09-26 Geopolitics / National Sec early 0/2 -> late 0/2  
+  [218/500] 2025-09-27 Geopolitics / Unrest       early 2/4 -> late 1/3  
+  [219/500] 2025-09-30 Healthcare Policy          early 0/2 -> late 1/2  
+  [220/500] 2025-10-03 Geopolitics / Peace        early 2/6 -> late 1/3  
+  [221/500] 2025-10-03 Geopolitics / Peace        early 4/4 -> late 1/2  Flash Shock
+  [222/500] 2025-10-04 Geopolitics / Peace        early 1/6 -> late 1/3  
+  [223/500] 2025-10-06 Trade Policy               early 2/4 -> late 0/2  
+  [224/500] 2025-10-08 Geopolitics / Peace        early 2/4 -> late 0/2  
+  [225/500] 2025-10-09 Geopolitics / Peace        early 0/2 -> late 0/1  
+  [226/500] 2025-10-10 Geopolitics / Trade War    early 4/6 -> late 0/3  Flash Shock
+  [227/500] 2025-10-12 Geopolitics / Domestic Pol early 1/2 -> late 0/1  
+  [228/500] 2025-10-14 Geopolitics / Peace        early 2/4 -> late 1/2  
+  [229/500] 2025-10-14 US Politics                early 3/4 -> late 0/2  Flash Shock
+  [230/500] 2025-10-14 Domestic Politics          early 3/4 -> late 0/2  Flash Shock
+  [231/500] 2025-10-14 Election / Endorsement     early 3/4 -> late 0/2  Flash Shock
+  [232/500] 2025-10-14 Election                   early 3/4 -> late 0/2  Flash Shock
+  [233/500] 2025-10-17 US Politics                early 1/2 -> late 0/1  
+  [234/500] 2025-10-22 Trade Policy               early 0/6 -> late 2/3  Structural Drift
+  [235/500] 2025-10-22 US Politics                early 0/0 -> late 0/0  
+  [236/500] 2025-10-24 Geopolitics / Trade        early 2/2 -> late 1/3  Flash Shock
+  [237/500] 2025-10-24 Trade War                  early 3/4 -> late 1/3  Flash Shock
+  [238/500] 2025-10-24 Domestic Politics          early 1/2 -> late 0/1  
+  [239/500] 2025-10-25 Domestic Politics          early 0/2 -> late 1/2  
+  [240/500] 2025-10-25 Geopolitics / Peace        early 0/2 -> late 1/2  
+  [241/500] 2025-10-25 Election / Endorsement     early 1/4 -> late 1/3  
+  [242/500] 2025-10-25 Geopolitics / Peace        early 0/2 -> late 1/2  
+  [243/500] 2025-10-25 Elections / Politics       early 0/2 -> late 1/2  
+  [244/500] 2025-10-25 Geopolitics / Peace        early 0/2 -> late 1/2  
+  [245/500] 2025-10-25 Election / Politics        early 0/4 -> late 1/2  
+  [246/500] 2025-10-25 Domestic Politics          early 1/4 -> late 2/2  Structural Drift
+  [247/500] 2025-10-25 Domestic Politics          early 0/2 -> late 1/2  
+  [248/500] 2025-10-25 Geopolitics / Peace        early 1/2 -> late 1/2  
+  [249/500] 2025-10-27 Geopolitics / Peace        early 1/4 -> late 0/2  
+  [250/500] 2025-10-29 Geopolitics / Trade        early 1/2 -> late 1/2  
+  [251/500] 2025-10-29 Geopolitics / Defense      early 0/0 -> late 0/2  
+  [252/500] 2025-10-30 Geopolitics / Trade        early 0/2 -> late 0/1  
+  [253/500] 2025-11-01 Geopolitics / Peace        early 0/0 -> late 2/2  
+  [254/500] 2025-11-02 Trade Policy               early 0/0 -> late 1/3  
+  [255/500] 2025-11-03 US Politics                early 0/0 -> late 1/2  
+  [256/500] 2025-11-03 Domestic Policy            early 0/0 -> late 2/3  
+  [257/500] 2025-11-03 Election                   early 0/0 -> late 2/2  
+  [258/500] 2025-11-03 Domestic Politics          early 0/0 -> late 1/2  
+  [259/500] 2025-11-03 Geopolitics / Peace        early 0/0 -> late 1/2  
+  [260/500] 2025-11-03 Geopolitics / Peace        early 0/0 -> late 1/2  
+  [261/500] 2025-11-03 Elections / Policy         early 0/0 -> late 1/2  
+  [262/500] 2025-11-03 Domestic Policy            early 0/0 -> late 1/2  
+  [263/500] 2025-11-03 Domestic Politics          early 0/0 -> late 1/2  
+  [264/500] 2025-11-03 Election / Endorsement     early 0/0 -> late 1/2  
+  [265/500] 2025-11-03 Domestic Politics          early 0/0 -> late 1/2  
+  [266/500] 2025-11-03 Domestic Politics          early 0/0 -> late 1/2  
+  [267/500] 2025-11-03 Geopolitics / Peace        early 0/0 -> late 1/2  
+  [268/500] 2025-11-03 Domestic Politics          early 0/0 -> late 2/3  
+  [269/500] 2025-11-03 Domestic Politics          early 0/0 -> late 1/2  
+  [270/500] 2025-11-03 Election / Endorsement     early 0/0 -> late 1/3  
+  [271/500] 2025-11-03 Domestic Politics          early 0/0 -> late 1/2  
+  [272/500] 2025-11-03 Elections / Politics       early 0/0 -> late 1/2  
+  [273/500] 2025-11-03 Election / Endorsement     early 0/0 -> late 1/2  
+  [274/500] 2025-11-03 Domestic Politics          early 0/0 -> late 1/2  
+  [275/500] 2025-11-03 Domestic Policy            early 0/0 -> late 1/2  
+  [276/500] 2025-11-03 Domestic Politics          early 0/0 -> late 1/2  
+  [277/500] 2025-11-03 Geopolitics / Peace        early 0/0 -> late 1/2  
+  [278/500] 2025-11-03 Elections / Politics       early 0/0 -> late 1/2  
+  [279/500] 2025-11-03 Election / Endorsement     early 0/0 -> late 1/2  
+  [280/500] 2025-11-03 Geopolitics / Peace        early 0/0 -> late 1/2  
+  [281/500] 2025-11-03 Geopolitics / Peace        early 0/0 -> late 0/1  
+  [282/500] 2025-11-03 US Politics                early 0/0 -> late 1/2  
+  [283/500] 2025-11-03 Domestic Politics          early 0/0 -> late 1/2  
+  [284/500] 2025-11-03 US Politics                early 0/0 -> late 1/3  
+  [285/500] 2025-11-04 Geopolitics / Peace        early 0/2 -> late 0/1  
+  [286/500] 2025-11-05 Geopolitics / Conflict     early 0/0 -> late 0/2  
+  [287/500] 2025-11-07 Geopolitics / Trade        early 0/0 -> late 1/2  
+  [288/500] 2025-11-07 Geopolitics / Trade        early 0/0 -> late 2/3  
+  [289/500] 2025-11-09 Trade Policy               early 0/0 -> late 2/3  
+  [290/500] 2025-11-09 Healthcare Policy          early 0/0 -> late 0/1  
+  [291/500] 2025-11-10 Trade War                  early 4/4 -> late 0/2  Flash Shock
+  [292/500] 2025-11-11 Trade Policy               early 0/0 -> late 1/3  
+  [293/500] 2025-11-14 Geopolitics / US Politics  early 2/6 -> late 1/3  
+  [294/500] 2025-11-17 US Politics / Local Electi early 0/0 -> late 0/0  
+  [295/500] 2025-11-18 Regulation                 early 0/2 -> late 1/2  
+  [296/500] 2025-11-19 Geopolitics / Peace        early 2/4 -> late 2/2  
+  [297/500] 2025-11-23 Geopolitics / Trade        early 0/0 -> late 2/3  
+  [298/500] 2025-11-23 US Politics                early 0/0 -> late 1/2  
+  [299/500] 2025-11-24 Trade Policy               early 0/0 -> late 2/3  
+  [300/500] 2025-11-25 US Politics                early 0/0 -> late 1/3  
+  [301/500] 2025-11-29 Trade Policy               early 0/0 -> late 3/3  
+  [302/500] 2025-12-01 Geopolitics / Peace        early 3/6 -> late 0/3  
+  [303/500] 2025-12-03 Domestic Politics          early 0/2 -> late 0/1  
+  [304/500] 2025-12-04 Domestic Politics          early 4/4 -> late 1/2  Flash Shock
+  [305/500] 2025-12-04 Law and Order              early 0/0 -> late 1/2  
+  [306/500] 2025-12-06 Geopolitics / Peace        early 0/0 -> late 1/1  
+  [307/500] 2025-12-07 Trade Policy               early 0/0 -> late 0/3  
+  [308/500] 2025-12-08 Geopolitics / Trade        early 0/4 -> late 1/3  
+  [309/500] 2025-12-09 Geopolitics / Trade        early 0/0 -> late 2/2  
+  [310/500] 2025-12-11 Economic Policy            early 1/4 -> late 1/2  
+  [311/500] 2025-12-13 Trade Policy               early 0/0 -> late 2/2  
+  [312/500] 2025-12-15 Domestic Politics          early 0/0 -> late 0/0  
+  [313/500] 2025-12-18 US Politics / Election     early 0/0 -> late 3/3  
+  [314/500] 2025-12-18 US Politics                early 0/0 -> late 3/3  
+  [315/500] 2025-12-19 Economic Policy            early 0/0 -> late 2/2  
+  [316/500] 2025-12-20 US Politics                early 0/0 -> late 3/3  
+  [317/500] 2025-12-23 Economic Growth            early 3/6 -> late 2/3  
+  [318/500] 2025-12-25 Geopolitics / Economy      early 0/0 -> late 1/2  
+  [319/500] 2025-12-26 Geopolitics / Security     early 0/0 -> late 1/2  
+  [320/500] 2025-12-28 Geopolitics / Peace        early 0/0 -> late 0/1  
+  [321/500] 2025-12-30 Politics / Judiciary       early 0/0 -> late 1/1  
+  [322/500] 2025-12-31 Geopolitics / Peace        early 2/4 -> late 1/2  
+  [323/500] 2026-01-02 Trade War                  early 0/0 -> late 3/3  
+  [324/500] 2026-01-05 US Politics                early 0/0 -> late 2/2  
+  [325/500] 2026-01-06 Geopolitics / Peace        early 0/0 -> late 1/2  
+  [326/500] 2026-01-07 Geopolitics / Peace        early 2/2 -> late 1/1  
+  [327/500] 2026-01-07 Geopolitics / Trade        early 0/0 -> late 2/2  
+  [328/500] 2026-01-08 Economic Policy            early 2/2 -> late 2/3  
+  [329/500] 2026-01-09 Geopolitics / Peace        early 1/2 -> late 1/3  
+  [330/500] 2026-01-09 Economic Policy            early 0/0 -> late 2/2  
+  [331/500] 2026-01-11 Geopolitics / Sanctions    early 1/2 -> late 2/3  
+  [332/500] 2026-01-13 Immigration / Law Enforcem early 0/0 -> late 3/4  
+  [333/500] 2026-01-14 Geopolitics / Expansion    early 0/0 -> late 2/3  
+  [334/500] 2026-01-15 Geopolitics / Peace        early 0/0 -> late 1/2  
+  [335/500] 2026-01-16 Geopolitics / Peace        early 2/4 -> late 1/2  
+  [336/500] 2026-01-19 Geopolitics / Regime Chang early 0/0 -> late 1/1  
+  [337/500] 2026-01-19 Domestic Politics          early 0/0 -> late 1/2  
+  [338/500] 2026-01-20 Geopolitics / Peace        early 0/0 -> late 0/0  
+  [339/500] 2026-01-22 Domestic Politics          early 2/4 -> late 2/2  
+  [340/500] 2026-01-23 US Politics                early 0/0 -> late 3/3  
+  [341/500] 2026-01-23 Geopolitics / Peace        early 0/0 -> late 0/1  
+  [342/500] 2026-01-23 Geopolitics / Trade        early 1/2 -> late 1/3  
+  [343/500] 2026-01-23 Domestic Policy            early 0/0 -> late 2/3  
+  [344/500] 2026-01-23 Geopolitics / Peace        early 0/0 -> late 2/2  
+  [345/500] 2026-01-23 Election / Endorsement     early 0/0 -> late 2/2  
+  [346/500] 2026-01-23 Domestic Politics          early 0/0 -> late 0/0  
+  [347/500] 2026-01-23 Domestic Politics          early 0/0 -> late 2/2  
+  [348/500] 2026-01-23 Trade Policy               early 0/0 -> late 2/2  
+  [349/500] 2026-01-24 Trade War                  early 0/0 -> late 1/2  
+  [350/500] 2026-01-25 Geopolitics / Trade        early 0/0 -> late 3/3  
+  [351/500] 2026-01-26 US Politics                early 0/0 -> late 0/0  
+  [352/500] 2026-01-28 US Politics                early 0/0 -> late 2/2  
+  [353/500] 2026-01-28 US Politics                early 0/0 -> late 3/3  
+  [354/500] 2026-01-28 Geopolitics / War          early 2/2 -> late 3/3  
+  [355/500] 2026-01-29 Trade War                  early 0/0 -> late 0/1  
+  [356/500] 2026-01-31 Geopolitics / Domestic Sec early 0/0 -> late 2/2  
+  [357/500] 2026-02-02 Geopolitics / Energy       early 0/0 -> late 0/1  
+  [358/500] 2026-02-02 Geopolitics / Tension      early 0/4 -> late 3/3  Structural Drift
+  [359/500] 2026-02-03 Geopolitics / Education    early 0/0 -> late 0/0  
+  [360/500] 2026-02-04 Geopolitics / Trade        early 0/4 -> late 0/3  
+  [361/500] 2026-02-05 US Politics                early 0/0 -> late 2/2  
+  [362/500] 2026-02-05 US Politics                early 0/0 -> late 2/2  
+  [363/500] 2026-02-05 Geopolitics / Election     early 2/2 -> late 1/2  Flash Shock
+  [364/500] 2026-02-05 US Politics                early 0/0 -> late 2/2  
+  [365/500] 2026-02-07 Regulatory                 early 0/0 -> late 1/2  
+  [366/500] 2026-02-09 Geopolitics / Trade        early 0/0 -> late 2/3  
+  [367/500] 2026-02-10 Domestic Policy            early 0/0 -> late 2/2  
+  [368/500] 2026-02-10 Domestic Politics          early 0/0 -> late 2/2  
+  [369/500] 2026-02-11 Trade Policy               early 0/0 -> late 3/3  
+  [370/500] 2026-02-13 US Politics                early 0/0 -> late 1/2  
+  [371/500] 2026-02-16 Economy / Confidence       early 0/0 -> late 1/2  
+  [372/500] 2026-02-17 US Politics                early 0/0 -> late 1/1  
+  [373/500] 2026-02-17 US Politics                early 0/0 -> late 2/3  
+  [374/500] 2026-02-17 US Politics                early 0/0 -> late 1/1  
+  [375/500] 2026-02-18 Geopolitics / Conflict     early 3/4 -> late 1/2  Flash Shock
+  [376/500] 2026-02-20 Trade War                  early 4/8 -> late 3/4  
+  [377/500] 2026-02-21 Trade Policy               early 0/0 -> late 2/2  
+  [378/500] 2026-02-21 Trade War                  early 0/0 -> late 3/3  
+  [379/500] 2026-02-23 Geopolitics / Trade        early 0/0 -> late 3/3  
+  [380/500] 2026-02-23 Trade War                  early 0/0 -> late 2/2  
+  [381/500] 2026-02-27 Immigration                early 3/6 -> late 1/3  
+  [382/500] 2026-02-27 US Politics                early 5/6 -> late 0/3  Flash Shock
+  [383/500] 2026-02-27 Geopolitics / National Sec early 1/4 -> late 3/3  Structural Drift
+  [384/500] 2026-02-28 US Politics                early 1/2 -> late 1/3  
+  [385/500] 2026-02-28 Geopolitics / War          early 1/2 -> late 0/2  
+  [386/500] 2026-03-01 Geopolitics / Conflict     early 1/2 -> late 0/2  
+  [387/500] 2026-03-02 Geopolitics / Conflict     early 4/4 -> late 2/3  
+  [388/500] 2026-03-03 Trade War                  early 2/2 -> late 1/2  Flash Shock
+  [389/500] 2026-03-03 Geopolitics / War          early 0/0 -> late 0/3  
+  [390/500] 2026-03-05 US Politics                early 0/0 -> late 1/2  
+  [391/500] 2026-03-05 Geopolitics / Peace        early 0/0 -> late 0/1  
+  [392/500] 2026-03-06 Geopolitics / Conflict     early 2/2 -> late 1/3  Flash Shock
+  [393/500] 2026-03-06 Trade Policy               early 4/4 -> late 2/2  
+  [394/500] 2026-03-08 Geopolitics / Peace        early 0/4 -> late 1/2  
+  [395/500] 2026-03-10 Geopolitics / Conflict     early 6/8 -> late 2/4  Flash Shock
+  [396/500] 2026-03-10 Energy Independence        early 3/8 -> late 4/4  Structural Drift
+  [397/500] 2026-03-11 US Politics / Election     early 2/4 -> late 0/2  
+  [398/500] 2026-03-12 Geopolitics / Tension      early 2/4 -> late 1/2  
+  [399/500] 2026-03-13 Geopolitics / Conflict     early 4/6 -> late 1/3  Flash Shock
+  [400/500] 2026-03-14 US Politics                early 4/4 -> late 1/3  Flash Shock
+  [401/500] 2026-03-14 Geopolitics / Peace        early 2/2 -> late 1/2  Flash Shock
+  [402/500] 2026-03-14 Geopolitics / Conflict     early 2/4 -> late 1/3  
+  [403/500] 2026-03-16 Geopolitics / Institutions early 4/4 -> late 2/3  
+  [404/500] 2026-03-17 Geopolitics / Conflict     early 1/2 -> late 2/2  
+  [405/500] 2026-03-18 Geopolitics / Conflict     early 5/6 -> late 0/3  Flash Shock
+  [406/500] 2026-03-19 Geopolitics / Conflict     early 1/6 -> late 0/3  
+  [407/500] 2026-03-20 Geopolitics / Conflict     early 4/6 -> late 1/3  Flash Shock
+  [408/500] 2026-03-21 US Politics                early 6/6 -> late 1/3  Flash Shock
+  [409/500] 2026-03-21 Geopolitics / War          early 2/6 -> late 1/3  
+  [410/500] 2026-03-23 US Politics                early 0/2 -> late 0/1  
+  [411/500] 2026-03-23 Immigration                early 4/4 -> late 1/2  Flash Shock
+  [412/500] 2026-03-24 US Politics / Elections    early 0/4 -> late 0/2  
+  [413/500] 2026-03-25 Geopolitics / National Sec early 3/4 -> late 0/2  Flash Shock
+  [414/500] 2026-03-26 Geopolitics / Conflict     early 0/6 -> late 1/3  
+  [415/500] 2026-03-26 Geopolitics / Immigration  early 4/6 -> late 2/3  
+  [416/500] 2026-03-28 Geopolitics / Conflict     early 2/4 -> late 0/3  
+  [417/500] 2026-03-30 Geopolitics / War          early 2/4 -> late 0/3  
+  [418/500] 2026-03-31 Geopolitics / Conflict     early 1/2 -> late 0/1  
+  [419/500] 2026-04-01 Trade Policy               early 0/0 -> late 1/1  
+  [420/500] 2026-04-02 Geopolitics / War          early 2/6 -> late 0/3  
+  [421/500] 2026-04-03 Geopolitics / War          early 0/0 -> late 0/3  
+  [422/500] 2026-04-04 Trade Policy               early 3/6 -> late 1/3  
+  [423/500] 2026-04-05 Geopolitics / Peace        early 2/4 -> late 2/2  
+  [424/500] 2026-04-05 Domestic Politics          early 0/0 -> late 0/0  
+  [425/500] 2026-04-07 Geopolitics / Regime Chang early 0/4 -> late 1/2  
+  [426/500] 2026-04-08 Geopolitics / Disinformati early 2/2 -> late 0/1  Flash Shock
+  [427/500] 2026-04-08 Geopolitics / Trade        early 6/6 -> late 1/3  Flash Shock
+  [428/500] 2026-04-09 Geopolitics / Peace        early 1/4 -> late 2/2  Structural Drift
+  [429/500] 2026-04-09 Geopolitics / Peace        early 2/4 -> late 0/2  
+  [430/500] 2026-04-09 Immigration Policy         early 3/4 -> late 1/2  Flash Shock
+  [431/500] 2026-04-10 Domestic Policy            early 2/4 -> late 0/2  
+  [432/500] 2026-04-11 Geopolitics / Peace        early 4/6 -> late 3/3  
+  [433/500] 2026-04-11 Geopolitics / Peace        early 2/2 -> late 1/1  
+  [434/500] 2026-04-12 Geopolitics / Conflict     early 2/6 -> late 0/3  
+  [435/500] 2026-04-13 Geopolitics / Peace        early 2/2 -> late 1/1  
+  [436/500] 2026-04-13 Geopolitics / Peace        early 4/4 -> late 1/2  Flash Shock
+  [437/500] 2026-04-14 Geopolitics / National Sec early 3/4 -> late 0/2  Flash Shock
+  [438/500] 2026-04-14 US Politics / Election     early 3/4 -> late 0/2  Flash Shock
+  [439/500] 2026-04-14 US Politics                early 3/4 -> late 0/2  Flash Shock
+  [440/500] 2026-04-14 Geopolitics / Domestic Pol early 0/0 -> late 0/0  
+  [441/500] 2026-04-15 Geopolitics / Conflict     early 3/6 -> late 1/3  
+  [442/500] 2026-04-15 Geopolitics / Security     early 2/4 -> late 0/2  
+  [443/500] 2026-04-16 Geopolitics / National Sec early 2/4 -> late 0/2  
+  [444/500] 2026-04-16 Geopolitics / Peace        early 0/0 -> late 0/0  
+  [445/500] 2026-04-17 Geopolitics / Trade        early 5/6 -> late 1/3  Flash Shock
+  [446/500] 2026-04-17 Geopolitics / Peace        early 2/2 -> late 0/1  Flash Shock
+  [447/500] 2026-04-17 Geopolitics / Peace        early 2/2 -> late 0/1  Flash Shock
+  [448/500] 2026-04-18 Geopolitics / Peace        early 1/4 -> late 2/2  Structural Drift
+  [449/500] 2026-04-19 Geopolitics / Conflict     early 3/4 -> late 1/3  Flash Shock
+  [450/500] 2026-04-19 Geopolitics / Conflict     early 3/4 -> late 1/3  Flash Shock
+  [451/500] 2026-04-20 Geopolitics / Conflict     early 5/6 -> late 1/3  Flash Shock
+  [452/500] 2026-04-20 Geopolitics / War          early 3/4 -> late 1/2  Flash Shock
+  [453/500] 2026-04-21 Geopolitics / Conflict     early 2/6 -> late 1/3  
+  [454/500] 2026-04-21 Geopolitics / Peace        early 2/4 -> late 1/2  
+  [455/500] 2026-04-21 Domestic Politics          early 1/2 -> late 0/1  
+  [456/500] 2026-04-22 Geopolitics / Domestic Pol early 2/4 -> late 0/2  
+  [457/500] 2026-04-23 Geopolitics / War          early 4/4 -> late 0/2  Flash Shock
+  [458/500] 2026-04-23 Geopolitics / Tension      early 2/4 -> late 1/2  
+  [459/500] 2026-04-23 Geopolitics / Peace        early 1/4 -> late 2/2  Structural Drift
+  [460/500] 2026-04-24 US Politics                early 0/0 -> late 0/0  
+  [461/500] 2026-04-28 Geopolitics / Conflict     early 7/8 -> late 1/4  Flash Shock
+  [462/500] 2026-04-30 Geopolitics / War          early 3/8 -> late 0/4  
+  [463/500] 2026-05-01 Geopolitics / Tension      early 0/2 -> late 0/2  
+  [464/500] 2026-05-02 Geopolitics / Conflict     early 2/4 -> late 1/3  
+  [465/500] 2026-05-03 Geopolitics / Peace        early 2/4 -> late 1/2  
+  [466/500] 2026-05-05 Domestic Politics          early 2/4 -> late 0/2  
+  [467/500] 2026-05-05 Geopolitics / Peace        early 2/4 -> late 1/2  
+  [468/500] 2026-05-05 Election / Endorsement     early 2/4 -> late 1/2  
+  [469/500] 2026-05-05 Geopolitics / Peace        early 5/6 -> late 3/3  
+  [470/500] 2026-05-06 Domestic Politics          early 1/4 -> late 2/2  Structural Drift
+  [471/500] 2026-05-07 Geopolitics / Trade        early 6/6 -> late 3/3  
+  [472/500] 2026-05-08 Geopolitics / Transparency early 2/4 -> late 1/2  
+  [473/500] 2026-05-09 Geopolitics / War          early 4/6 -> late 1/3  Flash Shock
+  [474/500] 2026-05-10 Geopolitics / Trade        early 4/4 -> late 2/2  
+Traceback (most recent call last):
+  File "C:\Users\kali-linux\Projects\stocksPredictionAfterTweet\.venv\Lib\site-packages\urllib3\connectionpool.py", line 534, in _make_request
+    response = conn.getresponse()
+  File "C:\Users\kali-linux\Projects\stocksPredictionAfterTweet\.venv\Lib\site-packages\urllib3\connection.py", line 571, in getresponse
+    httplib_response = super().getresponse()
+  File "C:\Users\kali-linux\AppData\Local\Programs\Python\Python314\Lib\http\client.py", line 1459, in getresponse
+    response.begin()
+    ~~~~~~~~~~~~~~^^
+  File "C:\Users\kali-linux\AppData\Local\Programs\Python\Python314\Lib\http\client.py", line 336, in begin
+    version, status, reason = self._read_status()
+                              ~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\kali-linux\AppData\Local\Programs\Python\Python314\Lib\http\client.py", line 297, in _read_status
+    line = str(self.fp.readline(_MAXLINE + 1), "iso-8859-1")
+               ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^
+  File "C:\Users\kali-linux\AppData\Local\Programs\Python\Python314\Lib\socket.py", line 729, in readinto
+    return self._sock.recv_into(b)
+           ~~~~~~~~~~~~~~~~~~~~^^^
+  File "C:\Users\kali-linux\AppData\Local\Programs\Python\Python314\Lib\ssl.py", line 1304, in recv_into
+    return self.read(nbytes, buffer)
+           ~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "C:\Users\kali-linux\AppData\Local\Programs\Python\Python314\Lib\ssl.py", line 1138, in read
+    return self._sslobj.read(len, buffer)
+           ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+TimeoutError: The read operation timed out
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\kali-linux\Projects\stocksPredictionAfterTweet\.venv\Lib\site-packages\requests\adapters.py", line 696, in send
+    resp = conn.urlopen(
+        method=request.method,
+    ...<9 lines>...
+        chunked=chunked,
+    )
+  File "C:\Users\kali-linux\Projects\stocksPredictionAfterTweet\.venv\Lib\site-packages\urllib3\connectionpool.py", line 842, in urlopen
+    retries = retries.increment(
+        method, url, error=new_e, _pool=self, _stacktrace=sys.exc_info()[2]
+    )
+  File "C:\Users\kali-linux\Projects\stocksPredictionAfterTweet\.venv\Lib\site-packages\urllib3\util\retry.py", line 498, in increment
+    raise reraise(type(error), error, _stacktrace)
+          ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\kali-linux\Projects\stocksPredictionAfterTweet\.venv\Lib\site-packages\urllib3\util\util.py", line 39, in reraise
+    raise value
+  File "C:\Users\kali-linux\Projects\stocksPredictionAfterTweet\.venv\Lib\site-packages\urllib3\connectionpool.py", line 788, in urlopen
+    response = self._make_request(
+        conn,
+    ...<10 lines>...
+        **response_kw,
+    )
+  File "C:\Users\kali-linux\Projects\stocksPredictionAfterTweet\.venv\Lib\site-packages\urllib3\connectionpool.py", line 536, in _make_request
+    self._raise_timeout(err=e, url=url, timeout_value=read_timeout)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\kali-linux\Projects\stocksPredictionAfterTweet\.venv\Lib\site-packages\urllib3\connectionpool.py", line 367, in _raise_timeout
+    raise ReadTimeoutError(
+        self, url, f"Read timed out. (read timeout={timeout_value})"
+    ) from err
+urllib3.exceptions.ReadTimeoutError: HTTPSConnectionPool(host='api.studio.nebius.ai', port=443): Read timed out. (read timeout=90)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\kali-linux\Projects\stocksPredictionAfterTweet\scripts\nebius_macro_backtest.py", line 637, in <module>
+    main()
+    ~~~~^^
+  File "C:\Users\kali-linux\Projects\stocksPredictionAfterTweet\scripts\nebius_macro_backtest.py", line 633, in main
+    run(start, end, a.limit, a.model, a.base_url, api_key, a.top)
+    ~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\kali-linux\Projects\stocksPredictionAfterTweet\scripts\nebius_macro_backtest.py", line 169, in run
+    pred = classify_tweet(tw.text, base_url=base_url, api_key=api_key, model=model)
+  File "C:\Users\kali-linux\Projects\stocksPredictionAfterTweet\scripts\nebius_macro_validate.py", line 111, in classify_tweet
+    resp = requests.post(
+        f"{base_url.rstrip('/')}/chat/completions",
+    ...<9 lines>...
+        timeout=90,
+    )
+  File "C:\Users\kali-linux\Projects\stocksPredictionAfterTweet\.venv\Lib\site-packages\requests\api.py", line 134, in post
+    return request("post", url, data=data, json=json, **kwargs)
+  File "C:\Users\kali-linux\Projects\stocksPredictionAfterTweet\.venv\Lib\site-packages\requests\api.py", line 71, in request
+    return session.request(method=method, url=url, **kwargs)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\kali-linux\Projects\stocksPredictionAfterTweet\.venv\Lib\site-packages\requests\sessions.py", line 651, in request
+    resp = self.send(prep, **send_kwargs)
+  File "C:\Users\kali-linux\Projects\stocksPredictionAfterTweet\.venv\Lib\site-packages\requests\sessions.py", line 784, in send
+    r = adapter.send(request, **kwargs)
+  File "C:\Users\kali-linux\Projects\stocksPredictionAfterTweet\.venv\Lib\site-packages\requests\adapters.py", line 742, in send
+    raise ReadTimeout(e, request=request)
+requests.exceptions.ReadTimeout: HTTPSConnectionPool(host='api.studio.nebius.ai', port=443): Read timed out. (read timeout=90)
+=======================================
+VALIDATION EXAMPLES — inspect the model's brain (one per pattern)
+====================================================================================
+
+### Flash Shock  |  2025-11-10  |  Trade War  |  intensity 8  |  split=val
+  TWEET: "The “Pay Back” Numbers being quoted by the Radical Left Lunatics, who would love to see us lose on Tariffs because of how bad it would be for our Country, are much higher than those being stated by our Fake Opposition — Opposition mainly fr"
+  MEANING:     US would owe $2 trillion if tariffs are removed
+  MACRO LINK:  Tariff revenue loss impacts US trade balance
+  SHORT CALL:  Market falls as trade war escalation feared, WHY: immediate uncertainty
+  LONG CALL:   Dollar and defense stocks rise as trade tensions persist, WHY: prolonged trade war
+  REALITY (short 30m/1h vs long 1mo):
+    USO   pred up       30m    +0.1%  1h    +0.1%  1mo    -2.6%  [MISS@1mo]
+    ITA   pred up       30m    +0.1%  1h    +0.0%  1mo    -3.3%  [MISS@1mo]
+    SPY   pred down     30m    +0.0%  1h    -0.0%  1mo    +1.1%  [-@1mo]
+  CONCLUSION:  The model nailed the immediate reaction (early 100% correct) but the edge decayed to 0% by 1 month — the crowd over-reacted, then re-priced as broader macro forces took over. Rule: trust this signal INTRADAY ONLY.
+
+### Structural Drift  |  2026-02-02  |  Geopolitics / Tension  |  intensity 8  |  split=val
+  TWEET: "Trump has been ‘very clear’ in message to Iran, State Department spokesperson says: https://www.foxnews.com/video/6388654275112"
+  MEANING:     Trump sent clear message to Iran
+  MACRO LINK:  Geopolitical tensions affect oil prices
+  SHORT CALL:  Oil prices rise due to uncertainty, WHY: immediate risk premium
+  LONG CALL:   Tensions escalate, affecting global trade, WHY: prolonged conflict
+  REALITY (short 30m/1h vs long 1mo):
+    USO   pred up       30m     n/a   1h     n/a   1mo   +20.7%  [HIT@1mo]
+    VIXY  pred up       30m    -0.4%  1h    -0.3%  1mo   +11.8%  [HIT@1mo]
+    ITA   pred up       30m    +0.0%  1h    -0.4%  1mo    +5.9%  [HIT@1mo]
+  CONCLUSION:  The first hour was noise (early 0%), but the thesis played out over weeks (1mo 100% correct) as the policy actually took effect. Rule: SLOW-BURN signal — hold to 1 month, ignore the immediate wobble.
+
+### Failed Anomaly  |  2025-12-08  |  Geopolitics / Trade  |  intensity 9  |  split=val
+  TWEET: "I have informed President Xi, of China, that the United States will allow NVIDIA to ship its H200 products to approved customers in China, and other Countries, under conditions that allow for continued strong National Security. President Xi"
+  MEANING:     US to allow NVIDIA to ship H200 products to China
+  MACRO LINK:  Eased trade restrictions boost US tech sector
+  SHORT CALL:  NVIDIA stock rises on increased sales prospects
+  LONG CALL:   US tech sector growth as other companies benefit
+  REALITY (short 30m/1h vs long 1mo):
+    NVDA  pred up       30m    -0.3%  1h    -1.1%  1mo    -0.3%  [MISS@1mo]
+    ITA   pred up       30m     n/a   1h     n/a   1mo   +11.3%  [HIT@1mo]
+    SPY   pred up       30m    -0.1%  1h    -0.1%  1mo    +1.2%  [-@1mo]
+  CONCLUSION:  The model was confident (intensity 9) yet wrong by 1 month (only 50% of the basket confirmed) — a macro confound or sharp reversal overwhelmed the tweet. Rule: FLAG this scenario for error analysis, don't trust blindly.
+
+-> narrative dashboard -> reports/nebius_validation_examples.html

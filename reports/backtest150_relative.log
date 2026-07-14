@@ -1,0 +1,289 @@
+$KOL: possibly delisted; no price data found  (1d 2025-03-07 -> 2025-05-01)
+
+1 Failed download:
+['KOL']: possibly delisted; no price data found  (1d 2025-03-07 -> 2025-05-01)
+HTTP Error 404: {"quoteSummary":{"result":null,"error":{"code":"Not Found","description":"Quote not found for symbol: EURUSD"}}}
+$EURUSD: possibly delisted; no timezone found
+
+1 Failed download:
+['EURUSD']: possibly delisted; no timezone found
+$KOL: possibly delisted; no price data found  (1d 2026-04-11 -> 2026-06-05)
+
+1 Failed download:
+['KOL']: possibly delisted; no price data found  (1d 2026-04-11 -> 2026-06-05)
+-> 150 candidate geopolitical/macro tweets (2025-01-01..2026-06-01), model=meta-llama/Llama-3.3-70B-Instruct
+
+  [1/150] 2025-01-01 Trade Policy               early 0/0 -> late 1/3  
+  [2/150] 2025-01-10 Government Appointment     early 0/0 -> late 0/0  
+  [3/150] 2025-01-22 Geopolitics / Peace        early 2/6 -> late 2/3  Structural Drift
+  [4/150] 2025-02-02 Trade War                  early 0/0 -> late 2/3  
+  [5/150] 2025-02-07 Sports                     early 0/0 -> late 0/0  
+  [6/150] 2025-02-13 Trade Policy               early 3/6 -> late 1/3  
+  [7/150] 2025-02-20 Geopolitics / Peace        early 0/0 -> late 0/1  
+  [8/150] 2025-02-24 Geopolitics / Peace        early 0/0 -> late 0/2  
+  [9/150] 2025-02-28 Geopolitics / Peace        early 2/4 -> late 2/2  
+  [10/150] 2025-03-05 Geopolitics / Trade        early 1/2 -> late 0/1  
+  [11/150] 2025-03-09 Geopolitics / Expansion    early 0/0 -> late 1/1  
+  [12/150] 2025-03-14 Geopolitics / Peace        early 0/0 -> late 0/1  
+  [13/150] 2025-03-17 Energy Policy              early 2/2 -> late 1/2  Flash Shock
+  [14/150] 2025-03-19 Elections                  early 0/0 -> late 0/0  
+  [15/150] 2025-03-26 Domestic Politics          early 0/4 -> late 1/2  
+  [16/150] 2025-03-29 US Politics / Election     early 2/2 -> late 1/2  Flash Shock
+  [17/150] 2025-04-01 Trade Policy               early 0/4 -> late 0/2  
+  [18/150] 2025-04-06 Trade War                  early 0/2 -> late 0/3  
+  [19/150] 2025-04-09 Business Investment        early 2/4 -> late 1/2  
+  [20/150] 2025-04-11 Trade Policy               early 2/6 -> late 1/3  
+  [21/150] 2025-04-16 Immigration Policy         early 1/4 -> late 0/3  
+  [22/150] 2025-04-20 Trade War                  early 2/4 -> late 0/3  
+  [23/150] 2025-04-25 Geopolitics / Peace        early 0/0 -> late 1/1  
+  [24/150] 2025-04-28 Domestic Politics          early 0/0 -> late 0/0  
+  [25/150] 2025-05-02 US Politics                early 0/4 -> late 0/3  
+  [26/150] 2025-05-07 Geopolitics / Peace        early 0/0 -> late 0/0  
+  [27/150] 2025-05-08 Geopolitics / Peace        early 0/4 -> late 1/2  
+  [28/150] 2025-05-09 Domestic Politics          early 0/0 -> late 0/0  
+  [29/150] 2025-05-11 Trade Policy               early 5/6 -> late 1/3  Flash Shock
+  [30/150] 2025-05-16 Geopolitics / Trade        early 2/4 -> late 1/2  
+  [31/150] 2025-05-23 Energy Policy              early 5/6 -> late 3/3  
+  [32/150] 2025-05-25 US Politics / Election     early 0/0 -> late 2/3  
+  [33/150] 2025-05-28 Geopolitics / Security     early 0/0 -> late 1/1  
+  [34/150] 2025-06-02 Trade War                  early 0/0 -> late 1/3  
+  [35/150] 2025-06-06 Trade Policy               early 2/4 -> late 1/2  
+  [36/150] 2025-06-11 Trade Deal                 early 1/4 -> late 2/2  Structural Drift
+  [37/150] 2025-06-15 Geopolitics / Peace        early 3/4 -> late 1/2  Flash Shock
+  [38/150] 2025-06-17 Geopolitics / Conflict     early 2/2 -> late 1/2  Flash Shock
+  [39/150] 2025-06-21 Geopolitics / Peace        early 2/2 -> late 1/1  
+  [40/150] 2025-06-23 Geopolitics / Energy       early 2/2 -> late 1/1  
+  [41/150] 2025-06-24 Geopolitics / Peace        early 2/4 -> late 2/2  
+  [42/150] 2025-06-25 Geopolitics / Diplomacy    early 0/0 -> late 0/0  
+  [43/150] 2025-06-26 Geopolitics / Peace        early 0/0 -> late 1/2  
+  [44/150] 2025-06-29 US Fiscal Policy           early 5/6 -> late 2/3  
+  [45/150] 2025-07-01 Fiscal Policy              early 2/6 -> late 2/3  Structural Drift
+  [46/150] 2025-07-02 Immigration Policy         early 4/4 -> late 2/2  
+  [47/150] 2025-07-10 Politics / Election        early 2/2 -> late 1/2  Flash Shock
+  [48/150] 2025-07-15 Geopolitics / Trade        early 4/4 -> late 1/2  Flash Shock
+  [49/150] 2025-07-18 Domestic Politics          early 2/4 -> late 1/2  
+  [50/150] 2025-07-19 Geopolitics / Conflict     early 2/6 -> late 1/3  
+  [51/150] 2025-07-22 Geopolitics / US Politics  early 2/2 -> late 0/1  Flash Shock
+  [52/150] 2025-07-24 Election                   early 1/6 -> late 1/3  
+  [53/150] 2025-07-29 Geopolitics / Trade        early 0/2 -> late 0/1  
+  [54/150] 2025-07-31 Trade War                  early 3/6 -> late 1/3  
+  [55/150] 2025-08-04 Geopolitics / Trade        early 2/4 -> late 0/2  
+  [56/150] 2025-08-08 Trade Policy               early 1/4 -> late 1/2  
+  [57/150] 2025-08-11 Trade                      early 1/2 -> late 0/2  
+  [58/150] 2025-08-14 Geopolitics / Scandal      early 0/2 -> late 0/1  
+  [59/150] 2025-08-18 Geopolitics / Peace        early 2/2 -> late 1/2  Flash Shock
+  [60/150] 2025-08-19 Domestic Politics          early 2/2 -> late 1/2  Flash Shock
+  [61/150] 2025-08-21 Geopolitics / War          early 3/4 -> late 0/2  Flash Shock
+  [62/150] 2025-08-31 Geopolitics / Peace        early 0/0 -> late 0/0  
+  [63/150] 2025-09-05 US Politics                early 2/4 -> late 2/2  
+  [64/150] 2025-09-10 Geopolitics / Conflict     early 1/4 -> late 1/2  
+  [65/150] 2025-09-19 Geopolitics / Peace        early 4/8 -> late 2/4  
+  [66/150] 2025-09-26 Geopolitics / Peace        early 2/4 -> late 2/2  
+  [67/150] 2025-10-03 Geopolitics / Peace        early 2/2 -> late 1/2  Flash Shock
+  [68/150] 2025-10-08 Geopolitics / Peace        early 2/4 -> late 1/2  
+  [69/150] 2025-10-12 Geopolitics / Peace        early 2/4 -> late 2/2  
+  [70/150] 2025-10-14 Election / Endorsement     early 1/2 -> late 1/2  
+  [71/150] 2025-10-22 Trade Policy               early 4/4 -> late 2/2  
+  [72/150] 2025-10-24 Trade Policy               early 1/2 -> late 0/2  
+  [73/150] 2025-10-25 Election / Endorsement     early 1/4 -> late 1/3  
+  [74/150] 2025-10-25 Domestic Politics          early 1/4 -> late 1/3  
+  [75/150] 2025-10-25 Domestic Politics          early 0/2 -> late 1/2  
+  [76/150] 2025-10-29 Geopolitics / Defense      early 0/0 -> late 0/2  
+  [77/150] 2025-11-03 Domestic Politics          early 0/0 -> late 1/2  
+  [78/150] 2025-11-03 Geopolitics / Peace        early 0/0 -> late 1/2  
+  [79/150] 2025-11-03 Elections / Policy         early 0/0 -> late 1/2  
+  [80/150] 2025-11-03 Geopolitics / Peace        early 0/0 -> late 0/0  
+  [81/150] 2025-11-03 US Politics                early 0/0 -> late 2/3  
+  [82/150] 2025-11-03 Domestic Politics          early 0/0 -> late 1/2  
+  [83/150] 2025-11-03 Geopolitics / Peace        early 0/0 -> late 1/2  
+  [84/150] 2025-11-03 Elections / Policy         early 0/0 -> late 1/2  
+  [85/150] 2025-11-03 Geopolitics / Peace        early 0/0 -> late 0/1  
+  [86/150] 2025-11-04 US Politics                early 0/0 -> late 0/2  
+  [87/150] 2025-11-07 US Politics                early 0/0 -> late 0/1  
+  [88/150] 2025-11-10 Trade War                  early 4/4 -> late 0/2  Flash Shock
+  [89/150] 2025-11-17 Geopolitics / US Politics  early 0/0 -> late 0/1  
+  [90/150] 2025-11-23 Geopolitics / Peace        early 0/0 -> late 1/2  
+  [91/150] 2025-11-29 Trade Policy               early 0/0 -> late 3/3  
+  [92/150] 2025-12-04 Elections / Endorsement    early 4/4 -> late 1/2  Flash Shock
+  [93/150] 2025-12-08 Geopolitics / Peace        early 3/4 -> late 2/3  
+  [94/150] 2025-12-13 Trade Policy               early 0/0 -> late 2/2  
+  [95/150] 2025-12-18 US Politics                early 0/0 -> late 3/3  
+  [96/150] 2025-12-24 Geopolitics / Tensions     early 0/0 -> late 2/2  
+  [97/150] 2025-12-30 Politics / Judiciary       early 0/0 -> late 1/1  
+  [98/150] 2026-01-06 Economic Nationalism       early 0/0 -> late 1/2  
+  [99/150] 2026-01-08 Economic Nationalism       early 0/2 -> late 2/2  Structural Drift
+  [100/150] 2026-01-11 Geopolitics / Sanctions    early 1/2 -> late 2/3  
+  [101/150] 2026-01-16 Geopolitics / Peace        early 0/0 -> late 0/2  
+  [102/150] 2026-01-20 Geopolitics / Conflict     early 0/0 -> late 1/2  
+  [103/150] 2026-01-23 Geopolitics / Peace        early 0/0 -> late 0/1  
+  [104/150] 2026-01-23 Elections / Policy         early 0/0 -> late 2/2  
+  [105/150] 2026-01-23 Trade Policy               early 0/0 -> late 1/1  
+  [106/150] 2026-01-26 US Politics                early 0/0 -> late 0/0  
+  [107/150] 2026-01-29 Monetary Policy            early 0/0 -> late 0/3  
+  [108/150] 2026-02-02 Geopolitics / Peace        early 3/4 -> late 0/2  Flash Shock
+  [109/150] 2026-02-05 US Politics                early 0/0 -> late 2/2  
+  [110/150] 2026-02-07 Trade Policy               early 0/0 -> late 1/2  
+  [111/150] 2026-02-10 Domestic Politics          early 0/0 -> late 0/2  
+  [112/150] 2026-02-16 Economy / Confidence       early 0/0 -> late 1/2  
+  [113/150] 2026-02-17 US Politics                early 0/0 -> late 2/2  
+  [114/150] 2026-02-21 Trade Policy               early 0/0 -> late 0/2  
+  [115/150] 2026-02-27 Immigration                early 3/6 -> late 1/3  
+  [116/150] 2026-02-28 US Politics / Election     early 1/2 -> late 1/1  
+  [117/150] 2026-03-03 Geopolitics / Military     early 0/0 -> late 0/2  
+  [118/150] 2026-03-05 Geopolitics / Peace        early 0/2 -> late 0/1  
+  [119/150] 2026-03-09 Geopolitics / Human Rights early 0/4 -> late 1/2  
+  [120/150] 2026-03-12 Geopolitics / Conflict     early 6/6 -> late 1/3  Flash Shock
+  [121/150] 2026-03-14 Geopolitics / Peace        early 2/2 -> late 1/2  Flash Shock
+  [122/150] 2026-03-17 Geopolitics / Conflict     early 2/6 -> late 0/3  
+  [123/150] 2026-03-20 Geopolitics / Peace        early 2/4 -> late 1/2  
+  [124/150] 2026-03-23 Immigration                early 4/4 -> late 1/2  Flash Shock
+  [125/150] 2026-03-26 Geopolitics / Election     early 0/2 -> late 0/1  
+  [126/150] 2026-03-31 Geopolitics / Conflict     early 1/6 -> late 1/3  
+  [127/150] 2026-04-03 Geopolitics / War          early 0/0 -> late 0/3  
+  [128/150] 2026-04-06 Domestic Policy            early 0/2 -> late 0/1  
+  [129/150] 2026-04-08 Geopolitics / Tensions     early 2/4 -> late 1/2  
+  [130/150] 2026-04-10 Domestic Policy            early 2/4 -> late 0/2  
+  [131/150] 2026-04-12 Geopolitics / Conflict     early 2/6 -> late 0/3  
+  [132/150] 2026-04-14 US Politics                early 3/6 -> late 1/3  
+  [133/150] 2026-04-15 Geopolitics / Conflict     early 3/6 -> late 1/3  
+  [134/150] 2026-04-16 Geopolitics / Peace        early 2/2 -> late 0/1  Flash Shock
+  [135/150] 2026-04-17 US Politics                early 2/2 -> late 1/2  Flash Shock
+  [136/150] 2026-04-20 Geopolitics / Conflict     early 5/6 -> late 1/3  Flash Shock
+  [137/150] 2026-04-21 Energy Policy              early 1/2 -> late 1/1  
+  [138/150] 2026-04-23 Geopolitics / Conflict     early 4/6 -> late 1/3  Flash Shock
+  [139/150] 2026-04-28 Geopolitics / Conflict     early 7/8 -> late 1/4  Flash Shock
+  [140/150] 2026-05-02 US Politics                early 0/0 -> late 0/1  
+  [141/150] 2026-05-05 US Politics                early 2/4 -> late 1/2  
+  [142/150] 2026-05-07 Geopolitics / Trade        early 6/6 -> late 3/3  
+  [143/150] 2026-05-10 Geopolitics / Conflict     early 4/6 -> late 1/3  Flash Shock
+  [144/150] 2026-05-16 US Politics                early 0/0 -> late 0/0  
+  [145/150] 2026-05-18 US Politics / Election     early 3/6 -> late 2/3  
+  [146/150] 2026-05-18 Domestic Politics          early 3/4 -> late 1/2  Flash Shock
+  [147/150] 2026-05-18 US Politics / Election     early 3/4 -> late 1/2  Flash Shock
+  [148/150] 2026-05-18 US Politics                early 3/4 -> late 1/2  Flash Shock
+  [149/150] 2026-05-23 Geopolitics / Peace        early 0/0 -> late 2/2  
+  [150/150] 2026-05-27 Geopolitics / Peace        early 0/4 -> late 0/2  
+
+====================================================================================
+AGGREGATE HIT-RATE across 150 tweets   model=meta-llama/Llama-3.3-70B-Instruct
+====================================================================================
+horizon       hits     rate       z   p(vs coin-flip)
+30m        100/184    54.3%    1.18            0.1191
+1h          99/184    53.8%    1.03            0.1510
+EOD        151/297    50.8%    0.29            0.3859
+3d         137/297    46.1%   -1.33            0.9090
+1w         139/297    46.8%   -1.10            0.8649
+1mo        133/297    44.8%   -1.80            0.9640
+
+(above counts every instrument -> inflated N: instruments within a tweet are correlated, NOT independent. The honest aggregate is one call per tweet:)
+
+TWEET-LEVEL HIT-RATE (majority vote per tweet; N = tweets)
+horizon       tweets     rate       z   p(vs coin-flip)
+30m            61/93    65.6%    3.01            0.0013
+1h             58/93    62.4%    2.38            0.0085
+EOD           89/139    64.0%    3.31            0.0005
+3d            82/139    59.0%    2.12            0.0170
+1w            82/139    59.0%    2.12            0.0170
+1mo           81/139    58.3%    1.95            0.0255
+
+p < 0.05 here is the HONEST test (N=tweets). Not multiple-comparison corrected across horizons; treat as suggestive.
+
+CATEGORIES:
+  Flash Shocks     (early 30m/1h right, fades by 1mo): 27
+  Structural Drifts(early noisy, 1mo builds up):       4
+    [Flash Shock     ] 2025-03-17 Energy Policy                  early 2/2 late 1/2
+    [Flash Shock     ] 2025-03-29 US Politics / Election         early 2/2 late 1/2
+    [Flash Shock     ] 2025-05-11 Trade Policy                   early 5/6 late 1/3
+    [Structural Drift] 2025-01-22 Geopolitics / Peace            early 2/6 late 2/3
+    [Structural Drift] 2025-06-11 Trade Deal                     early 1/4 late 2/2
+    [Structural Drift] 2025-07-01 Fiscal Policy                  early 2/6 late 2/3
+
+TOP 5 strongest examples (best correct-calls x move size at ANY horizon):
+  2025-12-18  US Politics                    score=0.332  
+  2025-05-23  Energy Policy                  score=0.319  
+  2026-05-23  Geopolitics / Peace            score=0.298  
+  2026-02-27  Immigration                    score=0.279  
+  2025-11-29  Trade Policy                   score=0.276  
+
+-> top-5 visual gallery -> reports/nebius_backtest_top5.html
+
+####################################################################################
+# CROSS-CORRELATIONS (training-data cleaning signals)
+####################################################################################
+
+(1) ASSET CLASS x HORIZON hit-rate  (decay = early 30m/1h avg  ->  1mo):
+  class                   30m           1h          EOD           3d           1w          1mo     decay
+  commodity_fx    65% (24/37)  59% (22/37)  56% (28/50)  46% (23/50)  48% (24/50)  46% (23/50)     +16pp
+  index             71% (5/7)    71% (5/7)    75% (6/8)    38% (3/8)    38% (3/8)    50% (4/8)     +21pp
+  sector_etf      50% (40/80)  51% (41/80)  43% (63/145)  46% (66/145)  50% (72/145)  48% (69/145)      +3pp
+  single_stock     60% (9/15)  67% (10/15)  70% (14/20)  65% (13/20)  50% (10/20)   45% (9/20)     +18pp
+  volatility      49% (22/45)  47% (21/45)  54% (40/74)  43% (32/74)  41% (30/74)  38% (28/74)     +10pp
+
+  named barometers (VIXY vs CAT vs LMT):
+  VIXY            49% (22/45)  47% (21/45)  54% (40/74)  43% (32/74)  41% (30/74)  38% (28/74)
+  LMT               60% (3/5)    60% (3/5)    43% (3/7)    57% (4/7)    14% (1/7)     0% (0/7)
+  CAT               50% (1/2)    50% (1/2)   100% (2/2)   100% (2/2)    50% (1/2)    50% (1/2)
+
+(2) LLM INTENSITY (1-10) vs drift  (early 30m/1h  ->  late 1mo hit-rate):
+  intensity     tweets           early            late   drift(late-early)
+  low(1-4)           2            n/a             n/a                  n/a
+  mid(5-7)          16     67% (16/24)      40% (8/20)               -27pp
+  high(8-10)       132   53% (183/344)   45% (125/277)                -8pp
+
+(3) SESSION PHASE vs 30m reaction  (hit-rate, data-coverage, |move| distortion):
+  phase         tweets         30m hit    30m coverage  mean|30m move|
+  regular           42     58% (46/80)             87%           0.29%
+  premarket         43     49% (19/39)             59%           0.35%
+  afterhours        36     45% (15/33)             61%           0.37%
+  weekend           29     62% (20/32)             61%           0.45%
+
+====================================================================================
+TRAIN / VALIDATION / TEST DATASET (one row per tweet, chronological 60/20/20)
+====================================================================================
+  -> reports/macro_dataset.csv   (139 tweets: 83 train / 28 val / 28 test)
+  -> reports/macro_dataset_config.json
+  label=label_1mo (1mo basket confirmed), positive_rate=0.583, majority_baseline=0.583
+  features=['intensity', 'phase', 'weekend_flag', 'market_closed', 'n_instruments', 'scenario']
+
+====================================================================================
+VALIDATION EXAMPLES — inspect the model's brain (one per pattern)
+====================================================================================
+
+### Flash Shock  |  2026-03-12  |  Geopolitics / Conflict  |  intensity 8  |  split=val
+  TWEET: "The United States is the largest Oil Producer in the World, by far, so when oil prices go up, we make a lot of money. BUT, of far greater interest and importance to me, as President, is stoping an evil Empire, Iran, from having Nuclear Weap"
+  MEANING:     US won't let Iran get nuclear weapons
+  MACRO LINK:  Geopolitical tensions affect oil prices
+  SHORT CALL:  Oil prices rise due to Middle East uncertainty, WHY: immediate fear reaction
+  LONG CALL:   US oil producers benefit from high oil prices, WHY: sustained geopolitical tensions
+  REALITY (short 30m/1h vs long 1mo):
+    USO   pred up       30m    +0.1%  1h    +1.1%  1mo    +7.9%  [HIT@1mo]
+    XLE   pred up       30m    +0.1%  1h    +0.7%  1mo    +0.3%  [MISS@1mo]
+    VIXY  pred up       30m    +0.1%  1h    +1.0%  1mo    -9.0%  [MISS@1mo]
+  CONCLUSION:  The model nailed the immediate reaction (early 100% correct) but the edge decayed to 33% by 1 month — the crowd over-reacted, then re-priced as broader macro forces took over. Rule: trust this signal INTRADAY ONLY.
+
+### Structural Drift  |  2026-01-08  |  Economic Nationalism  |  intensity 8  |  split=val
+  TWEET: "I just finished a great meeting with the very successful Intel CEO, Lip-Bu Tan. Intel just launched the first SUB 2 NANOMETER CPU PROCESSOR designed, built, and packaged right here in the U.S.A. The United States Government is proud to be a"
+  MEANING:     US gov proud of Intel's new US-made CPU
+  MACRO LINK:  US chip production boosts economy
+  SHORT CALL:  Intel stock up on US manufacturing win
+  LONG CALL:   US tech sector up as production returns
+  REALITY (short 30m/1h vs long 1mo):
+    INTC  pred up       30m    -0.4%  1h    -0.3%  1mo   +20.1%  [HIT@1mo]
+    SMH   pred up       30m     n/a   1h     n/a   1mo    +6.4%  [HIT@1mo]
+    SPY   pred up       30m    +0.2%  1h    -0.0%  1mo    +0.5%  [-@1mo]
+  CONCLUSION:  The first hour was noise (early 0%), but the thesis played out over weeks (1mo 100% correct) as the policy actually took effect. Rule: SLOW-BURN signal — hold to 1 month, ignore the immediate wobble.
+
+### Failed Anomaly  |  2026-01-16  |  Geopolitics / Peace  |  intensity 9  |  split=val
+  TWEET: "As Steve Witkoff announced, we have OFFICIALLY entered the next phase of Gaza’s 20-Point Peace Plan!
+Since the Ceasefire, my team has helped deliver RECORD LEVELS of Humanitarian Aid to Gaza, reaching Civilians at HISTORIC speed and scale. "
+  MEANING:     Gaza's 20-Point Peace Plan has entered its next phase
+  MACRO LINK:  Reduced conflict lowers oil prices and boosts stocks
+  SHORT CALL:  Markets rise on peace hopes, and WHY: immediate reaction to reduced conflict
+  LONG CALL:   Sustained peace boosts growth, and WHY: as policy plays out
+  REALITY (short 30m/1h vs long 1mo):
+    SPY   pred up       30m     n/a   1h     n/a   1mo    -1.6%  [-@1mo]
+    USO   pred down     30m     n/a   1h     n/a   1mo    +4.7%  [MISS@1mo]
+    VIXY  pred down     30m    +0.0%  1h    +0.0%  1mo    +7.7%  [MISS@1mo]
+  CONCLUSION:  The model was confident (intensity 9) yet wrong by 1 month (only 0% of the basket confirmed) — a macro confound or sharp reversal overwhelmed the tweet. Rule: FLAG this scenario for error analysis, don't trust blindly.
+
+-> narrative dashboard -> reports/nebius_validation_examples.html

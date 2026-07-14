@@ -1,0 +1,39 @@
+{
+  "track": "micro",
+  "label": "label_eod",
+  "label_type": "signed_multiclass",
+  "primary_horizon": "EOD",
+  "classes": {
+    "+1": "predicted UP and stock beat all 3 benchmarks (winning LONG)",
+    "-1": "predicted DOWN and stock beat all 3 downward (winning SHORT)",
+    "0": "wrong direction / noise / inside band"
+  },
+  "labels_secondary": {
+    "label_eod_soft": "SOFT: stock beat the BLENDED baseline mean(indices, sector, peers) at EOD",
+    "label_1mo_soft": "SOFT blended baseline at 1 month."
+  },
+  "benchmark": "config.membership.benchmarks_for -> labeling.benchmarks.compute_bench_outcome",
+  "features": [
+    "intensity",
+    "phase",
+    "weekend_flag",
+    "market_closed",
+    "ticker",
+    "sector",
+    "is_targeted_action",
+    "has_action_verbs",
+    "execution_window"
+  ],
+  "split": "time_ordered_60_20_20",
+  "n_total": 84,
+  "n_train": 50,
+  "n_val": 17,
+  "n_test": 17,
+  "class_balance": {
+    "+1_long": 27,
+    "-1_short": 8,
+    "0_noise": 49
+  },
+  "win_rate": 0.417,
+  "positive_rate_soft": 0.512
+}

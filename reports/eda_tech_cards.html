@@ -1,0 +1,384 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>EDA: prominent tech tweets -> multi-benchmark reactions</title><style>
+:root{--bg:#f4f5f2;--surface:#fff;--surface-2:#eef0ec;--ink:#191c1f;--ink-2:#5a6067;
+ --ink-3:#878d94;--line:#dee1db;--grid:#c9cdc6;--accent:#a8792f;--etf:#2f7ec0;
+ --up:#17805f;--up-bg:#e4f1ea;--down:#c0432f;--down-bg:#f7e5e0;--flat:#9aa0a6;
+ --font:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font);
+ font-size:14px;line-height:1.5}
+.wrap{max-width:920px;margin:0 auto;padding:28px 18px}
+h1{font-size:22px;margin:0 0 4px}
+.sub{color:var(--ink-2);margin:0 0 22px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:12px;
+ padding:16px 18px;margin:0 0 18px}
+.chd{display:flex;justify-content:space-between;align-items:baseline;gap:12px}
+.ttl{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.tk{font-weight:700;font-size:17px}
+.nm{color:var(--ink-2)}
+time{color:var(--ink-3);font-variant-numeric:tabular-nums}
+.chip{background:var(--surface-2);border-radius:20px;padding:2px 10px;font-size:12px}
+.chip.up b{color:var(--up)}.chip.down b{color:var(--down)}.chip.flat b{color:var(--ink-2)}
+blockquote{margin:10px 0;padding:8px 12px;border-left:3px solid var(--accent);
+ background:var(--surface-2);border-radius:0 6px 6px 0;color:var(--ink)}
+.bench{font-size:12px;color:var(--ink-2);margin:6px 0}
+.bench b{color:var(--ink)}
+.legend{display:flex;gap:14px;flex-wrap:wrap;margin:6px 0 2px}
+.lg{font-size:12px;color:var(--ink-2);display:flex;align-items:center;gap:5px}
+.lg i{width:14px;height:3px;border-radius:2px;display:inline-block}
+.mbchart{display:block;margin:2px 0}
+.ax{fill:var(--ink-3);font-size:10px}
+.unit{color:var(--ink-3);font-size:11px;margin:4px 0 8px}
+.strip{width:100%;border-collapse:collapse;table-layout:fixed}
+.strip .v{text-align:center;padding:5px 2px;border:1px solid var(--line);font-size:11px}
+.strip .v b{display:block;color:var(--ink-2);font-weight:600}
+.strip .v span{font-weight:700}
+.v.up{background:var(--up-bg)}.v.up span{color:var(--up)}
+.v.down{background:var(--down-bg)}.v.down span{color:var(--down)}
+.v.flat span{color:var(--ink-3)}
+.intra{margin-top:6px;display:flex;gap:8px;flex-wrap:wrap}
+.chip.sec{font-size:11px}.chip.sec b.up{color:var(--up)}.chip.sec b.down{color:var(--down)}
+.chip.sec b.flat{color:var(--ink-3)}
+footer{color:var(--ink-3);font-size:11px;margin-top:24px}
+</style></head><body><div class="wrap"><h1>EDA: prominent tech tweets -> multi-benchmark reactions</h1><p class="sub">Each card: one tweet, one stock, judged against the average of every index it belongs to, its sector ETF(s), and its sector peers. &middot; run 7ee85fa3ebd2</p>
+  <article class="card">
+    <div class="chd">
+      <div class="ttl"><span class="tk">AMD</span>
+        <span class="nm">AMD</span>
+        <span class="chip up">stance <b>positive</b></span></div>
+      <time>2025-04-20</time>
+    </div>
+    <blockquote>HOPEFULLY RUSSIA AMD UKRAINE WILL MAKE A DEAL THIS WEEK. BOTH WILL THEN START TO DO BIG BUSINESS WITH THE UNITED STATES OF AMERICA, WHICH IS THRIVING, AND MAKE A FORTUNE!</blockquote>
+    <div class="bench">compared vs &nbsp;
+      <b>indices:</b> SPY QQQ &nbsp; <b>sector:</b> XLK SMH &nbsp;
+      <b>peers:</b> AAPL MSFT NVDA AVGO INTC TSM</div>
+    <div class="legend"><span class="lg"><i style="background:var(--accent)"></i>stock</span><span class="lg"><i style="background:var(--etf)"></i>indices (avg)</span><span class="lg"><i style="background:#7a5cc0"></i>sector (avg)</span><span class="lg"><i style="background:var(--ink-3)"></i>peers (median)</span></div>
+    <svg viewBox="0 0 520 200" width="100%" height="200" role="img" class="mbchart"><title>AMD vs benchmarks</title><line x1="40" y1="94.0" x2="510" y2="94.0" stroke="var(--grid)" stroke-width="1" stroke-dasharray="2 2"/><text x="40.0" y="194" text-anchor="middle" class="ax">EOD</text><text x="118.3" y="194" text-anchor="middle" class="ax">2d</text><text x="196.7" y="194" text-anchor="middle" class="ax">3d</text><text x="275.0" y="194" text-anchor="middle" class="ax">1w</text><text x="353.3" y="194" text-anchor="middle" class="ax">2w</text><text x="431.7" y="194" text-anchor="middle" class="ax">3w</text><text x="510.0" y="194" text-anchor="middle" class="ax">1mo</text><text x="6" y="16.0" class="ax">+33.4%</text><text x="6" y="172.0" class="ax">-33.4%</text><polyline points="40.0,95.2 118.3,93.3 196.7,82.1 275.0,65.1 353.3,59.3 431.7,48.3 510.0,16.0" fill="none" stroke="var(--accent)" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round"/><circle cx="510.0" cy="16.0" r="3" fill="var(--accent)"/><polyline points="40.0,97.0 118.3,91.0 196.7,86.5 275.0,78.2 353.3,70.3 431.7,71.1 510.0,55.2" fill="none" stroke="var(--etf)" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/><circle cx="510.0" cy="55.2" r="3" fill="var(--etf)"/><polyline points="40.0,95.8 118.3,90.5 196.7,82.7 275.0,68.3 353.3,58.9 431.7,55.6 510.0,31.2" fill="none" stroke="#7a5cc0" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/><circle cx="510.0" cy="31.2" r="3" fill="#7a5cc0"/><polyline points="40.0,95.7 118.3,90.9 196.7,81.1 275.0,72.6 353.3,52.6 431.7,52.2 510.0,28.9" fill="none" stroke="var(--ink-3)" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/><circle cx="510.0" cy="28.9" r="3" fill="var(--ink-3)"/></svg>
+    <p class="unit">Lines = cumulative return (%). Stock outperforms only when it
+      beats indices AND sector AND peers beyond its noise band; the strip below is
+      that folded verdict per horizon.</p>
+    <table class="strip"><tr><td class="v flat"><b>EOD</b><span>NEUTRAL</span></td><td class="v flat"><b>2d</b><span>NEUTRAL</span></td><td class="v flat"><b>3d</b><span>NEUTRAL</span></td><td class="v flat"><b>1w</b><span>NEUTRAL</span></td><td class="v flat"><b>2w</b><span>NEUTRAL</span></td><td class="v flat"><b>3w</b><span>NEUTRAL</span></td><td class="v flat"><b>1mo</b><span>NEUTRAL</span></td></tr></table>
+  </article>
+  <article class="card">
+    <div class="chd">
+      <div class="ttl"><span class="tk">TSLA</span>
+        <span class="nm">Tesla</span>
+        <span class="chip flat">stance <b>neutral</b></span></div>
+      <time>2025-05-30</time>
+    </div>
+    <blockquote>I am having a Press Conference tomorrow at 1:30 P.M. EST, with Elon Musk, at the Oval Office. This will be his last day, but not really, because he will, always, be with us, helping all the way. Elon </blockquote>
+    <div class="bench">compared vs &nbsp;
+      <b>indices:</b> SPY QQQ &nbsp; <b>sector:</b> XLY &nbsp;
+      <b>peers:</b> AMZN HD MCD NKE</div>
+    <div class="legend"><span class="lg"><i style="background:var(--accent)"></i>stock</span><span class="lg"><i style="background:var(--etf)"></i>indices (avg)</span><span class="lg"><i style="background:#7a5cc0"></i>sector (avg)</span><span class="lg"><i style="background:var(--ink-3)"></i>peers (median)</span></div>
+    <svg viewBox="0 0 520 200" width="100%" height="200" role="img" class="mbchart"><title>TSLA vs benchmarks</title><line x1="40" y1="94.0" x2="510" y2="94.0" stroke="var(--grid)" stroke-width="1" stroke-dasharray="2 2"/><text x="40.0" y="194" text-anchor="middle" class="ax">EOD</text><text x="118.3" y="194" text-anchor="middle" class="ax">2d</text><text x="196.7" y="194" text-anchor="middle" class="ax">3d</text><text x="275.0" y="194" text-anchor="middle" class="ax">1w</text><text x="353.3" y="194" text-anchor="middle" class="ax">2w</text><text x="431.7" y="194" text-anchor="middle" class="ax">3w</text><text x="510.0" y="194" text-anchor="middle" class="ax">1mo</text><text x="6" y="16.0" class="ax">+19.9%</text><text x="6" y="172.0" class="ax">-19.9%</text><polyline points="40.0,104.0 118.3,108.1 196.7,106.4 275.0,172.0 353.3,134.1 431.7,130.7 510.0,135.7" fill="none" stroke="var(--accent)" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round"/><circle cx="510.0" cy="135.7" r="3" fill="var(--accent)"/><polyline points="40.0,94.0 118.3,91.3 196.7,88.6 275.0,90.6 353.3,83.7 431.7,88.8 510.0,71.4" fill="none" stroke="var(--etf)" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/><circle cx="510.0" cy="71.4" r="3" fill="var(--etf)"/><polyline points="40.0,94.6 118.3,93.7 196.7,91.6 275.0,102.6 353.3,94.8 431.7,100.3 510.0,87.3" fill="none" stroke="#7a5cc0" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/><circle cx="510.0" cy="87.3" r="3" fill="#7a5cc0"/><polyline points="40.0,93.2 118.3,90.8 196.7,89.4 275.0,88.6 353.3,87.7 431.7,104.7 510.0,79.1" fill="none" stroke="var(--ink-3)" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/><circle cx="510.0" cy="79.1" r="3" fill="var(--ink-3)"/></svg>
+    <p class="unit">Lines = cumulative return (%). Stock outperforms only when it
+      beats indices AND sector AND peers beyond its noise band; the strip below is
+      that folded verdict per horizon.</p>
+    <table class="strip"><tr><td class="v flat"><b>EOD</b><span>NEUTRAL</span></td><td class="v flat"><b>2d</b><span>NEUTRAL</span></td><td class="v flat"><b>3d</b><span>NEUTRAL</span></td><td class="v flat"><b>1w</b><span>NEUTRAL</span></td><td class="v flat"><b>2w</b><span>NEUTRAL</span></td><td class="v flat"><b>3w</b><span>NEUTRAL</span></td><td class="v flat"><b>1mo</b><span>NEUTRAL</span></td></tr></table>
+  </article>
+  <article class="card">
+    <div class="chd">
+      <div class="ttl"><span class="tk">TSLA</span>
+        <span class="nm">Tesla</span>
+        <span class="chip flat">stance <b>neutral</b></span></div>
+      <time>2025-07-01</time>
+    </div>
+    <blockquote>Elon Musk knew, long before he so strongly Endorsed me for President, that I was strongly against the EV Mandate. It is ridiculous, and was always a major part of my campaign. Electric cars are fine, </blockquote>
+    <div class="bench">compared vs &nbsp;
+      <b>indices:</b> SPY QQQ &nbsp; <b>sector:</b> XLY &nbsp;
+      <b>peers:</b> AMZN HD MCD NKE</div>
+    <div class="legend"><span class="lg"><i style="background:var(--accent)"></i>stock</span><span class="lg"><i style="background:var(--etf)"></i>indices (avg)</span><span class="lg"><i style="background:#7a5cc0"></i>sector (avg)</span><span class="lg"><i style="background:var(--ink-3)"></i>peers (median)</span></div>
+    <svg viewBox="0 0 520 200" width="100%" height="200" role="img" class="mbchart"><title>TSLA vs benchmarks</title><line x1="40" y1="94.0" x2="510" y2="94.0" stroke="var(--grid)" stroke-width="1" stroke-dasharray="2 2"/><text x="40.0" y="194" text-anchor="middle" class="ax">EOD</text><text x="118.3" y="194" text-anchor="middle" class="ax">2d</text><text x="196.7" y="194" text-anchor="middle" class="ax">3d</text><text x="275.0" y="194" text-anchor="middle" class="ax">1w</text><text x="353.3" y="194" text-anchor="middle" class="ax">2w</text><text x="431.7" y="194" text-anchor="middle" class="ax">3w</text><text x="510.0" y="194" text-anchor="middle" class="ax">1mo</text><text x="6" y="16.0" class="ax">+11.3%</text><text x="6" y="172.0" class="ax">-11.3%</text><polyline points="40.0,88.8 118.3,54.1 196.7,54.8 275.0,95.5 353.3,65.4 431.7,16.0 510.0,46.2" fill="none" stroke="var(--accent)" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round"/><circle cx="510.0" cy="46.2" r="3" fill="var(--accent)"/><polyline points="40.0,95.0 118.3,91.0 196.7,84.9 275.0,90.1 353.3,86.3 431.7,79.7 510.0,72.3" fill="none" stroke="var(--etf)" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/><circle cx="510.0" cy="72.3" r="3" fill="var(--etf)"/><polyline points="40.0,84.3 118.3,78.6 196.7,74.8 275.0,86.2 353.3,81.7 431.7,61.1 510.0,68.4" fill="none" stroke="#7a5cc0" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/><circle cx="510.0" cy="68.4" r="3" fill="#7a5cc0"/><polyline points="40.0,81.3 118.3,84.3 196.7,80.9 275.0,91.2 353.3,85.6 431.7,73.6 510.0,64.0" fill="none" stroke="var(--ink-3)" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/><circle cx="510.0" cy="64.0" r="3" fill="var(--ink-3)"/></svg>
+    <p class="unit">Lines = cumulative return (%). Stock outperforms only when it
+      beats indices AND sector AND peers beyond its noise band; the strip below is
+      that folded verdict per horizon.</p>
+    <table class="strip"><tr><td class="v flat"><b>EOD</b><span>NEUTRAL</span></td><td class="v flat"><b>2d</b><span>NEUTRAL</span></td><td class="v flat"><b>3d</b><span>NEUTRAL</span></td><td class="v flat"><b>1w</b><span>NEUTRAL</span></td><td class="v flat"><b>2w</b><span>NEUTRAL</span></td><td class="v flat"><b>3w</b><span>NEUTRAL</span></td><td class="v flat"><b>1mo</b><span>NEUTRAL</span></td></tr></table>
+  </article>
+  <article class="card">
+    <div class="chd">
+      <div class="ttl"><span class="tk">TSLA</span>
+        <span class="nm">Tesla</span>
+        <span class="chip up">stance <b>positive</b></span></div>
+      <time>2025-07-06</time>
+    </div>
+    <blockquote>I am saddened to watch Elon Musk go completely &#8220;off the rails,&#8221; essentially becoming a TRAIN WRECK over the past five weeks. He even wants to start a Third Political Party, despite the fact that they </blockquote>
+    <div class="bench">compared vs &nbsp;
+      <b>indices:</b> SPY QQQ &nbsp; <b>sector:</b> XLY &nbsp;
+      <b>peers:</b> AMZN HD MCD NKE</div>
+    <div class="legend"><span class="lg"><i style="background:var(--accent)"></i>stock</span><span class="lg"><i style="background:var(--etf)"></i>indices (avg)</span><span class="lg"><i style="background:#7a5cc0"></i>sector (avg)</span><span class="lg"><i style="background:var(--ink-3)"></i>peers (median)</span></div>
+    <svg viewBox="0 0 520 200" width="100%" height="200" role="img" class="mbchart"><title>TSLA vs benchmarks</title><line x1="40" y1="94.0" x2="510" y2="94.0" stroke="var(--grid)" stroke-width="1" stroke-dasharray="2 2"/><text x="40.0" y="194" text-anchor="middle" class="ax">EOD</text><text x="118.3" y="194" text-anchor="middle" class="ax">2d</text><text x="196.7" y="194" text-anchor="middle" class="ax">3d</text><text x="275.0" y="194" text-anchor="middle" class="ax">1w</text><text x="353.3" y="194" text-anchor="middle" class="ax">2w</text><text x="431.7" y="194" text-anchor="middle" class="ax">3w</text><text x="510.0" y="194" text-anchor="middle" class="ax">1mo</text><text x="6" y="16.0" class="ax">+13.1%</text><text x="6" y="172.0" class="ax">-13.1%</text><polyline points="40.0,88.8 118.3,80.9 196.7,84.8 275.0,48.9 353.3,16.0 431.7,43.7 510.0,57.6" fill="none" stroke="var(--accent)" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round"/><circle cx="510.0" cy="57.6" r="3" fill="var(--accent)"/><polyline points="40.0,96.1 118.3,96.1 196.7,92.2 275.0,93.5 353.3,87.8 431.7,80.6 510.0,84.6" fill="none" stroke="var(--etf)" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/><circle cx="510.0" cy="84.6" r="3" fill="var(--etf)"/><polyline points="40.0,93.5 118.3,95.4 196.7,91.9 275.0,85.2 353.3,83.1 431.7,75.8 510.0,92.8" fill="none" stroke="#7a5cc0" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/><circle cx="510.0" cy="92.8" r="3" fill="#7a5cc0"/><polyline points="40.0,94.0 118.3,101.7 196.7,95.7 275.0,92.0 353.3,100.3 431.7,86.2 510.0,90.9" fill="none" stroke="var(--ink-3)" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/><circle cx="510.0" cy="90.9" r="3" fill="var(--ink-3)"/></svg>
+    <p class="unit">Lines = cumulative return (%). Stock outperforms only when it
+      beats indices AND sector AND peers beyond its noise band; the strip below is
+      that folded verdict per horizon.</p>
+    <table class="strip"><tr><td class="v flat"><b>EOD</b><span>NEUTRAL</span></td><td class="v flat"><b>2d</b><span>NEUTRAL</span></td><td class="v flat"><b>3d</b><span>NEUTRAL</span></td><td class="v up"><b>1w</b><span>UP</span></td><td class="v up"><b>2w</b><span>UP</span></td><td class="v flat"><b>3w</b><span>NEUTRAL</span></td><td class="v flat"><b>1mo</b><span>NEUTRAL</span></td></tr></table>
+  </article>
+  <article class="card">
+    <div class="chd">
+      <div class="ttl"><span class="tk">MSFT</span>
+        <span class="nm">Microsoft</span>
+        <span class="chip flat">stance <b>neutral</b></span></div>
+      <time>2025-09-26</time>
+    </div>
+    <blockquote>Corrupt and Totally Trump Deranged Lisa Monaco (A purported pawn of Legal Lightweight Andrew Weissmann), was a senior National Security aide under Barrack Hussein Obama, and a Lawfare and Weaponizatio</blockquote>
+    <div class="bench">compared vs &nbsp;
+      <b>indices:</b> SPY QQQ DIA &nbsp; <b>sector:</b> XLK &nbsp;
+      <b>peers:</b> AAPL NVDA AMD AVGO</div>
+    <div class="legend"><span class="lg"><i style="background:var(--accent)"></i>stock</span><span class="lg"><i style="background:var(--etf)"></i>indices (avg)</span><span class="lg"><i style="background:#7a5cc0"></i>sector (avg)</span><span class="lg"><i style="background:var(--ink-3)"></i>peers (median)</span></div>
+    <svg viewBox="0 0 520 200" width="100%" height="200" role="img" class="mbchart"><title>MSFT vs benchmarks</title><line x1="40" y1="94.0" x2="510" y2="94.0" stroke="var(--grid)" stroke-width="1" stroke-dasharray="2 2"/><text x="40.0" y="194" text-anchor="middle" class="ax">EOD</text><text x="118.3" y="194" text-anchor="middle" class="ax">2d</text><text x="196.7" y="194" text-anchor="middle" class="ax">3d</text><text x="275.0" y="194" text-anchor="middle" class="ax">1w</text><text x="353.3" y="194" text-anchor="middle" class="ax">2w</text><text x="431.7" y="194" text-anchor="middle" class="ax">3w</text><text x="510.0" y="194" text-anchor="middle" class="ax">1mo</text><text x="6" y="16.0" class="ax">+6.9%</text><text x="6" y="172.0" class="ax">-6.9%</text><polyline points="40.0,87.1 118.3,79.8 196.7,75.9 275.0,81.2 353.3,95.2 431.7,89.4 510.0,50.1" fill="none" stroke="var(--accent)" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round"/><circle cx="510.0" cy="50.1" r="3" fill="var(--accent)"/><polyline points="40.0,95.1 118.3,92.2 196.7,88.6 275.0,85.7 353.3,113.7 431.7,92.4 510.0,54.7" fill="none" stroke="var(--etf)" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/><circle cx="510.0" cy="54.7" r="3" fill="var(--etf)"/><polyline points="40.0,94.4 118.3,88.3 196.7,77.1 275.0,76.9 353.3,102.3 431.7,75.7 510.0,19.7" fill="none" stroke="#7a5cc0" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/><circle cx="510.0" cy="19.7" r="3" fill="#7a5cc0"/><polyline points="40.0,89.8 118.3,88.0 196.7,78.4 275.0,70.4 353.3,104.6 431.7,63.0 510.0,16.0" fill="none" stroke="var(--ink-3)" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/><circle cx="510.0" cy="16.0" r="3" fill="var(--ink-3)"/></svg>
+    <p class="unit">Lines = cumulative return (%). Stock outperforms only when it
+      beats indices AND sector AND peers beyond its noise band; the strip below is
+      that folded verdict per horizon.</p>
+    <table class="strip"><tr><td class="v flat"><b>EOD</b><span>NEUTRAL</span></td><td class="v flat"><b>2d</b><span>NEUTRAL</span></td><td class="v flat"><b>3d</b><span>NEUTRAL</span></td><td class="v flat"><b>1w</b><span>NEUTRAL</span></td><td class="v flat"><b>2w</b><span>NEUTRAL</span></td><td class="v flat"><b>3w</b><span>NEUTRAL</span></td><td class="v flat"><b>1mo</b><span>NEUTRAL</span></td></tr></table>
+  </article>
+  <article class="card">
+    <div class="chd">
+      <div class="ttl"><span class="tk">NVDA</span>
+        <span class="nm">NVIDIA</span>
+        <span class="chip up">stance <b>positive</b></span></div>
+      <time>2025-12-08</time>
+    </div>
+    <blockquote>I have informed President Xi, of China, that the United States will allow NVIDIA to ship its H200 products to approved customers in China, and other Countries, under conditions that allow for continue</blockquote>
+    <div class="bench">compared vs &nbsp;
+      <b>indices:</b> SPY QQQ DIA &nbsp; <b>sector:</b> XLK SMH &nbsp;
+      <b>peers:</b> AAPL MSFT AMD AVGO INTC TSM</div>
+    <div class="legend"><span class="lg"><i style="background:var(--accent)"></i>stock</span><span class="lg"><i style="background:var(--etf)"></i>indices (avg)</span><span class="lg"><i style="background:#7a5cc0"></i>sector (avg)</span><span class="lg"><i style="background:var(--ink-3)"></i>peers (median)</span></div>
+    <svg viewBox="0 0 520 200" width="100%" height="200" role="img" class="mbchart"><title>NVDA vs benchmarks</title><line x1="40" y1="94.0" x2="510" y2="94.0" stroke="var(--grid)" stroke-width="1" stroke-dasharray="2 2"/><text x="40.0" y="194" text-anchor="middle" class="ax">EOD</text><text x="118.3" y="194" text-anchor="middle" class="ax">2d</text><text x="196.7" y="194" text-anchor="middle" class="ax">3d</text><text x="275.0" y="194" text-anchor="middle" class="ax">1w</text><text x="353.3" y="194" text-anchor="middle" class="ax">2w</text><text x="431.7" y="194" text-anchor="middle" class="ax">3w</text><text x="510.0" y="194" text-anchor="middle" class="ax">1mo</text><text x="6" y="16.0" class="ax">+5.0%</text><text x="6" y="172.0" class="ax">-5.0%</text><polyline points="40.0,99.0 118.3,109.0 196.7,133.0 275.0,172.0 353.3,109.8 431.7,77.3 510.0,98.4" fill="none" stroke="var(--accent)" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round"/><circle cx="510.0" cy="98.4" r="3" fill="var(--accent)"/><polyline points="40.0,94.2 118.3,83.2 196.7,76.7 275.0,98.5 353.3,86.7 431.7,84.6 510.0,72.2" fill="none" stroke="var(--etf)" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/><circle cx="510.0" cy="72.2" r="3" fill="var(--etf)"/><polyline points="40.0,86.2 118.3,71.7 196.7,82.6 275.0,150.8 353.3,117.6 431.7,108.5 510.0,81.4" fill="none" stroke="#7a5cc0" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/><circle cx="510.0" cy="81.4" r="3" fill="#7a5cc0"/><polyline points="40.0,87.3 118.3,90.9 196.7,93.1 275.0,171.4 353.3,135.7 431.7,128.3 510.0,165.1" fill="none" stroke="var(--ink-3)" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/><circle cx="510.0" cy="165.1" r="3" fill="var(--ink-3)"/></svg>
+    <p class="unit">Lines = cumulative return (%). Stock outperforms only when it
+      beats indices AND sector AND peers beyond its noise band; the strip below is
+      that folded verdict per horizon.</p>
+    <table class="strip"><tr><td class="v flat"><b>EOD</b><span>NEUTRAL</span></td><td class="v flat"><b>2d</b><span>NEUTRAL</span></td><td class="v flat"><b>3d</b><span>NEUTRAL</span></td><td class="v flat"><b>1w</b><span>NEUTRAL</span></td><td class="v flat"><b>2w</b><span>NEUTRAL</span></td><td class="v flat"><b>3w</b><span>NEUTRAL</span></td><td class="v flat"><b>1mo</b><span>NEUTRAL</span></td></tr></table>
+  </article>
+  <article class="card">
+    <div class="chd">
+      <div class="ttl"><span class="tk">AMD</span>
+        <span class="nm">AMD</span>
+        <span class="chip up">stance <b>positive</b></span></div>
+      <time>2025-12-08</time>
+    </div>
+    <blockquote>I have informed President Xi, of China, that the United States will allow NVIDIA to ship its H200 products to approved customers in China, and other Countries, under conditions that allow for continue</blockquote>
+    <div class="bench">compared vs &nbsp;
+      <b>indices:</b> SPY QQQ &nbsp; <b>sector:</b> XLK SMH &nbsp;
+      <b>peers:</b> AAPL MSFT NVDA AVGO INTC TSM</div>
+    <div class="legend"><span class="lg"><i style="background:var(--accent)"></i>stock</span><span class="lg"><i style="background:var(--etf)"></i>indices (avg)</span><span class="lg"><i style="background:#7a5cc0"></i>sector (avg)</span><span class="lg"><i style="background:var(--ink-3)"></i>peers (median)</span></div>
+    <svg viewBox="0 0 520 200" width="100%" height="200" role="img" class="mbchart"><title>AMD vs benchmarks</title><line x1="40" y1="94.0" x2="510" y2="94.0" stroke="var(--grid)" stroke-width="1" stroke-dasharray="2 2"/><text x="40.0" y="194" text-anchor="middle" class="ax">EOD</text><text x="118.3" y="194" text-anchor="middle" class="ax">2d</text><text x="196.7" y="194" text-anchor="middle" class="ax">3d</text><text x="275.0" y="194" text-anchor="middle" class="ax">1w</text><text x="353.3" y="194" text-anchor="middle" class="ax">2w</text><text x="431.7" y="194" text-anchor="middle" class="ax">3w</text><text x="510.0" y="194" text-anchor="middle" class="ax">1mo</text><text x="6" y="16.0" class="ax">+7.4%</text><text x="6" y="172.0" class="ax">-7.4%</text><polyline points="40.0,91.3 118.3,92.2 196.7,92.1 275.0,158.2 353.3,123.1 431.7,121.2 510.0,172.0" fill="none" stroke="var(--accent)" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round"/><circle cx="510.0" cy="172.0" r="3" fill="var(--accent)"/><polyline points="40.0,92.4 118.3,86.7 196.7,87.1 275.0,106.4 353.3,93.7 431.7,91.8 510.0,88.9" fill="none" stroke="var(--etf)" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/><circle cx="510.0" cy="88.9" r="3" fill="var(--etf)"/><polyline points="40.0,88.7 118.3,78.9 196.7,86.2 275.0,132.4 353.3,110.0 431.7,103.9 510.0,85.5" fill="none" stroke="#7a5cc0" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/><circle cx="510.0" cy="85.5" r="3" fill="#7a5cc0"/><polyline points="40.0,92.5 118.3,92.2 196.7,100.3 275.0,140.5 353.3,118.0 431.7,105.4 510.0,107.3" fill="none" stroke="var(--ink-3)" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/><circle cx="510.0" cy="107.3" r="3" fill="var(--ink-3)"/></svg>
+    <p class="unit">Lines = cumulative return (%). Stock outperforms only when it
+      beats indices AND sector AND peers beyond its noise band; the strip below is
+      that folded verdict per horizon.</p>
+    <table class="strip"><tr><td class="v flat"><b>EOD</b><span>NEUTRAL</span></td><td class="v flat"><b>2d</b><span>NEUTRAL</span></td><td class="v flat"><b>3d</b><span>NEUTRAL</span></td><td class="v flat"><b>1w</b><span>NEUTRAL</span></td><td class="v flat"><b>2w</b><span>NEUTRAL</span></td><td class="v flat"><b>3w</b><span>NEUTRAL</span></td><td class="v flat"><b>1mo</b><span>NEUTRAL</span></td></tr></table>
+  </article>
+  <article class="card">
+    <div class="chd">
+      <div class="ttl"><span class="tk">MSFT</span>
+        <span class="nm">Microsoft</span>
+        <span class="chip up">stance <b>positive</b></span></div>
+      <time>2026-01-12</time>
+    </div>
+    <blockquote>Under Sleepy Joe Biden and the Radical Left Democrats, the average American Household&#8217;s monthly Utility bills went up MASSIVELY &#8212; over 30%! I never want Americans to pay higher Electricity bills becau</blockquote>
+    <div class="bench">compared vs &nbsp;
+      <b>indices:</b> SPY QQQ DIA &nbsp; <b>sector:</b> XLK &nbsp;
+      <b>peers:</b> AAPL NVDA AMD AVGO</div>
+    <div class="legend"><span class="lg"><i style="background:var(--accent)"></i>stock</span><span class="lg"><i style="background:var(--etf)"></i>indices (avg)</span><span class="lg"><i style="background:#7a5cc0"></i>sector (avg)</span><span class="lg"><i style="background:var(--ink-3)"></i>peers (median)</span></div>
+    <svg viewBox="0 0 520 200" width="100%" height="200" role="img" class="mbchart"><title>MSFT vs benchmarks</title><line x1="40" y1="94.0" x2="510" y2="94.0" stroke="var(--grid)" stroke-width="1" stroke-dasharray="2 2"/><text x="40.0" y="194" text-anchor="middle" class="ax">EOD</text><text x="118.3" y="194" text-anchor="middle" class="ax">2d</text><text x="196.7" y="194" text-anchor="middle" class="ax">3d</text><text x="275.0" y="194" text-anchor="middle" class="ax">1w</text><text x="353.3" y="194" text-anchor="middle" class="ax">2w</text><text x="431.7" y="194" text-anchor="middle" class="ax">3w</text><text x="510.0" y="194" text-anchor="middle" class="ax">1mo</text><text x="6" y="16.0" class="ax">+14.8%</text><text x="6" y="172.0" class="ax">-14.8%</text><polyline points="40.0,98.4 118.3,111.0 196.7,114.0 275.0,116.4 353.3,87.5 431.7,164.4 510.0,172.0" fill="none" stroke="var(--accent)" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round"/><circle cx="510.0" cy="172.0" r="3" fill="var(--accent)"/><polyline points="40.0,96.0 118.3,98.8 196.7,96.7 275.0,107.6 353.3,94.8 431.7,99.6 510.0,96.7" fill="none" stroke="var(--etf)" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/><circle cx="510.0" cy="96.7" r="3" fill="var(--etf)"/><polyline points="40.0,95.3 118.3,101.7 196.7,99.0 275.0,112.0 353.3,89.7 431.7,111.1 510.0,107.9" fill="none" stroke="#7a5cc0" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/><circle cx="510.0" cy="107.9" r="3" fill="#7a5cc0"/><polyline points="40.0,90.3 118.3,95.4 196.7,91.6 275.0,116.1 353.3,89.5 431.7,89.7 510.0,88.7" fill="none" stroke="var(--ink-3)" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/><circle cx="510.0" cy="88.7" r="3" fill="var(--ink-3)"/></svg>
+    <p class="unit">Lines = cumulative return (%). Stock outperforms only when it
+      beats indices AND sector AND peers beyond its noise band; the strip below is
+      that folded verdict per horizon.</p>
+    <table class="strip"><tr><td class="v flat"><b>EOD</b><span>NEUTRAL</span></td><td class="v flat"><b>2d</b><span>NEUTRAL</span></td><td class="v flat"><b>3d</b><span>NEUTRAL</span></td><td class="v flat"><b>1w</b><span>NEUTRAL</span></td><td class="v flat"><b>2w</b><span>NEUTRAL</span></td><td class="v flat"><b>3w</b><span>NEUTRAL</span></td><td class="v flat"><b>1mo</b><span>NEUTRAL</span></td></tr></table>
+  </article>
+  <article class="card">
+    <div class="chd">
+      <div class="ttl"><span class="tk">AAPL</span>
+        <span class="nm">Apple</span>
+        <span class="chip up">stance <b>positive</b></span></div>
+      <time>2026-04-21</time>
+    </div>
+    <blockquote>I have always been a big fan of Tim Cook, and likewise, Steve Jobs, but if Steve was not taken from the Planet Earth so young, and ran the company instead of Tim, the company would have done well, but</blockquote>
+    <div class="bench">compared vs &nbsp;
+      <b>indices:</b> SPY QQQ DIA &nbsp; <b>sector:</b> XLK &nbsp;
+      <b>peers:</b> MSFT NVDA AMD AVGO</div>
+    <div class="legend"><span class="lg"><i style="background:var(--accent)"></i>stock</span><span class="lg"><i style="background:var(--etf)"></i>indices (avg)</span><span class="lg"><i style="background:#7a5cc0"></i>sector (avg)</span><span class="lg"><i style="background:var(--ink-3)"></i>peers (median)</span></div>
+    <svg viewBox="0 0 520 200" width="100%" height="200" role="img" class="mbchart"><title>AAPL vs benchmarks</title><line x1="40" y1="94.0" x2="510" y2="94.0" stroke="var(--grid)" stroke-width="1" stroke-dasharray="2 2"/><text x="40.0" y="194" text-anchor="middle" class="ax">EOD</text><text x="118.3" y="194" text-anchor="middle" class="ax">2d</text><text x="196.7" y="194" text-anchor="middle" class="ax">3d</text><text x="275.0" y="194" text-anchor="middle" class="ax">1w</text><text x="353.3" y="194" text-anchor="middle" class="ax">2w</text><text x="431.7" y="194" text-anchor="middle" class="ax">3w</text><text x="510.0" y="194" text-anchor="middle" class="ax">1mo</text><text x="6" y="16.0" class="ax">+14.8%</text><text x="6" y="172.0" class="ax">-14.8%</text><polyline points="40.0,104.4 118.3,90.7 196.7,90.2 275.0,101.6 353.3,83.6 431.7,52.3 510.0,40.0" fill="none" stroke="var(--accent)" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round"/><circle cx="510.0" cy="40.0" r="3" fill="var(--accent)"/><polyline points="40.0,98.7 118.3,92.8 196.7,95.2 275.0,90.4 353.3,88.2 431.7,69.2 510.0,74.8" fill="none" stroke="var(--etf)" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/><circle cx="510.0" cy="74.8" r="3" fill="var(--etf)"/><polyline points="40.0,95.1 118.3,83.4 196.7,91.1 275.0,75.0 353.3,70.0 431.7,16.0 510.0,31.8" fill="none" stroke="#7a5cc0" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/><circle cx="510.0" cy="31.8" r="3" fill="#7a5cc0"/><polyline points="40.0,89.7 118.3,70.6 196.7,83.3 275.0,62.6 353.3,86.9 431.7,52.2 510.0,62.1" fill="none" stroke="var(--ink-3)" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/><circle cx="510.0" cy="62.1" r="3" fill="var(--ink-3)"/></svg>
+    <p class="unit">Lines = cumulative return (%). Stock outperforms only when it
+      beats indices AND sector AND peers beyond its noise band; the strip below is
+      that folded verdict per horizon.</p>
+    <table class="strip"><tr><td class="v flat"><b>EOD</b><span>NEUTRAL</span></td><td class="v flat"><b>2d</b><span>NEUTRAL</span></td><td class="v flat"><b>3d</b><span>NEUTRAL</span></td><td class="v flat"><b>1w</b><span>NEUTRAL</span></td><td class="v flat"><b>2w</b><span>NEUTRAL</span></td><td class="v flat"><b>3w</b><span>NEUTRAL</span></td><td class="v flat"><b>1mo</b><span>NEUTRAL</span></td></tr></table>
+  </article>
+  <article class="card">
+    <div class="chd">
+      <div class="ttl"><span class="tk">INTC</span>
+        <span class="nm">Intel</span>
+        <span class="chip up">stance <b>positive</b></span></div>
+      <time>2026-04-29</time>
+    </div>
+    <blockquote>Intel Stock continues to rise. I&#8217;m very proud of that Company in that I am responsible for making the United States of America over 30 Billion Dollars in the last 90 days on that stock alone. There ar</blockquote>
+    <div class="bench">compared vs &nbsp;
+      <b>indices:</b> SPY QQQ &nbsp; <b>sector:</b> SMH &nbsp;
+      <b>peers:</b> NVDA AMD TSM AVGO</div>
+    <div class="legend"><span class="lg"><i style="background:var(--accent)"></i>stock</span><span class="lg"><i style="background:var(--etf)"></i>indices (avg)</span><span class="lg"><i style="background:#7a5cc0"></i>sector (avg)</span><span class="lg"><i style="background:var(--ink-3)"></i>peers (median)</span></div>
+    <svg viewBox="0 0 520 200" width="100%" height="200" role="img" class="mbchart"><title>INTC vs benchmarks</title><line x1="40" y1="94.0" x2="510" y2="94.0" stroke="var(--grid)" stroke-width="1" stroke-dasharray="2 2"/><text x="40.0" y="194" text-anchor="middle" class="ax">EOD</text><text x="118.3" y="194" text-anchor="middle" class="ax">2d</text><text x="196.7" y="194" text-anchor="middle" class="ax">3d</text><text x="275.0" y="194" text-anchor="middle" class="ax">1w</text><text x="353.3" y="194" text-anchor="middle" class="ax">2w</text><text x="431.7" y="194" text-anchor="middle" class="ax">3w</text><text x="510.0" y="194" text-anchor="middle" class="ax">1mo</text><text x="6" y="16.0" class="ax">+25.8%</text><text x="6" y="172.0" class="ax">-25.8%</text><polyline points="40.0,97.5 118.3,81.3 196.7,93.4 275.0,39.0 353.3,16.0 431.7,20.2 510.0,33.7" fill="none" stroke="var(--accent)" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round"/><circle cx="510.0" cy="33.7" r="3" fill="var(--accent)"/><polyline points="40.0,92.6 118.3,90.7 196.7,91.6 275.0,83.0 353.3,76.9 431.7,77.5 510.0,68.6" fill="none" stroke="var(--etf)" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/><circle cx="510.0" cy="68.6" r="3" fill="var(--etf)"/><polyline points="40.0,92.8 118.3,90.9 196.7,92.8 275.0,67.1 353.3,53.4 431.7,58.1 510.0,37.6" fill="none" stroke="#7a5cc0" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/><circle cx="510.0" cy="37.6" r="3" fill="#7a5cc0"/><polyline points="40.0,94.0 118.3,91.9 196.7,93.5 275.0,82.2 353.3,81.8 431.7,82.8 510.0,74.8" fill="none" stroke="var(--ink-3)" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/><circle cx="510.0" cy="74.8" r="3" fill="var(--ink-3)"/></svg>
+    <p class="unit">Lines = cumulative return (%). Stock outperforms only when it
+      beats indices AND sector AND peers beyond its noise band; the strip below is
+      that folded verdict per horizon.</p>
+    <table class="strip"><tr><td class="v flat"><b>EOD</b><span>NEUTRAL</span></td><td class="v flat"><b>2d</b><span>NEUTRAL</span></td><td class="v flat"><b>3d</b><span>NEUTRAL</span></td><td class="v up"><b>1w</b><span>UP</span></td><td class="v up"><b>2w</b><span>UP</span></td><td class="v up"><b>3w</b><span>UP</span></td><td class="v flat"><b>1mo</b><span>NEUTRAL</span></td></tr></table>
+  </article>
+  <article class="card">
+    <div class="chd">
+      <div class="ttl"><span class="tk">AMZN</span>
+        <span class="nm">Amazon</span>
+        <span class="chip flat">stance <b>neutral</b></span></div>
+      <time>2026-04-29</time>
+    </div>
+    <blockquote>Robert Hardman has written an amazing book about the incredible life of the beloved and deeply respected Queen Elizabeth II. In his research, Robert discovers many interesting things about the Queen, </blockquote>
+    <div class="bench">compared vs &nbsp;
+      <b>indices:</b> SPY QQQ DIA &nbsp; <b>sector:</b> XLY &nbsp;
+      <b>peers:</b> TSLA HD MCD NKE</div>
+    <div class="legend"><span class="lg"><i style="background:var(--accent)"></i>stock</span><span class="lg"><i style="background:var(--etf)"></i>indices (avg)</span><span class="lg"><i style="background:#7a5cc0"></i>sector (avg)</span><span class="lg"><i style="background:var(--ink-3)"></i>peers (median)</span></div>
+    <svg viewBox="0 0 520 200" width="100%" height="200" role="img" class="mbchart"><title>AMZN vs benchmarks</title><line x1="40" y1="94.0" x2="510" y2="94.0" stroke="var(--grid)" stroke-width="1" stroke-dasharray="2 2"/><text x="40.0" y="194" text-anchor="middle" class="ax">EOD</text><text x="118.3" y="194" text-anchor="middle" class="ax">2d</text><text x="196.7" y="194" text-anchor="middle" class="ax">3d</text><text x="275.0" y="194" text-anchor="middle" class="ax">1w</text><text x="353.3" y="194" text-anchor="middle" class="ax">2w</text><text x="431.7" y="194" text-anchor="middle" class="ax">3w</text><text x="510.0" y="194" text-anchor="middle" class="ax">1mo</text><text x="6" y="16.0" class="ax">+7.0%</text><text x="6" y="172.0" class="ax">-7.0%</text><polyline points="40.0,127.2 118.3,114.1 196.7,98.6 275.0,86.5 353.3,106.4 431.7,127.5 510.0,104.4" fill="none" stroke="var(--accent)" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round"/><circle cx="510.0" cy="104.4" r="3" fill="var(--accent)"/><polyline points="40.0,86.3 118.3,82.9 196.7,89.1 275.0,60.8 353.3,47.1 431.7,46.1 510.0,16.0" fill="none" stroke="var(--etf)" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/><circle cx="510.0" cy="16.0" r="3" fill="var(--etf)"/><polyline points="40.0,95.5 118.3,92.8 196.7,101.4 275.0,81.0 353.3,91.9 431.7,99.4 510.0,71.6" fill="none" stroke="#7a5cc0" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/><circle cx="510.0" cy="71.6" r="3" fill="#7a5cc0"/><polyline points="40.0,76.8 118.3,87.3 196.7,119.1 275.0,95.2 353.3,144.8 431.7,112.6 510.0,75.8" fill="none" stroke="var(--ink-3)" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/><circle cx="510.0" cy="75.8" r="3" fill="var(--ink-3)"/></svg>
+    <p class="unit">Lines = cumulative return (%). Stock outperforms only when it
+      beats indices AND sector AND peers beyond its noise band; the strip below is
+      that folded verdict per horizon.</p>
+    <table class="strip"><tr><td class="v flat"><b>EOD</b><span>NEUTRAL</span></td><td class="v flat"><b>2d</b><span>NEUTRAL</span></td><td class="v flat"><b>3d</b><span>NEUTRAL</span></td><td class="v flat"><b>1w</b><span>NEUTRAL</span></td><td class="v flat"><b>2w</b><span>NEUTRAL</span></td><td class="v flat"><b>3w</b><span>NEUTRAL</span></td><td class="v flat"><b>1mo</b><span>NEUTRAL</span></td></tr></table>
+  </article>
+  <article class="card">
+    <div class="chd">
+      <div class="ttl"><span class="tk">NVDA</span>
+        <span class="nm">NVIDIA</span>
+        <span class="chip up">stance <b>positive</b></span></div>
+      <time>2026-05-13</time>
+    </div>
+    <blockquote>CNBC incorrectly reported that the Great Jensen Huang, of Nvidia, was not invited to the incredible gathering of the World&#x27;s Greatest Businessmen/women proudly going to China. In actuality, Jensen is </blockquote>
+    <div class="bench">compared vs &nbsp;
+      <b>indices:</b> SPY QQQ DIA &nbsp; <b>sector:</b> XLK SMH &nbsp;
+      <b>peers:</b> AAPL MSFT AMD AVGO INTC TSM</div>
+    <div class="legend"><span class="lg"><i style="background:var(--accent)"></i>stock</span><span class="lg"><i style="background:var(--etf)"></i>indices (avg)</span><span class="lg"><i style="background:#7a5cc0"></i>sector (avg)</span><span class="lg"><i style="background:var(--ink-3)"></i>peers (median)</span></div>
+    <svg viewBox="0 0 520 200" width="100%" height="200" role="img" class="mbchart"><title>NVDA vs benchmarks</title><line x1="40" y1="94.0" x2="510" y2="94.0" stroke="var(--grid)" stroke-width="1" stroke-dasharray="2 2"/><text x="40.0" y="194" text-anchor="middle" class="ax">EOD</text><text x="118.3" y="194" text-anchor="middle" class="ax">2d</text><text x="196.7" y="194" text-anchor="middle" class="ax">3d</text><text x="275.0" y="194" text-anchor="middle" class="ax">1w</text><text x="353.3" y="194" text-anchor="middle" class="ax">2w</text><text x="431.7" y="194" text-anchor="middle" class="ax">3w</text><text x="510.0" y="194" text-anchor="middle" class="ax">1mo</text><text x="6" y="16.0" class="ax">+11.1%</text><text x="6" y="172.0" class="ax">-11.1%</text><polyline points="40.0,91.2 118.3,60.3 196.7,92.8 275.0,107.5 353.3,132.4 431.7,125.8 510.0,155.8" fill="none" stroke="var(--accent)" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round"/><circle cx="510.0" cy="155.8" r="3" fill="var(--accent)"/><polyline points="40.0,90.8 118.3,85.4 196.7,94.4 275.0,99.2 353.3,78.6 431.7,71.9 510.0,85.5" fill="none" stroke="var(--etf)" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/><circle cx="510.0" cy="85.5" r="3" fill="var(--etf)"/><polyline points="40.0,94.4 118.3,85.6 196.7,105.5 275.0,119.0 353.3,65.3 431.7,16.0 510.0,59.1" fill="none" stroke="#7a5cc0" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/><circle cx="510.0" cy="59.1" r="3" fill="#7a5cc0"/><polyline points="40.0,91.8 118.3,82.9 196.7,80.7 275.0,103.0 353.3,64.3 431.7,38.4 510.0,101.9" fill="none" stroke="var(--ink-3)" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/><circle cx="510.0" cy="101.9" r="3" fill="var(--ink-3)"/></svg>
+    <p class="unit">Lines = cumulative return (%). Stock outperforms only when it
+      beats indices AND sector AND peers beyond its noise band; the strip below is
+      that folded verdict per horizon.</p>
+    <table class="strip"><tr><td class="v flat"><b>EOD</b><span>NEUTRAL</span></td><td class="v up"><b>2d</b><span>UP</span></td><td class="v flat"><b>3d</b><span>NEUTRAL</span></td><td class="v flat"><b>1w</b><span>NEUTRAL</span></td><td class="v flat"><b>2w</b><span>NEUTRAL</span></td><td class="v flat"><b>3w</b><span>NEUTRAL</span></td><td class="v flat"><b>1mo</b><span>NEUTRAL</span></td></tr></table>
+  </article>
+  <article class="card">
+    <div class="chd">
+      <div class="ttl"><span class="tk">AAPL</span>
+        <span class="nm">Apple</span>
+        <span class="chip up">stance <b>positive</b></span></div>
+      <time>2026-05-13</time>
+    </div>
+    <blockquote>CNBC incorrectly reported that the Great Jensen Huang, of Nvidia, was not invited to the incredible gathering of the World&#x27;s Greatest Businessmen/women proudly going to China. In actuality, Jensen is </blockquote>
+    <div class="bench">compared vs &nbsp;
+      <b>indices:</b> SPY QQQ DIA &nbsp; <b>sector:</b> XLK &nbsp;
+      <b>peers:</b> MSFT NVDA AMD AVGO</div>
+    <div class="legend"><span class="lg"><i style="background:var(--accent)"></i>stock</span><span class="lg"><i style="background:var(--etf)"></i>indices (avg)</span><span class="lg"><i style="background:#7a5cc0"></i>sector (avg)</span><span class="lg"><i style="background:var(--ink-3)"></i>peers (median)</span></div>
+    <svg viewBox="0 0 520 200" width="100%" height="200" role="img" class="mbchart"><title>AAPL vs benchmarks</title><line x1="40" y1="94.0" x2="510" y2="94.0" stroke="var(--grid)" stroke-width="1" stroke-dasharray="2 2"/><text x="40.0" y="194" text-anchor="middle" class="ax">EOD</text><text x="118.3" y="194" text-anchor="middle" class="ax">2d</text><text x="196.7" y="194" text-anchor="middle" class="ax">3d</text><text x="275.0" y="194" text-anchor="middle" class="ax">1w</text><text x="353.3" y="194" text-anchor="middle" class="ax">2w</text><text x="431.7" y="194" text-anchor="middle" class="ax">3w</text><text x="510.0" y="194" text-anchor="middle" class="ax">1mo</text><text x="6" y="16.0" class="ax">+10.7%</text><text x="6" y="172.0" class="ax">-10.7%</text><polyline points="40.0,80.7 118.3,82.4 196.7,77.4 275.0,80.5 353.3,51.0 431.7,52.5 510.0,88.7" fill="none" stroke="var(--accent)" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round"/><circle cx="510.0" cy="88.7" r="3" fill="var(--accent)"/><polyline points="40.0,90.7 118.3,85.2 196.7,94.4 275.0,99.4 353.3,78.1 431.7,71.1 510.0,85.2" fill="none" stroke="var(--etf)" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/><circle cx="510.0" cy="85.2" r="3" fill="var(--etf)"/><polyline points="40.0,95.7 118.3,84.9 196.7,98.1 275.0,110.6 353.3,64.6 431.7,16.2 510.0,69.6" fill="none" stroke="#7a5cc0" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/><circle cx="510.0" cy="69.6" r="3" fill="#7a5cc0"/><polyline points="40.0,91.7 118.3,71.0 196.7,85.2 275.0,105.1 353.3,79.4 431.7,16.0 510.0,131.2" fill="none" stroke="var(--ink-3)" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/><circle cx="510.0" cy="131.2" r="3" fill="var(--ink-3)"/></svg>
+    <p class="unit">Lines = cumulative return (%). Stock outperforms only when it
+      beats indices AND sector AND peers beyond its noise band; the strip below is
+      that folded verdict per horizon.</p>
+    <table class="strip"><tr><td class="v up"><b>EOD</b><span>UP</span></td><td class="v flat"><b>2d</b><span>NEUTRAL</span></td><td class="v flat"><b>3d</b><span>NEUTRAL</span></td><td class="v up"><b>1w</b><span>UP</span></td><td class="v flat"><b>2w</b><span>NEUTRAL</span></td><td class="v flat"><b>3w</b><span>NEUTRAL</span></td><td class="v flat"><b>1mo</b><span>NEUTRAL</span></td></tr></table>
+  </article>
+  <article class="card">
+    <div class="chd">
+      <div class="ttl"><span class="tk">INTC</span>
+        <span class="nm">Intel</span>
+        <span class="chip flat">stance <b>neutral</b></span></div>
+      <time>2026-06-02</time>
+    </div>
+    <blockquote>Ex-intel official reported Hunter Biden laptop letter was &#8216;deception operation,&#8217; DOJ asked to probe: https://justthenews.com/accountability/political-ethics/ex-obama-intel-official-referred-hunter-bid</blockquote>
+    <div class="bench">compared vs &nbsp;
+      <b>indices:</b> SPY QQQ &nbsp; <b>sector:</b> SMH &nbsp;
+      <b>peers:</b> NVDA AMD TSM AVGO</div>
+    <div class="legend"><span class="lg"><i style="background:var(--accent)"></i>stock</span><span class="lg"><i style="background:var(--etf)"></i>indices (avg)</span><span class="lg"><i style="background:#7a5cc0"></i>sector (avg)</span><span class="lg"><i style="background:var(--ink-3)"></i>peers (median)</span></div>
+    <svg viewBox="0 0 520 200" width="100%" height="200" role="img" class="mbchart"><title>INTC vs benchmarks</title><line x1="40" y1="94.0" x2="510" y2="94.0" stroke="var(--grid)" stroke-width="1" stroke-dasharray="2 2"/><text x="40.0" y="194" text-anchor="middle" class="ax">EOD</text><text x="118.3" y="194" text-anchor="middle" class="ax">2d</text><text x="196.7" y="194" text-anchor="middle" class="ax">3d</text><text x="275.0" y="194" text-anchor="middle" class="ax">1w</text><text x="353.3" y="194" text-anchor="middle" class="ax">2w</text><text x="431.7" y="194" text-anchor="middle" class="ax">3w</text><text x="510.0" y="194" text-anchor="middle" class="ax">1mo</text><text x="6" y="16.0" class="ax">+23.1%</text><text x="6" y="172.0" class="ax">-23.1%</text><polyline points="40.0,92.5 118.3,77.5 196.7,80.4 275.0,85.2 353.3,29.9 431.7,16.0 510.0,32.5" fill="none" stroke="var(--accent)" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round"/><circle cx="510.0" cy="32.5" r="3" fill="var(--accent)"/><polyline points="40.0,92.6 118.3,94.2 196.7,94.4 275.0,104.0 353.3,94.1 431.7,105.2 510.0,99.8" fill="none" stroke="var(--etf)" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/><circle cx="510.0" cy="99.8" r="3" fill="var(--etf)"/><polyline points="40.0,87.1 118.3,84.0 196.7,89.7 275.0,105.7 353.3,79.0 431.7,92.6 510.0,93.5" fill="none" stroke="#7a5cc0" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/><circle cx="510.0" cy="93.5" r="3" fill="#7a5cc0"/><polyline points="40.0,94.1 118.3,98.8 196.7,98.5 275.0,112.9 353.3,104.1 431.7,115.2 510.0,114.0" fill="none" stroke="var(--ink-3)" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/><circle cx="510.0" cy="114.0" r="3" fill="var(--ink-3)"/></svg>
+    <p class="unit">Lines = cumulative return (%). Stock outperforms only when it
+      beats indices AND sector AND peers beyond its noise band; the strip below is
+      that folded verdict per horizon.</p>
+    <table class="strip"><tr><td class="v flat"><b>EOD</b><span>NEUTRAL</span></td><td class="v flat"><b>2d</b><span>NEUTRAL</span></td><td class="v flat"><b>3d</b><span>NEUTRAL</span></td><td class="v flat"><b>1w</b><span>NEUTRAL</span></td><td class="v flat"><b>2w</b><span>NEUTRAL</span></td><td class="v flat"><b>3w</b><span>NEUTRAL</span></td><td class="v flat"><b>1mo</b><span>NEUTRAL</span></td></tr></table>
+  </article>
+  <article class="card">
+    <div class="chd">
+      <div class="ttl"><span class="tk">AMZN</span>
+        <span class="nm">Amazon</span>
+        <span class="chip up">stance <b>positive</b></span></div>
+      <time>2026-06-05</time>
+    </div>
+    <blockquote>Eric Metaxas, a great guy, has written an incredible new book, &#8220;Revolution: The Birth of the Greatest Nation in the History of the World.&#8221; As we celebrate our Nation&#8217;s 250th Birthday, Eric honors the </blockquote>
+    <div class="bench">compared vs &nbsp;
+      <b>indices:</b> SPY QQQ DIA &nbsp; <b>sector:</b> XLY &nbsp;
+      <b>peers:</b> TSLA HD MCD NKE</div>
+    <div class="legend"><span class="lg"><i style="background:var(--accent)"></i>stock</span><span class="lg"><i style="background:var(--etf)"></i>indices (avg)</span><span class="lg"><i style="background:#7a5cc0"></i>sector (avg)</span><span class="lg"><i style="background:var(--ink-3)"></i>peers (median)</span></div>
+    <svg viewBox="0 0 520 200" width="100%" height="200" role="img" class="mbchart"><title>AMZN vs benchmarks</title><line x1="40" y1="94.0" x2="510" y2="94.0" stroke="var(--grid)" stroke-width="1" stroke-dasharray="2 2"/><text x="40.0" y="194" text-anchor="middle" class="ax">EOD</text><text x="118.3" y="194" text-anchor="middle" class="ax">2d</text><text x="196.7" y="194" text-anchor="middle" class="ax">3d</text><text x="275.0" y="194" text-anchor="middle" class="ax">1w</text><text x="353.3" y="194" text-anchor="middle" class="ax">2w</text><text x="431.7" y="194" text-anchor="middle" class="ax">3w</text><text x="510.0" y="194" text-anchor="middle" class="ax">1mo</text><text x="6" y="16.0" class="ax">+5.6%</text><text x="6" y="172.0" class="ax">-5.6%</text><polyline points="40.0,102.2 118.3,108.0 196.7,142.8 275.0,139.7 353.3,172.0 431.7,130.7" fill="none" stroke="var(--accent)" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round"/><circle cx="431.7" cy="130.7" r="3" fill="var(--accent)"/><polyline points="40.0,99.4 118.3,105.6 196.7,130.2 275.0,90.7 353.3,71.7 431.7,78.6" fill="none" stroke="var(--etf)" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/><circle cx="431.7" cy="78.6" r="3" fill="var(--etf)"/><polyline points="40.0,86.5 118.3,80.7 196.7,109.5 275.0,72.0 353.3,89.2 431.7,62.8" fill="none" stroke="#7a5cc0" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/><circle cx="431.7" cy="62.8" r="3" fill="#7a5cc0"/><polyline points="40.0,89.4 118.3,58.1 196.7,68.5 275.0,46.3 353.3,76.7 431.7,92.3" fill="none" stroke="var(--ink-3)" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/><circle cx="431.7" cy="92.3" r="3" fill="var(--ink-3)"/></svg>
+    <p class="unit">Lines = cumulative return (%). Stock outperforms only when it
+      beats indices AND sector AND peers beyond its noise band; the strip below is
+      that folded verdict per horizon.</p>
+    <table class="strip"><tr><td class="v flat"><b>EOD</b><span>NEUTRAL</span></td><td class="v flat"><b>2d</b><span>NEUTRAL</span></td><td class="v flat"><b>3d</b><span>NEUTRAL</span></td><td class="v flat"><b>1w</b><span>NEUTRAL</span></td><td class="v flat"><b>2w</b><span>NEUTRAL</span></td><td class="v flat"><b>3w</b><span>NEUTRAL</span></td><td class="v flat"><b>1mo</b><span>NA</span></td></tr></table>
+  </article>
+  <article class="card">
+    <div class="chd">
+      <div class="ttl"><span class="tk">AMZN</span>
+        <span class="nm">Amazon</span>
+        <span class="chip up">stance <b>positive</b></span></div>
+      <time>2026-06-18</time>
+    </div>
+    <blockquote>Tyrus became famous for saying, long before November 5th, 2024, &quot;Why we are talking about the 2024 Presidential Election?&#160;It&#x27;s OVER. TRUMP is going to win, and everyone knows it. It&#x27;s a waste of time </blockquote>
+    <div class="bench">compared vs &nbsp;
+      <b>indices:</b> SPY QQQ DIA &nbsp; <b>sector:</b> XLY &nbsp;
+      <b>peers:</b> TSLA HD MCD NKE</div>
+    <div class="legend"><span class="lg"><i style="background:var(--accent)"></i>stock</span><span class="lg"><i style="background:var(--etf)"></i>indices (avg)</span><span class="lg"><i style="background:#7a5cc0"></i>sector (avg)</span><span class="lg"><i style="background:var(--ink-3)"></i>peers (median)</span></div>
+    <svg viewBox="0 0 520 200" width="100%" height="200" role="img" class="mbchart"><title>AMZN vs benchmarks</title><line x1="40" y1="94.0" x2="510" y2="94.0" stroke="var(--grid)" stroke-width="1" stroke-dasharray="2 2"/><text x="40.0" y="194" text-anchor="middle" class="ax">EOD</text><text x="118.3" y="194" text-anchor="middle" class="ax">2d</text><text x="196.7" y="194" text-anchor="middle" class="ax">3d</text><text x="275.0" y="194" text-anchor="middle" class="ax">1w</text><text x="353.3" y="194" text-anchor="middle" class="ax">2w</text><text x="431.7" y="194" text-anchor="middle" class="ax">3w</text><text x="510.0" y="194" text-anchor="middle" class="ax">1mo</text><text x="6" y="16.0" class="ax">+6.4%</text><text x="6" y="172.0" class="ax">-6.4%</text><polyline points="40.0,72.2 118.3,131.3 196.7,124.6 275.0,160.9 353.3,81.0" fill="none" stroke="var(--accent)" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round"/><circle cx="353.3" cy="81.0" r="3" fill="var(--accent)"/><polyline points="40.0,95.0 118.3,96.0 196.7,115.7 275.0,111.8 353.3,101.3" fill="none" stroke="var(--etf)" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/><circle cx="353.3" cy="101.3" r="3" fill="var(--etf)"/><polyline points="40.0,88.6 118.3,109.6 196.7,121.9 275.0,126.3 353.3,86.7" fill="none" stroke="#7a5cc0" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/><circle cx="353.3" cy="86.7" r="3" fill="#7a5cc0"/><polyline points="40.0,85.6 118.3,120.2 196.7,146.7 275.0,172.0 353.3,105.6" fill="none" stroke="var(--ink-3)" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/><circle cx="353.3" cy="105.6" r="3" fill="var(--ink-3)"/></svg>
+    <p class="unit">Lines = cumulative return (%). Stock outperforms only when it
+      beats indices AND sector AND peers beyond its noise band; the strip below is
+      that folded verdict per horizon.</p>
+    <table class="strip"><tr><td class="v up"><b>EOD</b><span>UP</span></td><td class="v flat"><b>2d</b><span>NEUTRAL</span></td><td class="v flat"><b>3d</b><span>NEUTRAL</span></td><td class="v flat"><b>1w</b><span>NEUTRAL</span></td><td class="v flat"><b>2w</b><span>NEUTRAL</span></td><td class="v flat"><b>3w</b><span>NA</span></td><td class="v flat"><b>1mo</b><span>NA</span></td></tr></table>
+  </article>
+  <article class="card">
+    <div class="chd">
+      <div class="ttl"><span class="tk">INTC</span>
+        <span class="nm">Intel</span>
+        <span class="chip down">stance <b>negative</b></span></div>
+      <time>2026-06-18</time>
+    </div>
+    <blockquote>The Technology the World relies on was invented in America. We all remember &quot;Intel Inside.&quot; Stupid Presidents took our Economy for granted, and let Taiwan and others steal our Semiconductor Factories.</blockquote>
+    <div class="bench">compared vs &nbsp;
+      <b>indices:</b> SPY QQQ &nbsp; <b>sector:</b> SMH &nbsp;
+      <b>peers:</b> NVDA AMD TSM AVGO</div>
+    <div class="legend"><span class="lg"><i style="background:var(--accent)"></i>stock</span><span class="lg"><i style="background:var(--etf)"></i>indices (avg)</span><span class="lg"><i style="background:#7a5cc0"></i>sector (avg)</span><span class="lg"><i style="background:var(--ink-3)"></i>peers (median)</span></div>
+    <svg viewBox="0 0 520 200" width="100%" height="200" role="img" class="mbchart"><title>INTC vs benchmarks</title><line x1="40" y1="94.0" x2="510" y2="94.0" stroke="var(--grid)" stroke-width="1" stroke-dasharray="2 2"/><text x="40.0" y="194" text-anchor="middle" class="ax">EOD</text><text x="118.3" y="194" text-anchor="middle" class="ax">2d</text><text x="196.7" y="194" text-anchor="middle" class="ax">3d</text><text x="275.0" y="194" text-anchor="middle" class="ax">1w</text><text x="353.3" y="194" text-anchor="middle" class="ax">2w</text><text x="431.7" y="194" text-anchor="middle" class="ax">3w</text><text x="510.0" y="194" text-anchor="middle" class="ax">1mo</text><text x="6" y="16.0" class="ax">+8.7%</text><text x="6" y="172.0" class="ax">-8.7%</text><polyline points="40.0,79.2 118.3,31.8 196.7,90.8 275.0,86.8 353.3,172.0" fill="none" stroke="var(--accent)" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round"/><circle cx="353.3" cy="172.0" r="3" fill="var(--accent)"/><polyline points="40.0,92.6 118.3,95.1 196.7,116.3 275.0,114.3 353.3,110.2" fill="none" stroke="var(--etf)" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/><circle cx="353.3" cy="110.2" r="3" fill="var(--etf)"/><polyline points="40.0,78.4 118.3,65.8 196.7,130.6 275.0,110.2 353.3,171.8" fill="none" stroke="#7a5cc0" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/><circle cx="353.3" cy="171.8" r="3" fill="#7a5cc0"/><polyline points="40.0,81.9 118.3,74.2 196.7,119.7 275.0,123.1 353.3,132.6" fill="none" stroke="var(--ink-3)" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/><circle cx="353.3" cy="132.6" r="3" fill="var(--ink-3)"/></svg>
+    <p class="unit">Lines = cumulative return (%). Stock outperforms only when it
+      beats indices AND sector AND peers beyond its noise band; the strip below is
+      that folded verdict per horizon.</p>
+    <table class="strip"><tr><td class="v flat"><b>EOD</b><span>NEUTRAL</span></td><td class="v flat"><b>2d</b><span>NEUTRAL</span></td><td class="v flat"><b>3d</b><span>NEUTRAL</span></td><td class="v flat"><b>1w</b><span>NEUTRAL</span></td><td class="v flat"><b>2w</b><span>NEUTRAL</span></td><td class="v flat"><b>3w</b><span>NA</span></td><td class="v flat"><b>1mo</b><span>NA</span></td></tr></table>
+  </article>
+  <article class="card">
+    <div class="chd">
+      <div class="ttl"><span class="tk">NVDA</span>
+        <span class="nm">NVIDIA</span>
+        <span class="chip down">stance <b>negative</b></span></div>
+      <time>2026-06-18</time>
+    </div>
+    <blockquote>The Technology the World relies on was invented in America. We all remember &quot;Intel Inside.&quot; Stupid Presidents took our Economy for granted, and let Taiwan and others steal our Semiconductor Factories.</blockquote>
+    <div class="bench">compared vs &nbsp;
+      <b>indices:</b> SPY QQQ DIA &nbsp; <b>sector:</b> XLK SMH &nbsp;
+      <b>peers:</b> AAPL MSFT AMD AVGO INTC TSM</div>
+    <div class="legend"><span class="lg"><i style="background:var(--accent)"></i>stock</span><span class="lg"><i style="background:var(--etf)"></i>indices (avg)</span><span class="lg"><i style="background:#7a5cc0"></i>sector (avg)</span><span class="lg"><i style="background:var(--ink-3)"></i>peers (median)</span></div>
+    <svg viewBox="0 0 520 200" width="100%" height="200" role="img" class="mbchart"><title>NVDA vs benchmarks</title><line x1="40" y1="94.0" x2="510" y2="94.0" stroke="var(--grid)" stroke-width="1" stroke-dasharray="2 2"/><text x="40.0" y="194" text-anchor="middle" class="ax">EOD</text><text x="118.3" y="194" text-anchor="middle" class="ax">2d</text><text x="196.7" y="194" text-anchor="middle" class="ax">3d</text><text x="275.0" y="194" text-anchor="middle" class="ax">1w</text><text x="353.3" y="194" text-anchor="middle" class="ax">2w</text><text x="431.7" y="194" text-anchor="middle" class="ax">3w</text><text x="510.0" y="194" text-anchor="middle" class="ax">1mo</text><text x="6" y="16.0" class="ax">+6.9%</text><text x="6" y="172.0" class="ax">-6.9%</text><polyline points="40.0,75.6 118.3,86.7 196.7,134.0 275.0,157.6 353.3,162.6" fill="none" stroke="var(--accent)" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round"/><circle cx="353.3" cy="162.6" r="3" fill="var(--accent)"/><polyline points="40.0,94.9 118.3,95.8 196.7,114.2 275.0,110.5 353.3,100.8" fill="none" stroke="var(--etf)" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/><circle cx="353.3" cy="100.8" r="3" fill="var(--etf)"/><polyline points="40.0,81.0 118.3,70.2 196.7,135.3 275.0,121.1 353.3,172.0" fill="none" stroke="#7a5cc0" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/><circle cx="353.3" cy="172.0" r="3" fill="#7a5cc0"/><polyline points="40.0,85.4 118.3,74.7 196.7,107.2 275.0,136.6 353.3,114.8" fill="none" stroke="var(--ink-3)" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/><circle cx="353.3" cy="114.8" r="3" fill="var(--ink-3)"/></svg>
+    <p class="unit">Lines = cumulative return (%). Stock outperforms only when it
+      beats indices AND sector AND peers beyond its noise band; the strip below is
+      that folded verdict per horizon.</p>
+    <table class="strip"><tr><td class="v flat"><b>EOD</b><span>NEUTRAL</span></td><td class="v flat"><b>2d</b><span>NEUTRAL</span></td><td class="v flat"><b>3d</b><span>NEUTRAL</span></td><td class="v flat"><b>1w</b><span>NEUTRAL</span></td><td class="v flat"><b>2w</b><span>NEUTRAL</span></td><td class="v flat"><b>3w</b><span>NA</span></td><td class="v flat"><b>1mo</b><span>NA</span></td></tr></table>
+  </article>
+  <article class="card">
+    <div class="chd">
+      <div class="ttl"><span class="tk">AAPL</span>
+        <span class="nm">Apple</span>
+        <span class="chip down">stance <b>negative</b></span></div>
+      <time>2026-06-18</time>
+    </div>
+    <blockquote>The Technology the World relies on was invented in America. We all remember &quot;Intel Inside.&quot; Stupid Presidents took our Economy for granted, and let Taiwan and others steal our Semiconductor Factories.</blockquote>
+    <div class="bench">compared vs &nbsp;
+      <b>indices:</b> SPY QQQ DIA &nbsp; <b>sector:</b> XLK &nbsp;
+      <b>peers:</b> MSFT NVDA AMD AVGO</div>
+    <div class="legend"><span class="lg"><i style="background:var(--accent)"></i>stock</span><span class="lg"><i style="background:var(--etf)"></i>indices (avg)</span><span class="lg"><i style="background:#7a5cc0"></i>sector (avg)</span><span class="lg"><i style="background:var(--ink-3)"></i>peers (median)</span></div>
+    <svg viewBox="0 0 520 200" width="100%" height="200" role="img" class="mbchart"><title>AAPL vs benchmarks</title><line x1="40" y1="94.0" x2="510" y2="94.0" stroke="var(--grid)" stroke-width="1" stroke-dasharray="2 2"/><text x="40.0" y="194" text-anchor="middle" class="ax">EOD</text><text x="118.3" y="194" text-anchor="middle" class="ax">2d</text><text x="196.7" y="194" text-anchor="middle" class="ax">3d</text><text x="275.0" y="194" text-anchor="middle" class="ax">1w</text><text x="353.3" y="194" text-anchor="middle" class="ax">2w</text><text x="431.7" y="194" text-anchor="middle" class="ax">3w</text><text x="510.0" y="194" text-anchor="middle" class="ax">1mo</text><text x="6" y="16.0" class="ax">+7.7%</text><text x="6" y="172.0" class="ax">-7.7%</text><polyline points="40.0,94.3 118.3,97.7 196.7,107.0 275.0,172.0 353.3,58.2" fill="none" stroke="var(--accent)" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round"/><circle cx="353.3" cy="58.2" r="3" fill="var(--accent)"/><polyline points="40.0,94.7 118.3,95.7 196.7,112.0 275.0,108.7 353.3,100.1" fill="none" stroke="var(--etf)" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/><circle cx="353.3" cy="100.1" r="3" fill="var(--etf)"/><polyline points="40.0,88.5 118.3,83.6 196.7,126.0 275.0,123.9 353.3,145.2" fill="none" stroke="#7a5cc0" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/><circle cx="353.3" cy="145.2" r="3" fill="#7a5cc0"/><polyline points="40.0,86.3 118.3,104.8 196.7,123.0 275.0,155.8 353.3,137.7" fill="none" stroke="var(--ink-3)" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/><circle cx="353.3" cy="137.7" r="3" fill="var(--ink-3)"/></svg>
+    <p class="unit">Lines = cumulative return (%). Stock outperforms only when it
+      beats indices AND sector AND peers beyond its noise band; the strip below is
+      that folded verdict per horizon.</p>
+    <table class="strip"><tr><td class="v flat"><b>EOD</b><span>NEUTRAL</span></td><td class="v flat"><b>2d</b><span>NEUTRAL</span></td><td class="v flat"><b>3d</b><span>NEUTRAL</span></td><td class="v flat"><b>1w</b><span>NEUTRAL</span></td><td class="v flat"><b>2w</b><span>NEUTRAL</span></td><td class="v flat"><b>3w</b><span>NA</span></td><td class="v flat"><b>1mo</b><span>NA</span></td></tr></table>
+  </article><footer>Abnormal return = stock return minus the averaged benchmark over the same window. Association at the drift horizon, not a causal claim. Intraday badges are sector-only. </footer></div></body></html>

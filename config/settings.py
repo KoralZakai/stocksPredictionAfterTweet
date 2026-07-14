@@ -25,6 +25,12 @@ class Settings(BaseModel):
     # Drift horizons in sessions (§3.4): ret_1d/2d/3d -> close offsets 0,1,2 from s0.
     horizon_days: tuple[int, ...] = (1, 2, 3)
 
+    # Full multi-benchmark label ladder (v-multibench). Daily sessions:
+    # EOD=1, 2d, 3d, 1w=5, 2w=10, 3w=15, 1mo=21. Intraday horizons are minute-
+    # based and resolved via the intraday store, not compute_outcome.
+    label_horizons: tuple[int, ...] = (1, 2, 3, 5, 10, 15, 21)
+    intraday_horizons: tuple[str, ...] = ("30m", "1h")
+
     # Label band (§3.5): thresholds = ±k * σ_backward, σ backward-only rolling vol.
     k: float = 0.5
     vol_window_sessions: int = 20

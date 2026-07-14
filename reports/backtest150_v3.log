@@ -1,0 +1,9 @@
+$KOL: possibly delisted; no price data found  (1d 2025-03-07 -> 2025-05-01)
+
+1 Failed download:
+['KOL']: possibly delisted; no price data found  (1d 2025-03-07 -> 2025-05-01)
+HTTP Error 404: {"quoteSummary":{"result":null,"error":{"code":"Not Found","description":"Quote not found for symbol: EURUSD"}}}
+$EURUSD: possibly delisted; no timezone found
+
+1 Failed download:
+['EURUSD']: possibly delisted; no timezone found

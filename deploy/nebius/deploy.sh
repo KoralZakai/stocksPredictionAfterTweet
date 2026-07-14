@@ -112,6 +112,14 @@ cmd_jobs() {
     --signals "$RUNS/llm_signals.json" \
     --out "$RUNS/eden_dashboard.html"
 
+  # 7. v-multibench: train/test the per-stock multi-benchmark direction model.
+  #    Consumes data/real/labeled_multibench.csv (built by scripts/build_multibench.py;
+  #    ponytail: that builder still uses repo-relative paths — run it in-image or
+  #    parametrize its paths before wiring as a standalone /data job).
+  job train-multibench jobs/train_multibench.py \
+    --data "$DATA/real/labeled_multibench.csv" \
+    --out "$RUNS/multibench_model" --horizon 3d
+
   info "follow a job:  nebius ai job logs <job_id> --follow"
   info "list them:     nebius ai job list --parent-id \$NB_PROJECT_ID"
 }
@@ -142,6 +150,7 @@ cmd_endpoint() {
     --env "PYTHONPATH=/app" \
     --env "BARS_CSV=${DATA}/real/bars.csv" \
     --env "MODEL_DIR=${RUNS}/model" \
+    --env "MB_MODEL_DIR=${RUNS}/multibench_model" \
     --volume "s3://${NB_BUCKET}:${DATA}" \
     --auth token \
     --token "$NB_ENDPOINT_TOKEN" \

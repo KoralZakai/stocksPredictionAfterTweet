@@ -1,0 +1,61 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Validation set &#8212; inspect the model&#x27;s reasoning</title><style>
+:root{--bg:#f4f5f2;--surface:#fff;--surface-2:#eef0ec;--ink:#191c1f;--ink-2:#5a6067;
+ --ink-3:#878d94;--line:#dee1db;--accent:#a8792f;
+ --up:#17805f;--up-bg:#e4f1ea;--down:#c0432f;--down-bg:#f7e5e0;--flat:#9aa0a6;
+ --font:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font);font-size:14px;line-height:1.5}
+.wrap{max-width:860px;margin:0 auto;padding:28px 18px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:18px 20px;margin:0 0 18px}
+.ph{font-size:22px;margin:0 0 4px}.psub{color:var(--ink-2);margin:0 0 20px}
+.hl{font-size:18px;font-weight:800;padding:12px 14px;border-radius:9px;margin:0 0 12px;
+ border-left:6px solid var(--flat);background:var(--surface-2)}
+.hl.up{border-left-color:var(--up);background:var(--up-bg);color:var(--up)}
+.hl.down{border-left-color:var(--down);background:var(--down-bg);color:var(--down)}
+.tag{float:right;font-size:11px;font-weight:700;padding:3px 9px;border-radius:20px;
+ background:var(--surface);border:1px solid var(--line);color:var(--ink-2)}
+.tag.flash{color:#b06a00;border-color:#e6c68a}
+.tag.struct{color:var(--up);border-color:#9cc9b6}
+.meta{font-size:12px;color:var(--ink-2);margin:0 0 10px}.meta b{color:var(--ink)}
+blockquote{margin:10px 0;padding:9px 13px;border-left:3px solid var(--accent);
+ background:var(--surface-2);border-radius:0 6px 6px 0;font-style:italic}
+.why{font-size:13px;color:var(--ink-2);margin:8px 0 12px}.why b{color:var(--ink)}
+.calls{display:flex;flex-direction:column;gap:6px;margin:0 0 14px}
+.call{font-size:13px;font-weight:600;padding:7px 11px;border-radius:7px}
+.call.up{background:var(--up-bg);color:var(--up)}
+.call.down{background:var(--down-bg);color:var(--down)}
+.grid{width:100%;border-collapse:collapse;margin:4px 0;font-size:13px}
+.grid th{text-align:right;font-size:11px;color:var(--ink-3);padding:6px 8px;border-bottom:1px solid var(--line)}
+.grid th:first-child,.grid th:nth-child(2){text-align:left}
+.grid td{padding:8px;border-bottom:1px solid var(--line);text-align:right;
+ font-variant-numeric:tabular-nums}
+.inst{text-align:left!important}.inst b{display:inline}
+.inst .tkr{color:var(--ink-3);margin-left:6px;font-size:12px}
+.inst .role{display:block;color:var(--ink-3);font-size:11px}
+.pred{text-align:left!important;font-weight:700}
+.pred.up{color:var(--up)}.pred.down{color:var(--down)}.pred.flat{color:var(--ink-3)}
+.ret{font-weight:700;color:var(--ink-3)}
+.ret.up{color:var(--up);background:var(--up-bg)}
+.ret.down{color:var(--down);background:var(--down-bg)}
+.unit{color:var(--ink-3);font-size:12px;margin:12px 0 6px}
+.k{font-weight:700}.k.up{color:var(--up)}.k.down{color:var(--down)}
+.gauge{display:flex;gap:8px;margin:4px 0}
+.gcell{flex:1;text-align:center;padding:10px 4px;border-radius:9px;background:var(--surface-2)}
+.gcell .gh{display:block;font-size:11px;color:var(--ink-2);font-weight:600}
+.gcell .gg{font-size:20px;font-weight:800;color:var(--ink-3)}
+.gcell .gs{display:block;font-size:11px;color:var(--ink-3)}
+.gcell.up{background:var(--up-bg)}.gcell.up .gg{color:var(--up)}
+.gcell.down{background:var(--down-bg)}.gcell.down .gg{color:var(--down)}
+footer{color:var(--ink-3);font-size:11px;margin-top:16px}
+.nsec{font-size:13px;margin:7px 0;color:var(--ink)}
+.nsec b{color:var(--ink-2);font-weight:600;display:block;font-size:11px;text-transform:uppercase;
+ letter-spacing:.03em;margin-bottom:1px}
+.grid.mini th:nth-child(2){text-align:center}
+.grid.mini .pred{text-align:center!important;font-size:15px}
+.concl{margin-top:12px;padding:11px 13px;border-radius:8px;font-size:13px;
+ background:var(--surface-2);border-left:5px solid var(--flat)}
+.concl.flash{border-left-color:#b06a00;background:#fbf3e4}
+.concl.struct{border-left-color:var(--up);background:var(--up-bg)}
+.concl.down{border-left-color:var(--down);background:var(--down-bg)}
+.concl b{color:var(--ink)}
+</style></head><body><div class="wrap"><h1 class="ph">Validation set &#8212; inspect the model&#x27;s reasoning</h1><p class="psub">One Flash Shock, one Structural Drift, one Failed Anomaly, drawn from the validation split. Green = the market moved as the LLM predicted; red = it did not.</p><article class="card"><div class="hl flash">Flash Shock<span class="tag flash">2025-11-10 &#183; Trade War &#183; intensity 8</span></div><blockquote>The &#8220;Pay Back&#8221; Numbers being quoted by the Radical Left Lunatics, who would love to see us lose on Tariffs because of how bad it would be for our Country, are much higher than those being stated by our Fake Opposition &#8212; Opposition mainly from Foreign Countries that would do anything to be allowed to charge us Tariffs without retribution. The actual Number we would have to pay back in Tariff Revenu</blockquote><div class="nsec"><b>What he actually said:</b> US would owe $2 trillion if tariffs are removed</div><div class="nsec"><b>Why it moves markets:</b> Tariff revenue loss impacts US trade balance</div><div class="nsec"><b>Short-term call (30m-1h):</b> Market falls as trade war escalation feared, WHY: immediate uncertainty</div><div class="nsec"><b>Long-term call (1mo):</b> Dollar and defense stocks rise as trade tensions persist, WHY: prolonged trade war</div><div class="nsec"><b>Reality check &#8212; short vs long (green=right, red=wrong):</b></div><table class="grid mini"><thead><tr><th>Instrument</th><th>call</th><th>30m</th><th>1h</th><th>1mo</th></tr></thead><tbody><tr><td class="inst"><b>Oil ETF</b><span class="tkr">USO</span></td><td class="pred up">&#9650;</td><td class="ret up">+0.1%</td><td class="ret up">+0.1%</td><td class="ret down">-2.6%</td></tr><tr><td class="inst"><b>Defense &amp; Aerospace ETF</b><span class="tkr">ITA</span></td><td class="pred up">&#9650;</td><td class="ret up">+0.1%</td><td class="ret up">+0.0%</td><td class="ret down">-3.3%</td></tr><tr><td class="inst"><b>S&amp;P 500 ETF</b><span class="tkr">SPY</span></td><td class="pred down">&#9660;</td><td class="ret flat">+0.0%</td><td class="ret flat">-0.0%</td><td class="ret flat">+1.1%</td></tr></tbody></table><div class="concl flash"><b>Data-science conclusion:</b> The model nailed the immediate reaction (early 100% correct) but the edge decayed to 0% by 1 month &#8212; the crowd over-reacted, then re-priced as broader macro forces took over. Rule: trust this signal INTRADAY ONLY.</div></article><article class="card"><div class="hl struct">Structural Drift<span class="tag struct">2026-02-02 &#183; Geopolitics / Tension &#183; intensity 8</span></div><blockquote>Trump has been &#8216;very clear&#8217; in message to Iran, State Department spokesperson says: https://www.foxnews.com/video/6388654275112</blockquote><div class="nsec"><b>What he actually said:</b> Trump sent clear message to Iran</div><div class="nsec"><b>Why it moves markets:</b> Geopolitical tensions affect oil prices</div><div class="nsec"><b>Short-term call (30m-1h):</b> Oil prices rise due to uncertainty, WHY: immediate risk premium</div><div class="nsec"><b>Long-term call (1mo):</b> Tensions escalate, affecting global trade, WHY: prolonged conflict</div><div class="nsec"><b>Reality check &#8212; short vs long (green=right, red=wrong):</b></div><table class="grid mini"><thead><tr><th>Instrument</th><th>call</th><th>30m</th><th>1h</th><th>1mo</th></tr></thead><tbody><tr><td class="inst"><b>Oil ETF</b><span class="tkr">USO</span></td><td class="pred up">&#9650;</td><td class="ret flat">n/a</td><td class="ret flat">n/a</td><td class="ret up">+20.7%</td></tr><tr><td class="inst"><b>Fear ETF</b><span class="tkr">VIXY</span></td><td class="pred up">&#9650;</td><td class="ret down">-0.4%</td><td class="ret down">-0.3%</td><td class="ret up">+11.8%</td></tr><tr><td class="inst"><b>Defense &amp; Aerospace ETF</b><span class="tkr">ITA</span></td><td class="pred up">&#9650;</td><td class="ret down">+0.0%</td><td class="ret down">-0.4%</td><td class="ret up">+5.9%</td></tr></tbody></table><div class="concl struct"><b>Data-science conclusion:</b> The first hour was noise (early 0%), but the thesis played out over weeks (1mo 100% correct) as the policy actually took effect. Rule: SLOW-BURN signal &#8212; hold to 1 month, ignore the immediate wobble.</div></article><article class="card"><div class="hl down">Failed Anomaly<span class="tag down">2025-12-08 &#183; Geopolitics / Trade &#183; intensity 9</span></div><blockquote>I have informed President Xi, of China, that the United States will allow NVIDIA to ship its H200 products to approved customers in China, and other Countries, under conditions that allow for continued strong National Security. President Xi responded positively! $25% will be paid to the United States of America. This policy will support American Jobs, strengthen U.S. Manufacturing, and benefit Ame</blockquote><div class="nsec"><b>What he actually said:</b> US to allow NVIDIA to ship H200 products to China</div><div class="nsec"><b>Why it moves markets:</b> Eased trade restrictions boost US tech sector</div><div class="nsec"><b>Short-term call (30m-1h):</b> NVIDIA stock rises on increased sales prospects</div><div class="nsec"><b>Long-term call (1mo):</b> US tech sector growth as other companies benefit</div><div class="nsec"><b>Reality check &#8212; short vs long (green=right, red=wrong):</b></div><table class="grid mini"><thead><tr><th>Instrument</th><th>call</th><th>30m</th><th>1h</th><th>1mo</th></tr></thead><tbody><tr><td class="inst"><b>NVIDIA</b><span class="tkr">NVDA</span></td><td class="pred up">&#9650;</td><td class="ret down">-0.3%</td><td class="ret down">-1.1%</td><td class="ret down">-0.3%</td></tr><tr><td class="inst"><b>Semiconductor ETF</b><span class="tkr">ITA</span></td><td class="pred up">&#9650;</td><td class="ret flat">n/a</td><td class="ret flat">n/a</td><td class="ret up">+11.3%</td></tr><tr><td class="inst"><b>S&amp;P 500</b><span class="tkr">SPY</span></td><td class="pred up">&#9650;</td><td class="ret flat">-0.1%</td><td class="ret flat">-0.1%</td><td class="ret flat">+1.2%</td></tr></tbody></table><div class="concl down"><b>Data-science conclusion:</b> The model was confident (intensity 9) yet wrong by 1 month (only 50% of the basket confirmed) &#8212; a macro confound or sharp reversal overwhelmed the tweet. Rule: FLAG this scenario for error analysis, don&#x27;t trust blindly.</div></article></div></body></html>
