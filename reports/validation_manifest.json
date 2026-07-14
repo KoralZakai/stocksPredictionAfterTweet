@@ -1,0 +1,107 @@
+{
+  "schema_version": "1.0",
+  "generated_at_utc": "2026-07-14T17:30:09+00:00",
+  "code_rev": "7852708",
+  "corpus": {
+    "file": "data/real/corpus_v3.csv",
+    "sha256": "febe2439d07edd43f2ed330eff80e08b59365bc7a71a4fe1cd90d7c983146d15",
+    "n": 476
+  },
+  "metric": "beat_spy_signed_band0",
+  "split": "chronological_60_20_20",
+  "alpha": 0.05,
+  "prompt_template_hash": "1eb55bebe3c040706e6922b4cff6e30be2594654bf08013008f40ff61b96751d",
+  "horizons": {
+    "EOD": {
+      "n_test": 89,
+      "hits_test": 55,
+      "hit_rate_test": 0.618,
+      "ci95": [
+        0.5141,
+        0.7121
+      ],
+      "p_raw": 0.016708,
+      "requires_alpaca": false,
+      "p_bh": 0.033416,
+      "survives_bh": true
+    },
+    "3d": {
+      "n_test": 89,
+      "hits_test": 50,
+      "hit_rate_test": 0.5618,
+      "ci95": [
+        0.4583,
+        0.6602
+      ],
+      "p_raw": 0.144548,
+      "requires_alpaca": false,
+      "p_bh": 0.216822,
+      "survives_bh": false
+    },
+    "1w": {
+      "n_test": 89,
+      "hits_test": 47,
+      "hit_rate_test": 0.5281,
+      "ci95": [
+        0.4254,
+        0.6285
+      ],
+      "p_raw": 0.335904,
+      "requires_alpaca": false,
+      "p_bh": 0.403085,
+      "survives_bh": false
+    },
+    "1mo": {
+      "n_test": 89,
+      "hits_test": 35,
+      "hit_rate_test": 0.3933,
+      "ci95": [
+        0.2982,
+        0.4971
+      ],
+      "p_raw": 0.983292,
+      "requires_alpaca": false,
+      "p_bh": 0.983292,
+      "survives_bh": false
+    },
+    "30m": {
+      "n_test": 84,
+      "hits_test": 60,
+      "hit_rate_test": 0.7143,
+      "ci95": [
+        0.61,
+        0.7999
+      ],
+      "p_raw": 5.4e-05,
+      "requires_alpaca": true,
+      "p_bh": 0.000162,
+      "survives_bh": true
+    },
+    "1h": {
+      "n_test": 84,
+      "hits_test": 64,
+      "hit_rate_test": 0.7619,
+      "ci95": [
+        0.6606,
+        0.8403
+      ],
+      "p_raw": 1e-06,
+      "requires_alpaca": true,
+      "p_bh": 6e-06,
+      "survives_bh": true
+    }
+  },
+  "registry": [
+    "EOD",
+    "3d",
+    "1w",
+    "1mo",
+    "30m",
+    "1h"
+  ],
+  "shipped_horizons": [
+    "EOD"
+  ],
+  "intraday_note": "Intraday horizons (30m/1h) require Alpaca keys and are excluded from shipped_horizons for reproducibility.",
+  "disclaimer": "Research output. Not investment advice."
+}
