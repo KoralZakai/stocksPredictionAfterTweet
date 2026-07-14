@@ -14,8 +14,9 @@ ENV PYTHONPATH=/app \
 
 EXPOSE 8080
 
-# Endpoint by default; Jobs override the command, e.g.:
-#   docker run IMG python jobs/data_ingestion.py --tweets ... --bars ... --out runs/mvp
-#   docker run IMG python jobs/dataset_build.py  --in runs/mvp --out runs/mvp/dataset.json
-#   docker run IMG python jobs/evaluation.py     --dataset runs/mvp/dataset.json --out runs/mvp
-CMD ["python", "serving/endpoint.py"]
+# DEPRECATED shared image (System-A scaffold). The CANONICAL build is now two
+# purpose-built images: jobs/backtest/Dockerfile (the Job) and serving/Dockerfile
+# (the Endpoint). This file is kept for the older System-A jobs only.
+# Default command points at the SHIPPED System-B endpoint for consistency:
+#   docker run IMG uvicorn serving.app:app --host 0.0.0.0 --port 8080
+CMD ["uvicorn", "serving.app:app", "--host", "0.0.0.0", "--port", "8080"]

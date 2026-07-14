@@ -1,0 +1,42 @@
+# Nebius Serverless AI Endpoint — serve the distilled student (GPU). EXPERIMENTAL.
+# This is NOT the shipped endpoint. The shipped, validated endpoint is the CPU
+# FastAPI in serving/ (raw 70B call). This one serves the UNVALIDATED student and
+# labels its cohort rates as the teacher's — see experiments/distill/README.
+#
+# Apply (illustrative):
+#   nebius ai endpoint create -f experiments/distill/nebius_endpoint.yaml
+apiVersion: ai.nebius.io/v1
+kind: Endpoint
+metadata:
+  name: distill-predict
+  labels:
+    track: experimental
+    validated: "false"
+spec:
+  image: ${NB_REGISTRY}/distill-serve:latest
+  command: ["uvicorn", "experiments.distill.serve_distilled:app",
+            "--host", "0.0.0.0", "--port", "8080"]
+  port: 8080
+  resources:
+    gpu:
+      type: ${NB_GPU_PRESET}      # a small inference GPU (e.g. nvidia-l4) suffices
+      count: 1
+    cpu: 4
+    memoryGiB: 32
+  env:
+    - name: ADAPTER_DIR
+      value: /data/distill/adapter
+    - name: MANIFEST_PATH
+      value: /data/reports/validation_manifest.json
+    - name: BASE_MODEL
+      value: Qwen/Qwen2.5-7B-Instruct
+  volumes:
+    - name: bucket
+      bucket: ${NB_BUCKET}
+      mountPath: /data
+  scaling:
+    minReplicas: 0                # scale-to-zero: serverless, pay per request
+    maxReplicas: 2
+  health:
+    path: /health
+    port: 8080

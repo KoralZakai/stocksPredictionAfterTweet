@@ -1,196 +1,198 @@
-# Political Tweets → Sector-ETF Signal: A Serverless Null-Result Pipeline
+# Political Tweets → Sector-ETF Alpha: an honest, reproducible serverless pipeline
 
-A reproducible **statistical ML research pipeline** for the
-[Nebius Serverless AI Builders Challenge](serverlessChallange.txt). It asks one
-question, rigorously:
+A **statistical ML research pipeline** for the **Nebius Serverless AI Builders
+Challenge**. It asks one question rigorously: *does a raw large-language-model
+read of a political tweet carry measurable, statistically significant short-term
+directional information about US sector ETFs — beyond market beta?*
 
-> Do political tweets contain measurable, statistically significant short-term
-> directional information about sector-ETF returns, under strict causal
-> constraints?
+**The honest result.** Yes, at short horizons, and we ship exactly what survives
+scrutiny. A raw zero-shot **Llama-3.3-70B** classification, scored as
+**relative alpha ("beat SPY")**, beats the market on a held-out, chronological
+test set: **EOD 61.8%** (n=89, Wilson 95% CI [0.514, 0.712], BH-corrected
+p=0.033). The intraday edge is even stronger (**1h 76%, p≈0**) but requires a
+private data feed, so it is reported as a diagnostic, not shipped. Everything
+that could inflate the result — market beta, per-tweet confidence scoring,
+overlapping windows — was tested and **rejected**: a second-stage meta-model that
+tried to predict *which* calls land failed the sacred test three times (text Val
+AUC 0.593 → **Test 0.431**). So we ship the **raw call**, never a per-tweet
+probability. A rigorous, well-bounded result is the deliverable.
 
-**This is not a trading system.** Predictive accuracy is *not* a success
-metric. A rigorous **null result — "no signal" — is a full success.** The whole
-system is built to detect a weak-or-absent signal *truthfully* rather than to
-manufacture a positive one. See [`CLAUDE.md`](CLAUDE.md) for the full
-scientific specification and hard correctness invariants.
+---
 
-## What it measures
-
-With **daily OHLCV only**, we measure the 1–3 trading-day *drift-association*
-between a tweet and its rule-mapped sector ETF. We do **not** claim to measure
-the causal reaction (priced in seconds, invisible to daily bars). Tickers:
-`XLK XLE XLF XLI XLV XLP XLY XLB SMH ITA`, benchmark `SPY`.
-
-## Why it can't fool itself
-
-- **Point-in-time.** Every feature for a tweet at `t0` uses only data whose
-  session *closed strictly before* `t0`. A future-injection canary test proves
-  features are blind to any bar dated ≥ `t0`.
-- **No train/serve skew.** Exactly one pure `decide(tweet, market_state)` feeds
-  the batch jobs *and* the `/predict` endpoint — a test asserts identical
-  features on both paths.
-- **Leak-free labels.** Entry = `open(s0)` where `s0` is the first session open
-  strictly after `t0`; returns run forward from there; label bands use
-  backward-only volatility.
-- **Honest evaluation.** Purged + embargoed walk-forward CV (no random KFold),
-  majority / market-follow / **permutation-null** baselines, permutation
-  p-values, **Benjamini–Hochberg** correction over the full test registry, and
-  a **power/MDE gate** that declares the study underpowered when it is.
-
-## Architecture (Nebius Serverless)
-
-The serverless layer is orchestration only — it wraps pure modules and adds no
-second feature path.
+## Architecture — a Job produces the numbers, an Endpoint cites them
 
 ```
-Jobs (batch):  data_ingestion → dataset_build → evaluation/reporting
-Endpoint:      POST /predict  ── same decide() ──┘
+                                 ┌──────────────────────────────────────┐
+  data/real/corpus_v3.csv  ──►   │  Nebius Serverless AI JOB (CPU)       │
+  data/real/bars.csv  ──────►    │  jobs/backtest/entrypoint.py          │
+                                 │   classify (Nebius 70B, cached) →     │
+                                 │   beat-SPY relative-hit (signed) →    │
+                                 │   chronological 60/20/20 →            │
+                                 │   Benjamini-Hochberg + Wilson CI      │
+                                 └───────────────┬──────────────────────┘
+                                                 │ writes artifacts
+                                                 ▼
+                                 ┌──────────────────────────────────────┐
+                                 │  shared bucket (/data)                │
+                                 │   reports/macro_dataset.csv           │
+                                 │   reports/validation_manifest.json ◄──┼── the CONTRACT
+                                 └───────────────┬──────────────────────┘
+                                                 │ loaded + hash-verified at boot
+                                                 ▼
+   POST /predict  {tweet_text,   ┌──────────────────────────────────────┐
+   t0_utc, author}          ──►  │  Nebius Serverless AI ENDPOINT (CPU)  │
+                                 │  serving/app.py  (FastAPI, two-plane) │
+                                 │   DECISION plane: text → 70B → route  │
+                                 │   MARKET plane:  post-hoc enrichment  │
+                                 └──────────────────────────────────────┘
 ```
 
-| Component | Path | Role |
-|---|---|---|
-| `data_ingestion` job | `jobs/data_ingestion.py` | Validate raw (reject tz-naive / dup keys) → snapshot |
-| `dataset_build` job | `jobs/dataset_build.py` | Labels + point-in-time features → `dataset.json` |
-| `evaluation` job | `jobs/evaluation.py` | Signal-or-null report → `report.txt/json` |
-| `/predict` endpoint | `serving/endpoint.py` | Same `decide()`; abstains below calibrated confidence |
-| Core | `core/` | Calendar, `market_state_as_of`, features, `decide()` |
-| Labeling | `labeling/` | Entry anchor, `ret_1d/2d/3d`, vol-scaled bands |
-| Eval | `eval/` | Splits, baselines, significance, power, report |
+The serverless layer contains **zero science**. Both the Job and the Endpoint
+call the same pure engine in [`alpha/`](alpha/); `jobs/` and `serving/` only
+marshal I/O. This is what makes the result trustworthy rather than plumbing.
 
-**Why pandas (not polars):** the working set is tiny (N ≈ hundreds of rows);
-pandas' `merge_asof` and ubiquitous ecosystem win over polars' large-data
-throughput here. DuckDB backs the storage/validation layer.
+### Two integrity guarantees you can check
 
-## Setup
+1. **Validated model = served model.** The Job records
+   `prompt_template_hash` (sha256 of the exact classification prompt) and the
+   corpus `sha256` in the manifest. The Endpoint **refuses to boot** if its live
+   prompt or corpus doesn't match. No hit-rate is hardcoded in the serving code —
+   the Job produces the numbers, the Endpoint only cites them.
+2. **The leakage firewall.** `/predict` has two planes with one-way flow. The
+   **decision plane** sees *tweet text only* (the 76%/62% edge holds precisely
+   because the LLM never saw market data). The **market plane** runs *after* the
+   decision to enrich the response and can never feed back into it. A test
+   (`test_decision_invariant_to_market_data`) monkeypatches the market provider to
+   raise, time out, and return absurd values, and asserts the decision is
+   byte-identical across all of them.
 
-Requires Python 3.11+ and [`uv`](https://docs.astral.sh/uv/).
+---
 
+## Reproduce it
+
+### Prerequisites
+- Python 3.11+ and [`uv`](https://github.com/astral-sh/uv).
+- A Nebius AI Studio key for live classification (`NEBIUS_API_KEY`). **Not needed**
+  for the offline `$0` path below.
+- `cp .env.example .env` and fill in `NEBIUS_API_KEY` (Alpaca keys optional).
+
+### Run it for **$0** (offline, no keys)
+The Job re-scores from cached teacher outputs and regenerates the manifest —
+proving the full statistical path without spending a cent:
 ```bash
-uv sync                       # install (add --no-dev for runtime only)
-uv run python data/fixtures/make_fixture.py   # generate the synthetic MVP-10 fixture
+make smoke
+# = PYTHONPATH=. .venv/Scripts/python.exe jobs/backtest/entrypoint.py --from-results
 ```
-
-Quality gate (mandatory correctness-invariant tests run here):
-
+Or classify **10 tweets live for ~$0**:
 ```bash
-uv run ruff check . && uv run mypy . && uv run pytest -q
+make smoke-live      # jobs/backtest/entrypoint.py --live --limit 10   (needs NEBIUS_API_KEY)
 ```
 
-### Run the pipeline (locally or as Nebius Jobs)
-
+### Build the two images (CPU-only, no GPU)
 ```bash
-uv run python jobs/data_ingestion.py --tweets data/fixtures/tweets.csv \
-    --bars data/fixtures/bars.csv --out runs/mvp
-uv run python jobs/dataset_build.py --in runs/mvp --out runs/mvp/dataset.json
-uv run python jobs/evaluation.py   --dataset runs/mvp/dataset.json --out runs/mvp
+docker build -f jobs/backtest/Dockerfile -t backtest .     # the batch Job
+docker build -f serving/Dockerfile        -t predict   .   # the Endpoint
 ```
 
-### Serve `/predict`
-
+### Launch on Nebius (illustrative — match your CLI/tenant)
 ```bash
-BARS_CSV=data/fixtures/bars.csv uv run python serving/endpoint.py   # :8080
-curl -s -X POST localhost:8080/predict \
-  -d '{"tweet_text":"drill baby drill energy dominance","timestamp":"2024-02-20T22:00:00Z"}'
-# {"ticker":"XLE","direction":"ABSTAIN","confidence":0.0,"abstain":true,"map_confidence":1.0}
+# 1. Batch Job: writes macro_dataset.csv + validation_manifest.json to the bucket.
+nebius ai job create --name backtest-and-validate \
+    --image $NB_REGISTRY/backtest:latest \
+    --preset cpu-... --mount $NB_BUCKET:/data \
+    --command "python jobs/backtest/entrypoint.py --from-results"
+
+# 2. Endpoint: loads + hash-verifies the manifest at boot, then serves.
+nebius ai endpoint create --name predict \
+    --image $NB_REGISTRY/predict:latest \
+    --preset cpu-... --mount $NB_BUCKET:/data --port 8080
 ```
 
-### Docker (one CPU image for jobs and endpoint)
-
+### Call `/predict`
 ```bash
-docker build -f deploy/Dockerfile -t tweet-signal .
-docker run -p 8080:8080 tweet-signal                                   # endpoint
-docker run tweet-signal python jobs/evaluation.py --dataset ... --out ...   # a job
+curl -s -X POST http://<endpoint>/predict -H 'content-type: application/json' -d '{
+  "tweet_text": "We will impose massive tariffs on all Chinese semiconductors.",
+  "t0_utc": "2025-03-03T14:00:00+00:00", "author": "realDonaldTrump"
+}'
 ```
-
-## Expected output
-
-The current dataset is a **synthetic, seeded fixture** (10 tweets covering
-before-open / intraday / after-close / weekend / holiday cases). Phase 0 is
-plumbing-correctness only — outcomes carry **zero** evidential weight. The
-report prints a signal-or-null table; at N = 10 the honest headline is:
-
+```jsonc
+{
+  "decision": "SHORT",
+  "instruments": [{"ticker": "SMH", "direction": "down", "benchmark": "SPY"},
+                  {"ticker": "XLK", "direction": "down", "benchmark": "SPY"}],
+  "scenario": "Trade War", "reasoning": "tariffs raise input costs for chipmakers",
+  "horizon": "EOD",
+  "cohort_base_rate": {
+    "value": 0.618, "ci95": [0.514, 0.712], "n": 89, "horizon": "EOD",
+    "note": "Historical hit-rate of ALL calls of this type on a held-out chronological
+             test set. This is NOT a probability for THIS tweet. We tested per-tweet
+             confidence; it did not generalize."
+  },
+  "market_context": {"provider": "yfinance", "session_phase": "premarket",
+                     "entry_anchor_utc": "2025-03-03T13:30:00+00:00", "quotes": [],
+                     "realized_alpha_since_t0": []},   // null on any market-plane failure
+  "manifest_version": "7852708", "disclaimer": "Research output. Not investment advice."
+}
 ```
-HEADLINE: 0 of 3 cells survive BH correction (alpha=0.05).
-          A null result here is a valid, expected outcome.
-```
+`GET /health` returns the manifest version, corpus + prompt hashes, and shipped
+horizons. `GET /market/{ticker}` returns a quote + benchmark (market plane).
 
-Real Trump tweets + real ETF OHLCV drop into the same pipeline unchanged.
+**Abstention is a first-class success.** `/predict` returns `ABSTAIN` when the
+tweet isn't market-relevant, no whitelisted instrument resolves, or `t0` is
+unanchorable.
 
-## Reproduce the whole DAG (no Nebius account needed)
+---
 
-`scripts/run_dag.sh` runs the exact six Jobs that `deploy/nebius/deploy.sh`
-submits — same entrypoints, same argument shapes, same order — so a reviewer can
-reproduce the pipeline locally and the serverless manifests are exercised in
-shape before they touch a tenant.
+## Hardware, outputs, runtime, cost
 
-```bash
-./scripts/run_dag.sh fixture   # synthetic 10-tweet fixture, seconds
-./scripts/run_dag.sh real      # real posts + real bars
-```
+| | |
+|---|---|
+| **Hardware** | CPU-only (classical-ML track). No GPU. Both images build from `python:3.14-slim`. A small CPU preset (≈2 vCPU / 4 GiB) is sufficient. |
+| **Expected outputs** | `reports/macro_dataset.csv` (443 scored tweets) and `reports/validation_manifest.json` (`shipped_horizons: ["EOD"]`, per-horizon n/hit-rate/CI/p_bh, prompt+corpus hashes). |
+| **Approx runtime** | Offline `--from-results`: **~10 s**. Live `--limit 10`: **~1 min** (10 Nebius calls + daily-bar fetch). Full 443-tweet live classification: **~15–25 min** (cached + resumable). Endpoint cold boot: **a few seconds** (manifest verify). |
+| **Approx cost** | Offline path: **$0**. `--limit 10`: **≈$0** (a few 70B calls). Full corpus classification: a **few cents** of Nebius inference (cached, so paid once). Endpoint: pay-per-request, scale-to-zero. |
 
-## Deploy to Nebius Serverless
+---
 
-Six batch **Jobs** (the DAG) + one **Endpoint** (`/predict`), all from the one
-CPU image, so batch and serve cannot drift (§3.2).
+## Experimental extension (NOT shipped): GPU knowledge distillation
 
-```bash
-cp deploy/nebius/env.example deploy/nebius/.env   # fill in project/subnet/image/bucket
-DRY_RUN=1 ./deploy/nebius/deploy.sh all           # print every command, change nothing
-./deploy/nebius/deploy.sh image                   # build + push (linux/amd64)
-./deploy/nebius/deploy.sh jobs                    # submit the DAG in order
-./deploy/nebius/deploy.sh endpoint                # stand up /predict
-./deploy/nebius/deploy.sh urls                    # endpoint URL + smoke-test curl
-```
+[`experiments/distill/`](experiments/distill/) contains an optional downstream
+optimization: distilling the 70B teacher's *classifications* (not the noisy market
+outcome) into a small 7–8B student via QLoRA, to cut inference cost. It is
+**clearly quarantined**: separate deps, trains on the **train split only**, and its
+serving code labels the cohort rates as the *teacher's* with the student marked
+**unvalidated** until re-tested on the sacred split. It does **not** touch the
+shipped path or the validation manifest. See its
+[README](experiments/distill/README.md).
 
-`.env` is gitignored; no secrets are committed. Follow a job with
-`nebius ai job logs <job_id> --follow`.
+---
 
-> **Not yet executed against a tenant.** The commands are written from the public
-> [Jobs](https://docs.nebius.com/serverless/jobs/manage) and
-> [Endpoints](https://docs.nebius.com/serverless/endpoints/manage) docs, and the
-> full `DRY_RUN` output has been reviewed, but no job has run on real Nebius
-> infrastructure yet. Proof-of-execution (job logs, endpoint URL) goes below once
-> it has.
+## Repository layout
 
-### Proof of execution
+| Path | Role |
+|---|---|
+| [`alpha/`](alpha/) | The one shared engine: `classify`, `benchmark`, `route`, `schema`, `stats`. |
+| [`jobs/backtest/`](jobs/backtest/) | The Nebius **Job**: entrypoint + Dockerfile. |
+| [`serving/app.py`](serving/app.py) | The Nebius **Endpoint** (shipped, two-plane). |
+| [`market/`](market/) | Market-plane price providers (alpaca → yfinance → null). |
+| [`experiments/distill/`](experiments/distill/) | Experimental GPU distillation (not shipped). |
+| [`archive/`](archive/) | The rejected meta-model + its Val→Test AUC record. |
+| `core/`, `eval/`, `labeling/`, `serving/endpoint.py` | **Deprecated System-A** scaffold (rule-based `decide()`); superseded by the System-B pipeline above, kept for history. |
 
-<!-- Paste job IDs / log screenshots / the endpoint URL here after the first real run. -->
-_Pending first tenant run._
+License: [MIT](LICENSE). Data provenance: [`data/PROVENANCE.md`](data/PROVENANCE.md).
 
-## Hardware, runtime, cost
+## Limitations & threats to validity
 
-- **CPU-only** (classical-ML track). No GPU. Platform `cpu-e2`, preset
-  `2vcpu-8gb` — the smallest Nebius offers, and more than this workload needs.
-- Measured on the fixture DAG (`./scripts/run_dag.sh fixture`, Apple M-series):
-
-  | Job | Runtime |
-  |---|---|
-  | `data_ingestion` | 2 s |
-  | `llm_features` | <1 s (keyword fallback; ~seconds/1k posts with Claude) |
-  | `dataset_build` | 1 s |
-  | `training` | <1 s |
-  | `evaluation` | 8 s |
-  | `reporting` (23,236 real rows) | 2 s |
-  | **total** | **13 s** |
-
-- Test suite: ~7 s (84 tests).
-- **Cost:** the DAG is minutes of `2vcpu-8gb` CPU time per run — negligible, and
-  within the free trial credits. Rates: [Nebius compute pricing](https://docs.nebius.com/compute/resources/pricing).
-  The one variable cost is `llm_features` if you supply `ANTHROPIC_API_KEY`; it
-  is a one-time, cached, offline pass over the corpus (unset the key and it uses
-  the deterministic keyword fallback for free).
-
-## Status & roadmap
-
-Built and green (84 tests): config, storage, calendar, point-in-time market
-state, labeling, sector mapping, dataset build, full eval harness (purged CV,
-baselines, permutation null, BH, power gate, **text-ablation**), GBT + conformal
-abstention, serverless jobs + endpoint, offline LLM signal layer (`llm/`), and
-the `reporting` job that regenerates the dashboard from data.
-
-**Not yet built:** the transformer overfit canary; intraday (30m/1h) horizons;
-the prediction log + nightly outcome-backfill loop. See `CLAUDE.md` §10–11.
-
-## License
-
-[MIT](LICENSE).
+- **Association, not causation.** With daily bars we measure 1-day drift, not the
+  seconds-scale causal reaction. Macro confounding is documented, not deconfounded
+  (N≈443 observational rows cannot identify causality).
+- **Reproducibility boundary.** The shipped EOD horizon is fully public
+  (yfinance + public tweet archives). The stronger 1h/30m edge needs a private
+  Alpaca feed, so it is **excluded from `shipped_horizons`**.
+- **Small n.** The chronological test split is 89 tweets; we use Wilson intervals
+  and exact binomial p-values (not the normal approximation) and BH-correct across
+  the whole horizon registry.
+- **Selection & survivorship.** Deleted tweets are gone and may be systematically
+  the moved-then-retracted ones; the corpus is public archives of a public figure.
+- **No per-tweet confidence.** By design. The meta-model that would produce one
+  failed the sacred test; the response schema has no probability field.

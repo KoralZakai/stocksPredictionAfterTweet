@@ -1,0 +1,5 @@
+# EXPERIMENTAL dspy track ONLY — do NOT merge into the root pyproject.toml / uv.lock.
+# Keeps the shipped CPU image lean. Pin exact versions for a real run.
+dspy-ai>=2.5.0
+# Optional experiment logging:
+# wandb>=0.18.0

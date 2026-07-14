@@ -12,6 +12,8 @@ wheels/
 # Secrets / local env
 .env
 .env.*
+# the committed template carries NO secrets:
+!.env.example
 
 # Tool caches
 .mypy_cache/
