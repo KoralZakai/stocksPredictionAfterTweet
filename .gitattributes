@@ -20,6 +20,10 @@ data/fixtures/*.csv -text
 reports/*.json      -text
 reports/*.csv       -text
 
+# Binary formats: never newline-convert. (`* text=auto` above would otherwise mangle
+# them — it corrupted docs/project_summary.pdf on first commit; caught by hash check.)
+*.pdf               binary
+
 # Generated/vendored — keep them out of diffs and language stats.
 *.html              -text linguist-generated
 uv.lock             -diff
