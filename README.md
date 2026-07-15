@@ -258,6 +258,26 @@ shipped path or the validation manifest. See its
 
 License: [MIT](LICENSE). Data provenance: [`data/PROVENANCE.md`](data/PROVENANCE.md).
 
+## Event study: "but the Hormuz tweet moved oil 10%!" — tested, also null
+
+The obvious objection to the null: high-impact posts (Iran blockades, direct
+corporate mentions) *visibly* move markets, so the flat average must be hiding
+localized signal. We tested exactly that with a pre-registered **event study**
+([full report](experiments/event_study/REPORT.md)): outcome-blind cohorts
+(GEO_SHOCK / CORPORATE / NOISE from text-only tags), market-model CAR + abnormal
+volume over 1/3/5 sessions, permutation nulls, one BH pass over all 72 cells.
+
+**Result: 0 of 72 cells survive** (min p_bh = 0.83). The famous moves are real
+*individually* — our data surfaces "no deal with Iran except UNCONDITIONAL
+SURRENDER" → USO −13.2% — but the population effect is zero, and the study
+explains why the anecdotes feel true: **the calendar is saturated.** Trump posts
+geo/macro content on ~83% of trading sessions, so every large market move has a
+same-day tweet (our top-4 case studies include an +8% Intel day whose tweet was
+about *Comey*). At daily resolution there is no counterfactual; only intraday
+data could isolate causality. The study also caught its own would-be artifact: a
+degenerate permutation null initially flagged 22/72 cells before
+dedup + with-replacement sampling corrected it to 0.
+
 ## Future work: sector-relative alpha & single-stock benchmarking
 
 **The primary development path, and the most likely reason this study found a null.**
