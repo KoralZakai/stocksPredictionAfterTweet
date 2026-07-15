@@ -154,6 +154,15 @@ holding my favourite direction to the same bar as the one I rejected is the whol
 this project. What *doesn't* need a p-value is the case-level record above: the market
 moved first, in every famous anecdote I could check.
 
+**The timing is the whole illusion.** His posts land when a stock is already deep inside
+a strong, established trend — Intel had gained **+105% over the prior 21 sessions** when
+he posted "Intel Stock continues to rise"; Tesla was mid-fall when the thirteen Tesla
+posts arrived. To an observer who sees tweet-then-more-movement, he looks like the cause.
+But the trend was there *first*: he is reflecting an established market move, narrating it
+— and memory quietly reorders the sequence into tweet-then-move. That is why the anecdotes
+feel irrefutable and why every one of them dissolved under a timeline: the observed
+correlation is real, the implied causation is backwards.
+
 So the honest summary of the connection: **his feed is a mirror of the market, not a
 lever on it** — and the mirror hypothesis deserves its own pre-registered study, which
 the repo is set up to run.
