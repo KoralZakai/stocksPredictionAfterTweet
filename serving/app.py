@@ -44,6 +44,13 @@ from market.provider import Provider
 
 log = logging.getLogger("predict")
 DISCLAIMER = "Research output. Not investment advice."
+# Emitted for every tweet when the manifest ships no horizon (nothing survived BH
+# correction). The endpoint still runs and explains itself — it just refuses to call.
+NO_VALIDATED_EDGE = (
+    "no validated edge: no horizon survived Benjamini-Hochberg correction over the "
+    "test registry, so this deployment ships no tradeable horizon (shipped_horizons "
+    "is empty). The scenario and reasoning are research output, not a call."
+)
 MARKET_TIMEOUT_S = 1.5
 _QUOTE_TTL_S = 15.0
 
@@ -244,7 +251,19 @@ def create_app(*, manifest_path: str | None = None,
         # ---- DECISION PLANE: tweet text ONLY ----
         classified = classify(req.tweet_text)
         routed = route_decision(classified, whitelist=prof.whitelist)
-        horizon = shipped[0] if shipped else None
+
+        # No horizon survived BH correction over the registry => there is no validated
+        # edge, so there is no call to make. Refuse EVERY tweet, not just the marginal
+        # ones: a null result must not be dressed up as a signal (CLAUDE.md 4, 8). The
+        # classification is still returned as research output — it explains what the
+        # model saw, while `decision` refuses to act on it.
+        if not shipped:
+            out = _abstain(manifest, NO_VALIDATED_EDGE)
+            out["scenario"] = routed.scenario
+            out["reasoning"] = routed.reasoning
+            return out
+
+        horizon = shipped[0]
         resp: dict[str, Any] = {
             "decision": routed.decision,
             "instruments": [asdict(i) for i in routed.instruments],

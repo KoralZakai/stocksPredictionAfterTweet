@@ -68,8 +68,9 @@ class AbsurdProvider:
         return 9.99e18
 
 
-def _client(classify: Any, provider: Any) -> TestClient:
-    return TestClient(create_app(manifest_path=str(MANIFEST), classify_fn=classify, provider=provider))
+def _client(classify: Any, provider: Any, manifest_path: str | None = None) -> TestClient:
+    return TestClient(create_app(manifest_path=manifest_path or str(MANIFEST),
+                                 classify_fn=classify, provider=provider))
 
 
 def _decision_core(resp: dict[str, Any]) -> dict[str, Any]:
@@ -151,9 +152,14 @@ def test_verify_manifest_accepts_real() -> None:
 
 
 # ---------------------------------------------------------------- resilience / schema
-def test_serves_with_no_market_keys() -> None:
-    """Null provider (zero market keys) still serves a 200 with an intact decision."""
-    r = _client(_classify_macro, NullProvider()).post(
+def test_serves_with_no_market_keys(tmp_path: Path) -> None:
+    """Null provider (zero market keys) still serves a 200 with an intact decision.
+
+    Pinned to a manifest that DOES ship a horizon: this asserts market-independence,
+    so it must not be silently satisfied by the no-validated-edge abstain instead.
+    """
+    r = _client(_classify_macro, NullProvider(),
+                _tampered(["shipped_horizons"], ["EOD"], tmp_path)).post(
         "/predict", json={"tweet_text": "tariffs", "t0_utc": "2025-03-03T14:00:00+00:00"})
     assert r.status_code == 200 and r.json()["decision"] in ("LONG", "SHORT")
 
@@ -194,21 +200,57 @@ def test_health_reports_pins() -> None:
 
 def test_no_validated_horizon_is_disclosed() -> None:
     """With no horizon surviving BH, /predict must not imply a validated horizon:
-    horizon is null and no cohort base rate is cited."""
+    it abstains, horizon is null, and no cohort base rate is cited."""
     shipped = json.loads(MANIFEST.read_text()).get("shipped_horizons") or []
     r = _client(_classify_macro, NullProvider()).post(
         "/predict", json={"tweet_text": "tariffs", "t0_utc": "2025-03-03T14:00:00+00:00"})
     body = r.json()
     if not shipped:
+        assert body["decision"] == "ABSTAIN"
         assert body["horizon"] is None
         assert body["cohort_base_rate"] is None    # never quote an unvalidated rate
 
 
+def test_abstain_when_no_horizon_ships(tmp_path: Path) -> None:
+    """Nothing survived BH => refuse EVERY tweet, however confident the classifier.
+
+    Pinned against a tampered manifest so this holds regardless of what the real
+    manifest currently ships. _classify_macro returns a confident 2-instrument
+    basket: without this guard the router would happily answer SHORT.
+    """
+    c = TestClient(create_app(manifest_path=_tampered(["shipped_horizons"], [], tmp_path),
+                              classify_fn=_classify_macro, provider=NullProvider()))
+    body = c.post("/predict", json={"tweet_text": "tariffs bite tech",
+                                    "t0_utc": "2025-03-03T14:00:00+00:00"}).json()
+    assert body["decision"] == "ABSTAIN"
+    assert "no validated edge" in body["abstain_reason"]
+    assert body["instruments"] == []              # nothing to trade
+    assert body["cohort_base_rate"] is None
+    assert body["horizon"] is None
+    assert body["scenario"] == "Trade War"        # explanation survives the refusal
+
+
+def test_still_decides_when_a_horizon_ships(tmp_path: Path) -> None:
+    """The abstain guard must key off shipped_horizons ONLY — it must not gag a
+    deployment that does have a validated horizon."""
+    c = TestClient(create_app(manifest_path=_tampered(["shipped_horizons"], ["EOD"], tmp_path),
+                              classify_fn=_classify_macro, provider=NullProvider()))
+    body = c.post("/predict", json={"tweet_text": "tariffs bite tech",
+                                    "t0_utc": "2025-03-03T14:00:00+00:00"}).json()
+    assert body["decision"] in ("LONG", "SHORT")
+    assert body["horizon"] == "EOD"
+
+
 # ---------------------------------------------------------------- golden
-def test_golden_three_corpus_tweets_stable() -> None:
+def test_golden_three_corpus_tweets_stable(tmp_path: Path) -> None:
     """3 cached teacher classifications -> the endpoint's decision matches route_decision
-    on the same input (the endpoint uses the shared router, deterministically)."""
+    on the same input (the endpoint uses the shared router, deterministically).
+
+    Pinned to a manifest that DOES ship a horizon: this is the no-skew guard (CLAUDE.md
+    3.2), so it must compare real routed decisions, not two abstains agreeing trivially.
+    """
     from alpha.route import route_decision
+    shipping = _tampered(["shipped_horizons"], ["EOD"], tmp_path)
     results = json.loads((ROOT / "reports" / "nebius_backtest_results.json").read_text())
     picked = [r for r in results if r.get("instruments")][:3]
     assert len(picked) == 3
@@ -218,6 +260,6 @@ def test_golden_three_corpus_tweets_stable() -> None:
                                        "predicted_direction": i.get("predicted", "neutral")}
                                       for i in r["instruments"]]}
         expected = route_decision(classified).decision
-        resp = _client(lambda _t, c=classified: c, NullProvider()).post(
+        resp = _client(lambda _t, c=classified: c, NullProvider(), shipping).post(
             "/predict", json={"tweet_text": r["text"][:80], "t0_utc": "2025-03-03T14:00:00+00:00"})
         assert resp.json()["decision"] == expected

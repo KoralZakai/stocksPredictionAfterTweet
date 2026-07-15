@@ -1,0 +1,25 @@
+# Build context hygiene. Without this the context is ~716MB and every build spends
+# ~200s transferring it — and `COPY . .` drops the host's Windows .venv on top of the
+# Linux venv that `uv sync` just built in the image.
+.venv/
+.git/
+__pycache__/
+*.pyc
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Secrets — never bake into an image.
+.env
+deploy/nebius/.env
+
+# Raw inputs the Job does not read. It runs --from-results off reports/, and the
+# Endpoint only needs reports/validation_manifest.json.
+# ponytail: if a live --limit run ever needs data/real/corpus_v3.csv in-image,
+# un-ignore that one file rather than all of data/.
+data/
+!data/real/corpus_v3.csv
+
+experiments/
+docs/
+*.log
