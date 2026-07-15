@@ -1,6 +1,7 @@
 # I Built a Machine to Prove Trump's Tweets Move Markets. It Kept Proving Me Wrong — Seven Times.
 
-*#NebiusServerlessChallenge — code: https://github.com/KoralZakai/stocksPredictionAfterTweet*
+*#NebiusServerlessChallenge — code: https://github.com/KoralZakai/stocksPredictionAfterTweet
+— interactive dashboard: [Myth-Busting Quantitative Terminal](https://raw.githack.com/KoralZakai/stocksPredictionAfterTweet/nebius-serverless-submission/reports/dashboard.html)*
 
 Everyone on a trading desk knows the story. *He tweeted about Intel, and the stock ran for
 months.* *He posts about Iran, oil spikes.* The anecdotes are vivid, specific, and everybody
@@ -122,9 +123,9 @@ survive**.
 
 ## The results
 
-Every number below is explorable in the interactive dashboard —
-[**Myth-Busting Quantitative Terminal**](https://koralzakai.github.io/stocksPredictionAfterTweet/reports/dashboard.html)
-— including the wrong-day control and the per-tweet reasoning behind each call.
+**➡ Live dashboard: [Myth-Busting Quantitative Terminal](https://raw.githack.com/KoralZakai/stocksPredictionAfterTweet/nebius-serverless-submission/reports/dashboard.html)**
+— every number below is explorable there, including the wrong-day control and the
+per-tweet reasoning behind each call.
 
 | test | result |
 |---|---|
