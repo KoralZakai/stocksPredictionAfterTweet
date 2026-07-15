@@ -6,15 +6,15 @@ moves (|CAR|), *systematic drift* (signed CAR), or *abnormal volume* in their
 mapped assets than random days do?
 
 **Design.** Outcome-blind cohorts from text-only tags (GEO_SHOCK n=184 unique
-event-days, CORPORATE n=43, NOISE control n=89) × fixed asset map × windows
-{1,3,5} sessions × families {|CAR|, signed, volume} = **72 scored cells**, all
+event-days, CORPORATE n=13, NOISE control n=92) × fixed asset map × windows
+{1,3,5} sessions × families {|CAR|, signed, volume} = **63 scored cells**, all
 enumerated in `registry.json` **before** scoring. Market model per event: OLS
 beta vs SPY on 120 sessions ending 6 before s0 (SPY itself: Brown-Warner
 mean-adjusted). Entry anchor = first open strictly after t0. Permutation null =
 same statistic on random session-days, drawn **with replacement**; one BH pass
 over all 72 cells. Seed 20260715, N_perm=1000, fully offline (committed daily bars).
 
-## Result: **nothing survives. 0 of 72 cells.** (min p_bh = 0.83)
+## Result: **nothing survives. 0 of 63 cells.** (min p_bh = 0.76)
 
 | closest cells (all fail) | n | observed | null | p_raw | p_bh |
 |---|---|---|---|---|---|
@@ -59,8 +59,8 @@ saturation; the population effect, measured against an honest null, is zero.**
 ## Exhibit A: the Intel tweet is REVERSE CAUSALITY
 
 The most-cited anecdote — *"he tweeted about Intel and the stock rose for a long
-time"* — is the sequence run backwards. There are exactly **4 Intel-the-company
-mentions** in 8,317 posts (2025-01-01 → 2026-07-06). The famous one:
+time"* — is the sequence run backwards **for the famous tweet**. There are **8
+Intel-the-company mentions** in 8,317 posts (2025-01-01 → 2026-07-06). The famous one:
 
 > `2026-04-29` — *"**Intel Stock continues to rise.** I'm very proud of that Company
 > in that **I am responsible** for making the United S…"*
@@ -85,10 +85,34 @@ to the run-up.
 > the direction of the finding never changed.
 
 Intel had already **doubled** — then he tweeted about it, claiming credit — then
-nothing. He is a *reflector* of news, not a generator of it: he posts about
-winners after they win, and memory encodes the correlation as a sequence. (The one
-Intel tweet followed by a rise, `2026-01-08` +7.6% 1d, reports a CEO meeting and a
-product launch — the news was the news; n=1.)
+nothing. For *this* tweet he is a *reflector* of news, not a generator of it: he posted
+about a winner after it won, and memory encodes the correlation as a sequence.
+
+> **Correction (2026-07-15) — this exhibit was selecting its own evidence.** An earlier
+> revision claimed "exactly **4** Intel-the-company mentions" and generalised to "he
+> reflects news rather than generating it". Both came from a private regex in the
+> dashboard that only accepted company context *after* the word ("Intel **stock**"), so
+> it silently dropped `The CEO of INTEL is highly CONFLICTED and must resign`,
+> `I met with Mr. Lip-Bu Tan, of Intel`, and `I PAID ZERO FOR INTEL, IT IS WORTH ~11
+> BILLION`. There are **8**. The dropped ones are precisely the mentions that do **not**
+> fit the reverse-causality story:
+>
+> | date | INTC prior 21d | after 21d | post |
+> |---|---|---|---|
+> | 2025-08-07 | **−14.3%** | **+18.1%** | "The CEO of INTEL … must resign" |
+> | 2025-08-11 | −13.2% | +12.9% | "I met with Mr. Lip-Bu Tan, of Intel" |
+> | 2025-08-22 | +18.5% | +13.5% | "the US now fully owns … 10% of INTEL" |
+> | 2026-01-08 | +0.3% | +15.7% | "great meeting with the … Intel CEO" |
+> | **2026-04-29** | **+105.3%** | **−2.4%** | **"Intel Stock continues to rise"** ← the famous one |
+>
+> Intel was *falling* when he demanded the CEO resign, and rose afterwards. Those posts
+> also carry real news — a president calling for a CEO's head, the US taking an equity
+> stake — and news moves prices. **A rule that keeps the cases fitting the thesis and
+> drops the rest is the anecdote generator this study exists to expose, running on our
+> own exhibit.** The mapper is fixed (`sector_mapping/entities.py`, precision-first,
+> regression-tested in `tests/test_entities.py`), the count is now computed by the shared
+> mapper, and the claim is narrowed to the tweet it actually covers. Eight mentions
+> settle nothing either way — **the registered test above (0 of 63) is what settles it.**
 
 ## Exhibit B: the "fear then recovery" arc is mean reversion, not Trump
 

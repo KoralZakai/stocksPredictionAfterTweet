@@ -67,8 +67,15 @@ def test_cohorts_are_text_only() -> None:
     assert tag_cohort(base) == tag_cohort(with_outcome)
     assert tag_cohort(base)[0] == "GEO_SHOCK"
     assert tag_cohort({"text": "Vote for Joe Lombardo!", "scenario": "Domestic Politics"})[0] == "NOISE"
-    assert tag_cohort({"text": "Intel is doing great things for America",
+    # Carries company context ("CEO"), as every real Intel post in the corpus does. The
+    # INTC rule is precision-first: bare "Intel is doing great things" with no company
+    # context anywhere is now a deliberate MISS, because "intel" in this corpus is
+    # overwhelmingly the intelligence sense (51 of 55 raw matches) and the old permissive
+    # rule was filing spy-agency tweets into this CORPORATE cohort.
+    assert tag_cohort({"text": "The CEO of Intel is doing great things for America",
                        "scenario": "US Politics"})[0] == "CORPORATE"
+    assert tag_cohort({"text": "US intel secretly flagged election vulnerabilities",
+                       "scenario": "US Politics"})[0] != "CORPORATE"
 
 
 def test_us_open_utc_hour_tracks_dst() -> None:
@@ -196,3 +203,83 @@ def test_canary_shuffled_labels_yield_uniform_p() -> None:
             null.append(sum(vals) / len(vals))
     p = (sum(1 for x in null if x >= obs) + 1) / (len(null) + 1)
     assert 0.02 < p < 0.98, f"canary tripped: random dates got p={p}"
+
+
+def test_gather_calls_scores_beat_the_market_and_drops_ties() -> None:
+    """The tab-5 scoreboard rule. A call is RIGHT only when the named instrument beat
+    SPY in the predicted direction — beating SPY is the page's stated rule #1, and a
+    raw-return rule would credit "up" to any leg that merely floated up with the market.
+
+    The tie case is the one that bites: a leg whose return EQUALS SPY's did not beat it
+    either way and is unscoreable. Awarding ties is the tie-break artifact the README
+    documents (it inflated a coin flip to 0.618) — so ties must leave `n` untouched
+    rather than land in either column.
+    """
+    from experiments.event_study.generate_targeted_dashboard import gather_calls
+    rows = [{
+        "spy_returns": {"EOD": 0.01},
+        "instruments": [
+            {"ticker": "AAA", "predicted": "up", "returns": {"EOD": 0.05}},    # beat  -> right
+            {"ticker": "BBB", "predicted": "up", "returns": {"EOD": 0.02}},    # +2% raw but
+            {"ticker": "CCC", "predicted": "down", "returns": {"EOD": -0.03}},  # lagged -> right
+            {"ticker": "DDD", "predicted": "down", "returns": {"EOD": 0.04}},  # beat   -> wrong
+            {"ticker": "SPY", "predicted": "up", "returns": {"EOD": 0.01}},    # tie    -> dropped
+            {"ticker": "EEE", "predicted": "neutral", "returns": {"EOD": 0.09}},  # no direction
+        ],
+    }]
+    got = gather_calls(rows)
+    eod = next(r for r in got["rates"] if r["h"] == "EOD")
+    assert eod["n"] == 4, "ties and non-directional calls must be unscoreable, not wins"
+    assert eod["hit"] == 3 and eod["rate"] == 0.75
+    # BBB rose 2% on a day SPY rose 1%: it beat the market, so "up" is RIGHT.
+    assert got["n_calls"] == 6 and got["n_spy"] == 1
+    assert got["n_up"] == 3 and got["n_down"] == 2
+
+
+def test_named_vs_ignored_canary_detects_a_planted_signal() -> None:
+    """The wrong-day control is only meaningful if it CAN see a real effect.
+
+    Tab 5 concludes "naming an instrument means nothing" from real == wrong-day. That
+    inference is unfalsifiable unless the same code separates the arms when an effect
+    genuinely exists — so plant one and insist it is caught.
+
+    WHAT THE CONTROL ACTUALLY TESTS is the PAIRING: does the instrument *this* tweet named
+    move on *this* tweet's day. So the planted effect must be tweet-specific — USO jumps
+    only on the days its own tweets land, XLP only on its own. Shuffling the dates then
+    hands each tweet's picks the wrong day and the gap must collapse.
+
+    (A non-specific effect — "USO always jumps whenever any tweet happens" — would survive
+    the shuffle by construction, because permuting tweet-days onto tweet-days preserves it.
+    That is correct behaviour, not a hole: whether tweet-days differ from ordinary days is
+    a different question, and it is what the registered studies in tabs 4 and 6 measure.)
+    """
+    import random as _random
+    from experiments.event_study.engine import Bar
+    from experiments.event_study.generate_targeted_dashboard import gather_named_vs_ignored
+
+    days = [f"2025-{m:02d}-{d:02d}" for m in (1, 2, 3, 4, 5, 6) for d in range(1, 29)]
+    events = days[10::5]
+    # alternate which instrument each tweet is about; each jumps ONLY on its own days
+    owner = {d: ("USO" if i % 2 == 0 else "XLP") for i, d in enumerate(events)}
+
+    def series(tk: str) -> list[Bar]:
+        out, px = [], 100.0
+        for d in days:
+            nxt = px * (1.10 if owner.get(d) == tk else 1.0)
+            out.append(Bar(date=d, open=px, close=nxt, volume=1.0))
+            px = nxt
+        return out
+
+    bars = {t: series(t) for t in ("SPY", "USO", "XLP", "TLT", "GLD")}
+    rows = [{"date": d, "hour_utc": 5.0, "instruments": [{"ticker": owner[d]}]}
+            for d in events]
+
+    got = gather_named_vs_ignored(bars, rows, _random.Random(7), windows=(1,))
+    assert got, "canary produced no cells"
+    real, fake = got[0]["real"], got[0]["placebo"]
+    assert real["gap"] > 0.05, f"planted tweet-specific effect not detected: {real['gap']}"
+    assert fake["gap"] < real["gap"] / 2, (
+        f"wrong-day arm kept the effect (real={real['gap']:.4f} fake={fake['gap']:.4f}) — "
+        "the control cannot break the tweet->instrument pairing, so any null it reports "
+        "on real data would be meaningless"
+    )

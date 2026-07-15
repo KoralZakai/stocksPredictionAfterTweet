@@ -50,6 +50,35 @@ result is a full success.* The deliverable is an evaluation that **refused to
 confirm its own hypothesis** — and that kept finding its own errors, in both
 directions, right up to the deadline.
 
+## The "intel" artifact — a ticker rule that matched a common English word
+
+Twin of the DJT-signature bug (Trump signs posts "President DJT"; 754 of 762 "DJT
+mentions" were the sign-off). Here the word was **intel**, and in a political corpus
+that word is overwhelmingly *intelligence*:
+
+| | matches | real (the chipmaker) | false |
+|---|---|---|---|
+| old guard, full corpus | 55 | 4 | **51 (93%)** |
+| fixed guard | 12 | 12 | 0 |
+
+The old guard blocked the word *after* intel (`intel leak`) but not before, so
+`leaking intel`, `destroy intel`, `Danish intel`, `Obama Intel Chief`, `Ex-intel
+official` and every URL slug (`us-intel-has-known`) sailed through — into the
+**CORPORATE cohort of a registered study**. Rescored with the fix: `CORPORATE`
+**43 → 13 events** (70% of that cohort was spy tweets), 72 → 63 scored cells,
+and **the verdict is unchanged: 0 survive BH** (min p_bh 0.70 → 0.76).
+
+The mirror-image half is the one worth remembering. The dashboard kept its *own*
+private Intel regex that only accepted company context **after** the word, so it scored
+`The CEO of INTEL must resign`, `I met with Mr. Lip-Bu Tan, of Intel` and `I PAID ZERO
+FOR INTEL` as **not Intel** — and those are exactly the mentions that contradict the
+reverse-causality exhibit (Intel was *falling* before the "CEO must resign" post, then
+rose +18.1%). One rule dropped 93% true positives; the other dropped the inconvenient
+cases. **Detection now lives in one tested place** (`sector_mapping/entities.py`,
+precision-first, regression-tested both ways in `tests/test_entities.py`), and Exhibit A
+now shows all 8 mentions with their measured before/after rather than the 3 that suited
+it. See `experiments/event_study/REPORT.md`.
+
 ## The tie-break artifact
 
 `_tweet_hit` aggregates a tweet's instrument basket into one verdict (correlated

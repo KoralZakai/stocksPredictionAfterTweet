@@ -221,60 +221,6 @@
     },
     {
       "cohort": "CORPORATE",
-      "asset": "INTC",
-      "window": 1,
-      "family": "abs"
-    },
-    {
-      "cohort": "CORPORATE",
-      "asset": "INTC",
-      "window": 1,
-      "family": "signed"
-    },
-    {
-      "cohort": "CORPORATE",
-      "asset": "INTC",
-      "window": 1,
-      "family": "volume"
-    },
-    {
-      "cohort": "CORPORATE",
-      "asset": "INTC",
-      "window": 3,
-      "family": "abs"
-    },
-    {
-      "cohort": "CORPORATE",
-      "asset": "INTC",
-      "window": 3,
-      "family": "signed"
-    },
-    {
-      "cohort": "CORPORATE",
-      "asset": "INTC",
-      "window": 3,
-      "family": "volume"
-    },
-    {
-      "cohort": "CORPORATE",
-      "asset": "INTC",
-      "window": 5,
-      "family": "abs"
-    },
-    {
-      "cohort": "CORPORATE",
-      "asset": "INTC",
-      "window": 5,
-      "family": "signed"
-    },
-    {
-      "cohort": "CORPORATE",
-      "asset": "INTC",
-      "window": 5,
-      "family": "volume"
-    },
-    {
-      "cohort": "CORPORATE",
       "asset": "MSFT",
       "window": 1,
       "family": "abs"
@@ -378,60 +324,6 @@
     {
       "cohort": "CORPORATE",
       "asset": "NVDA",
-      "window": 5,
-      "family": "volume"
-    },
-    {
-      "cohort": "CORPORATE",
-      "asset": "SMH",
-      "window": 1,
-      "family": "abs"
-    },
-    {
-      "cohort": "CORPORATE",
-      "asset": "SMH",
-      "window": 1,
-      "family": "signed"
-    },
-    {
-      "cohort": "CORPORATE",
-      "asset": "SMH",
-      "window": 1,
-      "family": "volume"
-    },
-    {
-      "cohort": "CORPORATE",
-      "asset": "SMH",
-      "window": 3,
-      "family": "abs"
-    },
-    {
-      "cohort": "CORPORATE",
-      "asset": "SMH",
-      "window": 3,
-      "family": "signed"
-    },
-    {
-      "cohort": "CORPORATE",
-      "asset": "SMH",
-      "window": 3,
-      "family": "volume"
-    },
-    {
-      "cohort": "CORPORATE",
-      "asset": "SMH",
-      "window": 5,
-      "family": "abs"
-    },
-    {
-      "cohort": "CORPORATE",
-      "asset": "SMH",
-      "window": 5,
-      "family": "signed"
-    },
-    {
-      "cohort": "CORPORATE",
-      "asset": "SMH",
       "window": 5,
       "family": "volume"
     },
