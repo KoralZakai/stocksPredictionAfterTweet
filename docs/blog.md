@@ -2,7 +2,7 @@
 
 *#NebiusServerlessChallenge*
 
-**Live dashboard:** [Myth-Busting Quantitative Terminal](https://raw.githack.com/KoralZakai/stocksPredictionAfterTweet/nebius-serverless-submission/reports/dashboard.html)
+**Live dashboard:** [Myth-Busting Quantitative Terminal](https://koralzakai.github.io/stocksPredictionAfterTweet/dashboard.html)
 · **Live endpoint:** [`/predict` on Nebius Serverless](https://port8080-xaqg3twr3yhr61q.tunnel.applications.eu-north1.nebius.cloud/docs)
 · **Code:** [github.com/KoralZakai/stocksPredictionAfterTweet](https://github.com/KoralZakai/stocksPredictionAfterTweet)
 
@@ -169,7 +169,7 @@ the repo is set up to run.
 
 ## The results
 
-**➡ Live dashboard: [Myth-Busting Quantitative Terminal](https://raw.githack.com/KoralZakai/stocksPredictionAfterTweet/nebius-serverless-submission/reports/dashboard.html)**
+**➡ Live dashboard: [Myth-Busting Quantitative Terminal](https://koralzakai.github.io/stocksPredictionAfterTweet/dashboard.html)**
 — every number below is explorable there, including the wrong-day control and the
 per-tweet reasoning behind each call.
 

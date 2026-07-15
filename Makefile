@@ -48,3 +48,4 @@ feedback:
 # The Myth-Busting Quantitative Terminal -> reports/dashboard.html (self-contained).
 dashboard:
 	$(PY) experiments/event_study/generate_targeted_dashboard.py
+	cp reports/dashboard.html docs/dashboard.html  # docs/ is what GitHub Pages serves
