@@ -312,6 +312,13 @@ def _pct(v: float | None) -> str:
     return "n/a" if v is None else f"{v * 100:+.2f}%"
 
 
+FAMILY_LABEL = {"abs": "how big was the move?", "signed": "did it move as expected?",
+                "volume": "how much trading?"}
+METRIC_LABEL = {"post_excess": "did it beat the market?",
+                "abs_excess": "how big was the move?",
+                "vol_ratio": "how much trading?"}
+
+
 def _cls(v: float | None) -> str:
     return "flat" if v is None else ("up" if v > 0 else "down" if v < 0 else "flat")
 
@@ -455,7 +462,7 @@ function draw(){
   document.getElementById('tkr').textContent=tk+' — '+(anc.names[tk]||tk);
   document.getElementById('atext').textContent='“'+anc.text+'”';
   document.getElementById('as0').textContent='posted '+anc.ts.slice(0,16).replace('T',' ')+
-    ' UTC · entry anchor '+anc.s0+' · cohort '+anc.cohort;
+    ' UTC · first market open after it: '+anc.s0+' · type: '+anc.cohort.toLowerCase();
   renderPred(anc);
 
   const eFwd=at(Y), runup=runupAt(X);
@@ -529,7 +536,8 @@ function renderPanel(anc, X, Y){
      named for this tweet (highlighted). The rest it made no call on — it watches 2-4
      assets, not the whole market. <b>Exploratory:</b> ${Object.keys(anc.assets).length}
      assets x ${SERIES.length} tweets is ~${Object.keys(anc.assets).length*SERIES.length}
-     comparisons; something always looks like a pattern. See "when are we right?" below.</p></div>`;
+     combinations to eyeball — with that many, something <i>always</i> looks like a pattern.
+     The table below shows what happens when you check those patterns properly.</p></div>`;
 }
 
 // Hover: read the MEASURED point nearest the cursor. No smoothing, no synthesis.
@@ -610,8 +618,8 @@ on a sample this small — and one of them is nostalgia about "Intel Inside."</p
 <div class="myth"><b>THE HYPOTHESIS:</b> "After a big Iran/Hormuz tweet oil spikes on
 fear, then recovers — you can trade the arc." The shape is vivid and everyone
 remembers it.</div>
-<div class="card"><h2>USO abnormal-return paths</h2>
-<div class="scroll"><table><thead><tr><th>cohort</th>{hdr}<th></th></tr></thead>
+<div class="card"><h2>Oil (USO): how it moved vs the S&amp;P 500</h2>
+<div class="scroll"><table><thead><tr><th>which tweets</th>{hdr}<th></th></tr></thead>
 <tbody>{rows2}</tbody></table></div>
 <div class="tiles">
 <div class="tile"><div class="k">top-5 tweets @42d</div>
@@ -647,38 +655,50 @@ generator, visible in one table.</i></div>"""
 
     # ---- Tab 4: verdict
     vrows = "".join(
-        f'<tr><th>{escape(c["cohort"])}/{escape(str(c["asset"]))} w={c["window"]} {escape(str(c["family"]))}</th>'
+        f'<tr><th>{escape(c["cohort"].replace("GEO_SHOCK","war/geopolitics").replace("NOISE","ordinary").replace("CORPORATE","company").lower())} <span class="nm">{escape(str(c["asset"]))} · {c["window"]}d · {escape(FAMILY_LABEL.get(str(c["family"]), str(c["family"])))}</span></th>'
         f'<td>{c["n"]}</td><td class="{_cls(c["observed"])}">{c["observed"]:+.4f}</td>'
         f'<td class="flat">{c["null_mean"]:+.4f}</td><td>{c["p_raw"]:.3f}</td>'
         f'<td class="down">{c["p_bh"]:.3f}</td></tr>' for c in verdict["closest"])
-    coh = "".join(f'<div class="tile"><div class="k">{escape(k)}</div>'
+    coh = "".join(f'<div class="tile"><div class="k">{escape(k.replace("GEO_SHOCK","war/geopolitics").replace("NOISE","ordinary").replace("CORPORATE","company").lower())}</div>'
                   f'<div class="big">{v}</div></div>'
                   for k, v in verdict["cohorts"].items())
     t4 = f"""
 <div class="card"><h2>The registered test</h2>
-<p class="note">Outcome-blind cohorts (tagged from tweet text only) × fixed asset
-map × windows {{1,3,5}} × families {{|CAR|, signed, volume}} — every cell written to
-<code>registry.json</code> <b>before</b> scoring. Per-asset permutation nulls; one
-Benjamini-Hochberg pass over the whole grid.</p>
+<p class="note">We sorted every tweet into a type — <b>war/geopolitics</b>,
+<b>company</b>, or <b>ordinary</b> — using only the words in the tweet, never the
+result. For each type we asked three questions about its matching assets over 1, 3 and
+5 days: <b>did the price move in the direction expected? how big was the move? was
+there unusual trading?</b><br><br>
+Two rules keep this honest. We wrote down <b>all 72 questions before looking at a
+single answer</b> — otherwise you can ask a hundred things and report the three that
+worked. And every answer is compared against <b>the same asset on random days</b>, so
+"oil moved" only counts if it moved <i>more than oil normally does</i>.</p>
 <div class="tiles">
-<div class="tile"><div class="k">cells registered</div><div class="big">{verdict["n_cells"]}</div></div>
-<div class="tile"><div class="k">survive BH</div><div class="big up">{verdict["n_survive"]}</div></div>
-<div class="tile"><div class="k">min p_bh</div><div class="big">{verdict["min_p_bh"]:.2f}</div></div>
+<div class="tile"><div class="k">questions asked<br>(fixed in advance)</div><div class="big">{verdict["n_cells"]}</div></div>
+<div class="tile"><div class="k">questions with a<br>real answer</div><div class="big up">{verdict["n_survive"]}</div></div>
+<div class="tile"><div class="k">best result: chance<br>it was luck</div><div class="big">{verdict["min_p_bh"]:.0%}</div></div>
 </div>
-<h3>events by cohort</h3><div class="tiles">{coh}</div></div>
-<div class="card"><h2>The six closest cells — all fail</h2>
-<div class="scroll"><table><thead><tr><th>cell</th><th>n</th><th>observed</th>
-<th>null</th><th>p_raw</th><th>p_bh</th></tr></thead><tbody>{vrows}</tbody></table></div></div>
-<div class="myth verdict"><b>VERDICT — {verdict["n_survive"]} of {verdict["n_cells"]}
-CELLS SURVIVE.</b> Not direction, not magnitude, not volume. The null here is not
-"nothing happens" — it is <b>"the information is already in the price before he
-posts."</b> That is the efficient-market result, reached from this data by five
-independent routes.</div>
+<h3>how many tweets of each type</h3><div class="tiles">{coh}</div></div>
+<div class="card"><h2>The six that came closest — and still failed</h2>
+<div class="scroll"><table><thead><tr><th>tweet type / asset / days</th><th>how many<br>tweets</th>
+<th>after these<br>tweets</th><th>on random<br>days</th><th>chance it&#39;s<br>luck</th>
+<th>...after testing<br>72 things</th></tr></thead><tbody>{vrows}</tbody></table></div>
+<p class="note">The last column is the one that matters. Ask 72 questions and a few will
+look impressive by chance alone — like flipping 72 coins and celebrating the one that
+came up heads five times. That column adjusts for how many questions we asked. Nothing
+survives it.</p></div>
+<div class="myth verdict"><b>THE ANSWER: {verdict["n_survive"]} out of
+{verdict["n_cells"]} questions found anything real.</b> Not the direction of the move,
+not its size, not the trading volume.<br><br>
+But "nothing happens" is the wrong way to read this. The right reading is: <b>by the
+time he posts, the market already knows.</b> The news that moves a price is the actual
+event — the strike, the tariff, the earnings — and prices react to that, usually before
+he writes about it. His post is a description of something already priced in.</div>
 <div class="card"><h3>What this terminal is not</h3>
-<p class="note">It is not an alpha generator and it ships no trading signal. The
-deployed <code>/predict</code> endpoint serves its classification with
-<code>horizon: null</code> and <code>cohort_base_rate: null</code> — it cites no
-accuracy, because none survived. Research output. Not investment advice.</p></div>"""
+<p class="note">This is not a trading tool and it gives no buy/sell advice. The live
+service will read a tweet and tell you what it's about and which assets it touches —
+but it deliberately <b>quotes no accuracy number and no confidence score</b>, because
+nothing we measured earned one. Research output. Not investment advice.</p></div>"""
 
     # ---- "when are we right?" — the honest answer: nowhere that replicates.
     bd_rows = "".join(
@@ -689,27 +709,31 @@ accuracy, because none survived. Research output. Not investment advice.</p></di
         f'<td class="{_cls(b["shift"])}">{b["shift"]:+.3f}</td></tr>' for b in breakdown)
     bd_card = f"""
 <div class="card"><h2>“When do we predict correctly?”</h2>
-<p class="note">EOD hit-rate per subgroup, measured on TRAIN and then on the held-out
-TEST split. If any subgroup were genuinely better, its train number would survive.</p>
-<div class="scroll"><table><thead><tr><th>subgroup</th><th>TRAIN</th><th>TEST</th>
-<th>shift</th></tr></thead><tbody>{bd_rows}</tbody></table></div>
+<p class="note">We split the tweets by date: the model was studied on the <b>earlier</b>
+ones ("train") and then checked against <b>later</b> ones it had never seen ("test") —
+the honest way to find out if a pattern is real or imagined.<br><br>
+Each row is a group of tweets. "0.304" means it got 30% of them right; <b>0.5 is a coin
+flip</b>. If a group were genuinely easier to predict, its early score should hold up on
+the later tweets. None of them do.</p>
+<div class="scroll"><table><thead><tr><th>group of tweets</th><th>earlier tweets<br>(studied)</th><th>later tweets<br>(unseen)</th>
+<th>change</th></tr></thead><tbody>{bd_rows}</tbody></table></div>
 <div class="myth verdict" style="margin-top:14px"><b>ANSWER: nowhere that holds.</b>
-Every subgroup pattern reverses out of sample — weekend posts go from the WORST group
-(0.304) to the BEST (0.765). Learn “avoid weekends” from train and test punishes you;
+Every pattern flips when you check it on tweets the model never saw — weekend posts go
+from the <b>worst</b> group (30% right) to the <b>best</b> (76% right). Learn “avoid weekends” from train and test punishes you;
 learn “weekends are 76%” from test and the next batch punishes you. This is the same
 result the second-stage meta-model reported as Val AUC 0.593 → <b>Test 0.431</b>,
-shown as a table instead of a number. The subgroups are noise, and noise does not
-replicate.</div></div>"""
+shown as a table instead of a number. These groups aren't real patterns — they're random
+wobble, and random wobble never repeats.</div></div>"""
 
     # ---- Tab 5: dynamic time-window analyzer (reads MEASURED series only)
     opts = "".join(f'<option value="{i}">{escape(s["s0"])} · {escape(s["cohort"])} — '
                    f'{escape(s["label"])}</option>' for i, s in enumerate(series))
     t5 = f"""
-<div class="myth verdict"><b>HOW TO READ THIS:</b> pick an anchor tweet, then slide the
-windows. Every value shown is <b>measured</b> at that exact offset from
-<code>data/real/bars.csv</code> and embedded at build time — the slider performs a
-<b>lookup, not an interpolation</b>. Slide the lookback out and watch the run-up
-appear <i>before</i> the post.</div>
+<div class="myth verdict"><b>HOW TO READ THIS:</b> pick a tweet, then drag the two
+sliders to choose how far <b>back</b> and how far <b>forward</b> you want to look.<br><br>
+Every number is a <b>real measured price</b> from that exact day — the slider looks it
+up, it never estimates or draws a smooth curve. Drag the left slider out and watch what
+the price was doing <i>before</i> he posted. That's usually the whole story.</div>
 <div class="card"><div class="ctl">
   <div><label>1 · anchor tweet</label>
     <select id="anchor">{opts}</select>
@@ -722,26 +746,28 @@ appear <i>before</i> the post.</div>
     <input type="range" id="back" min="1" max="42" value="21">
     <div class="rl" style="margin-top:12px"><span>lookforward — T + <b id="fwdv">21</b> sessions</span></div>
     <input type="range" id="fwd" min="1" max="42" value="21">
-    <p class="note">Measure: cumulative <b>excess return vs SPY</b> (asset − SPY),
-    indexed to 0 at the entry anchor = first market open <b>strictly after</b> the
-    post. This is raw excess, <i>not</i> the beta-adjusted CAR used in tabs 1–2, so
-    the two differ for high-beta names — by design, both are labelled.</p></div>
+    <p class="note">Everything is measured <b>relative to the S&amp;P 500</b>: if a
+    stock rose 3% on a day the whole market rose 3%, that counts as <b>zero</b> — it
+    just went along for the ride. Zero on the chart is the moment of the <b>first
+    market open after the tweet</b> — the earliest point anyone could actually have
+    acted on it.</p></div>
 </div></div>
 <div class="card"><h2>Event trace <span id="tkr" class="note"></span></h2>
 <svg class="chart" id="svg" viewBox="0 0 720 220"></svg>
 <div class="axis"><span id="lstart">T − 21 sessions</span>
 <span style="color:var(--accent)">T₀ — first session after the post</span>
 <span id="lend">T + 21 sessions</span></div>
-<p class="note">Hover the trace for the exact date and measured value at any session.
-Y-axis is cumulative excess return vs SPY; the gold line is the entry anchor.</p>
+<p class="note">Hover the line for the exact date and value on any day. Up means it
+beat the S&amp;P 500; down means it lagged. The <b>gold line is the tweet</b> — left of
+it is before, right of it is after.</p>
 <div class="tiles">
-  <div class="tile"><div class="k">run-up INTO the post (T−X)</div><div class="big" id="pre">—</div></div>
-  <div class="tile"><div class="k">move AFTER the post (T+Y)</div><div class="big" id="post">—</div></div>
+  <div class="tile"><div class="k">move BEFORE the tweet<br>(vs the S&amp;P 500)</div><div class="big" id="pre">—</div></div>
+  <div class="tile"><div class="k">move AFTER the tweet<br>(vs the S&amp;P 500)</div><div class="big" id="post">—</div></div>
 </div>
-<div class="k">derived verdict</div><div id="verdict" class="vd flat">—</div>
-<p class="note">The verdict is computed from the two measured numbers on screen
-(run-up &gt; 10% while the post-move is under a third of it ⇒ the move preceded the
-post). It is not a stored conclusion.</p></div>
+<div class="k">what the two numbers say</div><div id="verdict" class="vd flat">—</div>
+<p class="note">This line is worked out live from the two numbers above it — if the
+price had already moved a lot <b>before</b> the tweet, and barely moved after, the
+tweet didn't cause it. It's not a saved conclusion; change the sliders and it changes.</p></div>
 <div id="panel"></div>
 <div id="pred"></div>
 {bd_card}"""
@@ -749,8 +775,8 @@ post). It is not a stored conclusion.</p></div>
     # ---- Tab 6: intraday shock study
     if intraday:
         irows = "".join(
-            f'<tr><th>{escape(c["cohort"])}<span class="nm"> {escape(str(c["asset"]))}</span></th>'
-            f'<td>{escape(str(c["metric"]))}</td><td>{c["n"]}</td>'
+            f'<tr><th>{escape(c["cohort"].replace("GEOPOLITIC","war/geopolitics").replace("NOISE","ordinary").replace("CORPORATE","company").replace("MACRO","economy/policy").lower())}<span class="nm"> {escape(str(c["asset"]))}</span></th>'
+            f'<td>{escape(METRIC_LABEL.get(str(c["metric"]), str(c["metric"])))}</td><td>{c["n"]}</td>'
             f'<td>{c["cohort_mean"]:+.4f}</td><td class="flat">{c["control_mean"]:+.4f}</td>'
             f'<td class="{_cls(c["diff"])}">{c["diff"]:+.4f}</td><td class="flat">{c["mde"]:.4f}</td>'
             f'<td>{c["p_raw"]:.3f}</td><td class="down">{c["p_bh"]:.3f}</td></tr>'
@@ -760,49 +786,63 @@ post). It is not a stored conclusion.</p></div>
             f'<td class="{"down" if h["cohort"] == "NOISE" else "flat"}">{escape(h["cohort"])}</td>'
             f'<td class="note">{escape(h["text"][:70])}</td></tr>' for h in intraday["hitters"])
         t6 = f"""
-<div class="myth"><b>THE HYPOTHESIS:</b> a geopolitical shock ("Iran", "Hormuz",
-"strike") should move oil and the fear gauge <b>within the hour</b>. Daily bars are
-too slow to see it — go intraday and the "Heavy Hitters" will separate from the noise.</div>
+<div class="myth"><b>THE BELIEF BEING TESTED:</b> when he posts about Iran, or a
+military strike, oil and the "fear gauge" should jump <b>within the hour</b> — and
+looking at whole days is too slow to catch it. Zoom in to the hour and the real
+market-movers should stand out.</div>
 <div class="card"><h2>Design</h2>
-<p class="note"><b>Within-event control:</b> each tweet's own 60-minute PRE-window is
-its control, which cancels the market-hours selection bias that killed our earlier 1h
-result. <b>Cohort control:</b> NOISE posts on the same asset — "GEO moves oil" only
-counts if it moves oil more than a random in-session post does. Excess is measured vs
-SPY on <b>public yfinance hourly bars</b> (no private feed), σ is backward-only, and
-the registry was written before scoring.</p>
+<p class="note">We compare the hour <b>after</b> each tweet with the hour <b>before
+the same tweet</b>. That matters: he only sometimes posts while the market is open, and
+those moments might be special for other reasons — using the same tweet's own "before"
+picture cancels that out.<br><br>
+We also compare against his <b>ordinary posts</b> (the ones about nothing in
+particular). "War tweets move oil" only means something if they move oil <i>more than
+his everyday posts do</i>.<br><br>
+Every price is measured <b>against the S&amp;P 500</b>, so a day when the whole market
+moved doesn't get mistaken for a tweet effect. Prices come from free public data
+(anyone can re-run this), and we wrote down every question <b>before</b> looking at any
+answer — so we can't quietly pick the ones that worked.</p>
 <div class="tiles">
-<div class="tile"><div class="k">in-session events</div><div class="big">{intraday["n_events"]}</div></div>
-<div class="tile"><div class="k">cells registered</div><div class="big">{intraday["n_cells"]}</div></div>
-<div class="tile"><div class="k">survive BH</div><div class="big up">{intraday["n_survive"]}</div></div>
-<div class="tile"><div class="k">min p_bh</div><div class="big">{intraday["min_p_bh"]:.2f}</div></div>
+<div class="tile"><div class="k">tweets posted while<br>the market was open</div><div class="big">{intraday["n_events"]}</div></div>
+<div class="tile"><div class="k">questions asked<br>(fixed in advance)</div><div class="big">{intraday["n_cells"]}</div></div>
+<div class="tile"><div class="k">questions with a<br>real answer</div><div class="big up">{intraday["n_survive"]}</div></div>
+<div class="tile"><div class="k">best result: chance<br>it was luck</div><div class="big">{intraday["min_p_bh"]:.0%}</div></div>
 </div></div>
-<div class="card"><h2>The eight closest cells — all fail</h2>
-<div class="scroll"><table><thead><tr><th>cohort / asset</th><th>metric</th><th>n</th>
-<th>cohort</th><th>NOISE control</th><th>diff</th><th>MDE</th><th>p_raw</th><th>p_bh</th>
+<div class="card"><h2>The eight that came closest — and still failed</h2>
+<div class="scroll"><table><thead><tr><th>tweet type / asset</th><th>what we measured</th><th>how many<br>tweets</th>
+<th>after these<br>tweets</th><th>after ORDINARY<br>tweets</th><th>difference</th><th>smallest gap<br>we could detect</th><th>chance it&#39;s<br>luck</th><th>...after testing<br>30 things</th>
 </tr></thead><tbody>{irows}</tbody></table></div>
-<p class="note">Read the <b>MDE</b> column: at n=228 we could have detected a 0.25%
-mean move on oil. The measured difference is +0.17% and does not survive correction.
-This is a null <i>with teeth</i> — not "we couldn't see it", but "it isn't there at a
-size we would have seen."</p></div>
-<div class="myth"><b>THE NEAR-MISS — the most dangerous artifact we caught.</b> The
-first run reported <b>9 cells surviving BH at p=0.0018</b>: "GEO tweets spike oil
-volume 1.79× vs 1.41×". It was entirely <b>duplicate counting</b>. He posts in bursts,
-and every tweet inside one hour resolves to the <i>same</i> hourly bar — two posts a
-minute apart both scored gold at z=−11.16. Collapsing to one observation per
-(asset, bar) took 10,245 rows down to 5,552 and the survivors from <b>9 → 0</b>. We
-found it only because the Heavy Hitter list looked absurd.</div>
-<div class="card"><h2>"Heavy Hitters" (|z| ≥ {intraday["sigma"]}) — read the tweets</h2>
-<div class="scroll"><table><thead><tr><th>shock</th><th>asset</th><th>cohort</th>
+<p class="note"><b>Why the "smallest gap we could detect" column matters.</b> With 228
+war-tweets, a real effect of 0.25% on oil would have shown up clearly. What we actually
+measured was 0.17% — smaller than our detector, and well inside normal random wobble.
+<br><br>So this isn't "our instruments were too blunt to tell." It's: <b>if an effect
+this size existed, we would have seen it. We didn't.</b></p></div>
+<div class="myth"><b>THE NEAR-MISS — how we almost published the opposite.</b> Our
+first run said exactly what everyone expects: <b>9 solid findings</b>, odds of luck
+about <b>1 in 550</b> — "war tweets spike oil trading by 79%".<br><br>
+It was a counting mistake. He posts in <b>bursts</b> — five tweets in ten minutes. Our
+data has one price reading per hour, so all five tweets pointed at the <i>same</i> price
+move. We counted one event five times and called it five pieces of evidence. Two posts a
+minute apart were both credited with the same gold move.<br><br>
+Count each hour <b>once</b> and the 9 findings become <b>zero</b>. We only caught it
+because the "biggest movers" list had a tweet about a <b>renovated Palm Room</b> at the
+top — the statistics looked perfect.</div>
+<div class="card"><h2>The biggest movers — now read the tweets</h2>
+<div class="scroll"><table><thead><tr><th>size of move<br>vs a normal hour</th><th>asset</th><th>tweet type</th>
 <th>tweet</th></tr></thead><tbody>{hrows}</tbody></table></div>
-<p class="note">The biggest "shocks" are <b>NOISE</b> posts — a renovated Palm Room, a
-Hannity plug. These are large market moves that happen to have a tweet in the same
-hour, which is guaranteed when someone posts in 28.5% of all sessions. The Heavy
-Hitters are the saturation problem in miniature.</p></div>
-<div class="myth verdict"><b>VERDICT — {intraday["n_survive"]} of {intraday["n_cells"]}
-CELLS SURVIVE.</b> Geopolitical posts do not move oil, gold, defence or the fear gauge
-more than a random in-session post — not in price, not in volume, within the hour. The
-category taxonomy does not isolate impact. This was our best-powered test
-(MDE ~0.1–0.3% vs 1.35% daily), and it is the strongest null in the study.</div>"""
+<p class="note">Look at which tweets top this list: a <b>renovated Palm Room</b>. A
+plug for a TV show. These are not market news — they're just big market moves that
+happened to have a tweet in the same hour.<br><br>And that will <i>always</i> happen:
+he posts during roughly <b>1 in 4</b> market hours. So every big move has a tweet
+sitting next to it, and you can always find one that looks like the cause. That's the
+whole illusion, in one table.</p></div>
+<div class="myth verdict"><b>THE ANSWER: {intraday["n_survive"]} out of
+{intraday["n_cells"]} questions found anything real.</b> War and geopolitics tweets do
+<b>not</b> move oil, gold, defence stocks or the fear gauge more than his ordinary posts
+do — not the price, not the trading volume, not within the hour.<br><br>
+Sorting tweets into categories doesn't find the "big movers" either. And this was our
+<b>most sensitive test</b>: it could have caught an effect five times smaller than
+anything our day-scale tests could see. It still found nothing.</div>"""
     else:
         t6 = ('<div class="myth">Intraday study not yet run — '
               '<code>python experiments/event_study/run_intraday.py</code></div>')
@@ -820,11 +860,27 @@ category taxonomy does not isolate impact. This was our best-powered test
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Myth-Busting Quantitative Terminal — Trump tweets vs. the market</title>
 <style>{_CSS}</style></head><body><div class="wrap">
-<header><h1>Myth-Busting Quantitative Terminal</h1>
-<p class="sub">Three high-conviction broker hypotheses about Trump's tweets, each
-run against the control that kills it.</p>
+<header><h1>Do Trump's tweets move the market?</h1>
+<p class="sub">Five things "everyone knows" about his posts and the stock market —
+each one tested against the check that decides it. No finance background needed.</p>
 <p class="stamp">generated {escape(stamp)} · every figure computed at build time from
 data/real/bars.csv + corpus_v3.csv + the registered study — nothing hardcoded</p></header>
+<div class="card" style="border-left:3px solid var(--accent)">
+<h2>Three ideas, and you can read the whole thing</h2>
+<div class="kv"><span class="k">1 · “beat the market”</span><b>A stock going up isn't
+impressive if <i>everything</i> went up that day. So we always ask: did it beat the
+S&amp;P 500 — the average of the 500 biggest US companies? Rising 3% on a day the market
+rose 3% counts as <b>zero</b>.</b></div>
+<div class="kv"><span class="k">2 · “could it be luck?”</span><b>Prices jump around on
+their own. So for every result we ask: how often would we see this <i>by pure chance</i>?
+We answer it by measuring the same thing on <b>random days with no tweet</b>. If the
+tweet days look like the random days, there's nothing there.</b></div>
+<div class="kv"><span class="k">3 · “ask 72 questions…”</span><b>…and a few will look
+amazing by luck alone — like flipping 72 coins and bragging about the one that hit five
+heads. So we wrote every question down <b>before</b> looking at any answer, and every
+result is adjusted for how many questions we asked.</b></div>
+<p class="note">That's it. Everything below is those three ideas applied to real
+prices.</p></div>
 <nav class="tabs" role="tablist">{tabbar}</nav>{panels}
 <p class="foot">Research output. Not investment advice. Reproduce:
 <code>make dashboard</code>. Full method:
@@ -863,12 +919,12 @@ def _cohort_of(text: str, scenario: str) -> str:
     from experiments.event_study.run_intraday import GEO_RX, MACRO_RX
     direct = [t for t, m in entity_matches(text).items() if m.tier == "direct" and t != "DJT"]
     if direct:
-        return f"CORPORATE ({direct[0]})"
+        return f"company ({direct[0]})"
     if GEO_RX.search(text) or GEO_RX.search(scenario):
-        return "GEOPOLITIC"
+        return "war/geopolitics"
     if MACRO_RX.search(text) or MACRO_RX.search(scenario):
-        return "MACRO"
-    return "OTHER"
+        return "economy/policy"
+    return "everything else"
 
 
 def _anchors(intel: dict[str, Any], rows: list[dict[str, Any]],
@@ -878,7 +934,7 @@ def _anchors(intel: dict[str, Any], rows: list[dict[str, Any]],
     events + Intel, which is why the analyzer only ever showed oil."""
     out: list[dict[str, Any]] = []
     for m in intel["mentions"]:                       # keep the Intel exhibits
-        out.append({"ts": m["ts"], "text": m["text"][:150], "cohort": "CORPORATE (INTC)",
+        out.append({"ts": m["ts"], "text": m["text"][:150], "cohort": "company (INTC)",
                     "label": "Intel mention", "pred": _prediction_for(m["text"], rows)})
 
     ranked: dict[str, list[tuple[float, dict[str, Any]]]] = {}
@@ -896,7 +952,7 @@ def _anchors(intel: dict[str, Any], rows: list[dict[str, Any]],
         lst.sort(key=lambda x: -x[0])
         for mag, r in lst[:per_cohort]:
             out.append({"ts": _t0(r).isoformat(), "text": r.get("text", "")[:150],
-                        "cohort": c, "label": f"max |abn| {mag * 100:.1f}%",
+                        "cohort": c, "label": f"biggest move {mag * 100:.1f}% vs the market",
                         "pred": _prediction_for(r.get("text", ""), rows)})
     return out
 
