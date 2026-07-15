@@ -186,7 +186,22 @@ def test_health_reports_pins() -> None:
     h = r.json()
     assert h["status"] == "ok"
     assert h["prompt_template_hash"] and h["corpus_sha256"]
-    assert h["shipped_horizons"] == ["EOD"]
+    # Assert against the manifest, NOT a hardcoded expectation. This previously
+    # asserted ["EOD"] and so baked in a result that turned out to be a tie-break
+    # artifact; a test must not assert what we wish were true.
+    assert h["shipped_horizons"] == (json.loads(MANIFEST.read_text()).get("shipped_horizons") or [])
+
+
+def test_no_validated_horizon_is_disclosed() -> None:
+    """With no horizon surviving BH, /predict must not imply a validated horizon:
+    horizon is null and no cohort base rate is cited."""
+    shipped = json.loads(MANIFEST.read_text()).get("shipped_horizons") or []
+    r = _client(_classify_macro, NullProvider()).post(
+        "/predict", json={"tweet_text": "tariffs", "t0_utc": "2025-03-03T14:00:00+00:00"})
+    body = r.json()
+    if not shipped:
+        assert body["horizon"] is None
+        assert body["cohort_base_rate"] is None    # never quote an unvalidated rate
 
 
 # ---------------------------------------------------------------- golden

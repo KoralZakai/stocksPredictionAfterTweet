@@ -5,17 +5,58 @@ Challenge**. It asks one question rigorously: *does a raw large-language-model
 read of a political tweet carry measurable, statistically significant short-term
 directional information about US sector ETFs — beyond market beta?*
 
-**The honest result.** Yes, at short horizons, and we ship exactly what survives
-scrutiny. A raw zero-shot **Llama-3.3-70B** classification, scored as
-**relative alpha ("beat SPY")**, beats the market on a held-out, chronological
-test set: **EOD 61.8%** (n=89, Wilson 95% CI [0.514, 0.712], BH-corrected
-p=0.033). The intraday edge is even stronger (**1h 76%, p≈0**) but requires a
-private data feed, so it is reported as a diagnostic, not shipped. Everything
-that could inflate the result — market beta, per-tweet confidence scoring,
-overlapping windows — was tested and **rejected**: a second-stage meta-model that
-tried to predict *which* calls land failed the sacred test three times (text Val
-AUC 0.593 → **Test 0.431**). So we ship the **raw call**, never a per-tweet
-probability. A rigorous, well-bounded result is the deliverable.
+**The honest result: no.** Not at any horizon we can reproduce. On the held-out
+chronological test set the daily signal is **a coin flip — EOD 50.7%** (n=67,
+Wilson 95% CI [0.391, 0.624], p=0.50). Longer horizons are worse (3d 44.1%, 1w
+42.9%, 1mo 25.7%). **`shipped_horizons` is empty**: nothing survived
+Benjamini-Hochberg correction that we can reproduce without private data, so the
+`/predict` endpoint serves its classification while **citing no accuracy at all**.
+
+**We nearly shipped the opposite claim, and the bug is the story.** An earlier
+version of this README reported *"EOD 61.8%, p=0.033, beats the market."* That
+number was an **artifact of one line of tie-breaking logic** — see
+[The tie-break artifact](#the-tie-break-artifact) below. Two independent unbiased
+estimators put the true test rate at **0.507** and **0.502**. The signal is null.
+
+**The 1h horizon looked like a survivor — it isn't.** After the fix, 1h read
+67.8% (n=59, p_bh=0.026). Two diagnostics then explained it away: (1) **selection
+bias** — 1h data exists only for tweets posted in/near market hours, and that
+subset also scores 0.588 at EOD (vs 0.250 for the rest): an easier subset, not a
+faster edge; (2) **wrong null** — per-asset unconditional beat-SPY base rates run
+0.33–0.60 (not 0.50), and against each asset's own base rate the LLM's edge
+averages ≈ 0 (ITA −0.06, XLI −0.10, LMT −0.13). The 1h effect is an artifact of
+comparing a favorable subset against the wrong baseline.
+
+This is what the system was built to do. Per the project charter: *a rigorous null
+result is a full success.* The deliverable is an evaluation that **refused to
+confirm its own hypothesis** — including catching an error that flattered us.
+
+## The tie-break artifact
+
+`_tweet_hit` aggregates a tweet's instrument basket into one verdict (correlated
+instruments within a tweet are not independent samples — aggregating is correct).
+The bug was the tie rule:
+
+```python
+return int(sum(hs) / len(hs) >= 0.5)   # 1-of-2 hits -> 0.5 >= 0.5 -> counted a WIN
+```
+
+**49% of baskets hold exactly 2 instruments**, where "majority" is undefined. Every
+50/50 split was silently scored as a full win. On the test split, **20 of 89 tweets
+(22%) were ties auto-counted as hits** — and that gap *was* the entire result:
+
+| test split | k/n | rate | p |
+|---|---|---|---|
+| original (ties win) | 55/89 | **0.618** | 0.017 |
+| ties **excluded** (correct) | 35/69 | **0.507** | 0.50 |
+| instrument-level (independent check) | 106/211 | **0.502** | 0.50 |
+
+Scoring ties as *losses* (`> 0.5`) is the mirror bug — it deflates to 0.393.
+A tie carries **no directional verdict**, so it is unscoreable: `_tweet_hit`
+now returns `None`. Both unbiased estimators agree at ~50%.
+
+This also explains the rejected meta-model (Val AUC 0.593 → **Test 0.431**): it
+wasn't a modelling failure. **There was never any signal to learn.**
 
 ---
 
@@ -59,8 +100,8 @@ marshal I/O. This is what makes the result trustworthy rather than plumbing.
    prompt or corpus doesn't match. No hit-rate is hardcoded in the serving code —
    the Job produces the numbers, the Endpoint only cites them.
 2. **The leakage firewall.** `/predict` has two planes with one-way flow. The
-   **decision plane** sees *tweet text only* (the 76%/62% edge holds precisely
-   because the LLM never saw market data). The **market plane** runs *after* the
+   **decision plane** sees *tweet text only* — the firewall is what keeps any
+   measured effect attributable to the text rather than to leaked market state. The **market plane** runs *after* the
    decision to enrich the response and can never feed back into it. A test
    (`test_decision_invariant_to_market_data`) monkeypatches the market provider to
    raise, time out, and return absurd values, and asserts the decision is
@@ -123,11 +164,8 @@ curl -s -X POST http://<endpoint>/predict -H 'content-type: application/json' -d
   "scenario": "Trade War", "reasoning": "tariffs raise input costs for chipmakers",
   "horizon": "EOD",
   "cohort_base_rate": {
-    "value": 0.618, "ci95": [0.514, 0.712], "n": 89, "horizon": "EOD",
-    "note": "Historical hit-rate of ALL calls of this type on a held-out chronological
-             test set. This is NOT a probability for THIS tweet. We tested per-tweet
-             confidence; it did not generalize."
-  },
+  "cohort_base_rate": null,   // no horizon survived BH -> no accuracy is cited
+  "horizon": null,
   "market_context": {"provider": "yfinance", "session_phase": "premarket",
                      "entry_anchor_utc": "2025-03-03T13:30:00+00:00", "quotes": [],
                      "realized_alpha_since_t0": []},   // null on any market-plane failure
@@ -148,11 +186,50 @@ unanchorable.
 | | |
 |---|---|
 | **Hardware** | CPU-only (classical-ML track). No GPU. Both images build from `python:3.14-slim`. A small CPU preset (≈2 vCPU / 4 GiB) is sufficient. |
-| **Expected outputs** | `reports/macro_dataset.csv` (443 scored tweets) and `reports/validation_manifest.json` (`shipped_horizons: ["EOD"]`, per-horizon n/hit-rate/CI/p_bh, prompt+corpus hashes). |
+| **Expected outputs** | `reports/macro_dataset.csv` (443 scored tweets) and `reports/validation_manifest.json` (`shipped_horizons: []` — nothing reproducible survived BH; per-horizon n/hit-rate/CI/p_bh, prompt+corpus hashes). |
 | **Approx runtime** | Offline `--from-results`: **~10 s**. Live `--limit 10`: **~1 min** (10 Nebius calls + daily-bar fetch). Full 443-tweet live classification: **~15–25 min** (cached + resumable). Endpoint cold boot: **a few seconds** (manifest verify). |
 | **Approx cost** | Offline path: **$0**. `--limit 10`: **≈$0** (a few 70B calls). Full corpus classification: a **few cents** of Nebius inference (cached, so paid once). Endpoint: pay-per-request, scale-to-zero. |
 
 ---
+
+## Two operational modes (profiles)
+
+The Endpoint and the Job both resolve a **profile** from `SIGNAL_PROFILE`
+(default `stable`). A profile bundles **(prompt, whitelist, manifest)** together —
+they can never be mixed, because the Endpoint verifies the manifest's
+`prompt_template_hash` against the live prompt and refuses to boot on a mismatch.
+
+| | **Mode A — Stable Indices (DEFAULT, shipped)** | **Mode B — Expanded Macro (EXPERIMENTAL)** |
+|---|---|---|
+| `SIGNAL_PROFILE` | `stable` | `macro` |
+| Manifest | `reports/validation_manifest.json` | `reports/validation_manifest_macro_v1.json` |
+| Universe | indices + sector ETFs + commodities | Mode A **+ TLT, UUP, FXI, GLD** (XLE was already in) |
+| Prompt | frozen, hash `1eb55beb…` | whitelist-only, hash `f03db279…` |
+| Status | **null** (EOD 50.7%, n=67, p=0.50; `shipped_horizons: []`) | **unvalidated** — do not quote its numbers as a result |
+
+**Switching the deployed container** (Mode A is the default; you must opt in to B):
+```bash
+# Mode A (default) — nothing to set.
+docker run -p 8080:8080 -e NEBIUS_API_KEY=$KEY predict
+
+# Mode B — profile picks the macro prompt + whitelist + its own manifest.
+docker run -p 8080:8080 -e NEBIUS_API_KEY=$KEY -e SIGNAL_PROFILE=macro predict
+```
+`GET /health` reports the active `profile`, `experimental` flag, and `manifest_path`.
+`MANIFEST_PATH` still overrides the path (e.g. to read the Job's bucket output).
+
+**Running the Mode-B Job** (writes ONLY to its own manifest; the baseline is never opened for writing):
+```bash
+PYTHONPATH=. python jobs/backtest/run_macro.py --limit 1000 --out-dir /data/reports
+# local 10-tweet smoke (filter -> LLM -> router, no manifest written):
+PYTHONPATH=. python jobs/backtest/run_macro.py --limit 10 --smoke
+```
+
+> **Honest status of Mode B:** it is a *variant*, not an improvement. Its corpus,
+> splits and test rows differ from Mode A's, so **its numbers are not comparable to
+> the baseline** — a different test set is a different measurement. Promotion requires
+> winning on **validation** first, then a single registered test scoring. Until then
+> Mode A remains the default and the shipped result.
 
 ## Experimental extension (NOT shipped): GPU knowledge distillation
 
@@ -181,14 +258,68 @@ shipped path or the validation manifest. See its
 
 License: [MIT](LICENSE). Data provenance: [`data/PROVENANCE.md`](data/PROVENANCE.md).
 
+## Future work: sector-relative alpha & single-stock benchmarking
+
+**The primary development path, and the most likely reason this study found a null.**
+
+Every instrument here is scored against **SPY** (`alpha/benchmark.py:170` —
+`spy = fwd("SPY", t0)` is hardcoded). For a broad sector ETF that is defensible.
+For everything else it is the wrong yardstick, and the data shows it:
+
+| asset class | EOD beat-SPY rate | why it's suspect |
+|---|---|---|
+| volatility (VIXY) | **0.557** | VIXY beats SPY *mechanically* whenever SPY falls — anti-beta, not information |
+| equity sector | 0.428 | the only class where SPY is a sensible factor |
+| commodity | 0.491 | different asset class; SPY is not its risk factor |
+
+Hit rate is also higher on SPY-**down** days (0.511) than SPY-**up** days (0.446) —
+a fingerprint of negative correlation leaking in as apparent "skill."
+
+**The fix: measure idiosyncratic alpha against a native benchmark.** If a tweet
+targets **Intel**, judge INTC against its **sector** (SOXX/SMH), not the S&P:
+
+- INTC **+2%**, SOXX **+5%** → INTC *underperformed* → **LOSS** (today: a "win" vs SPY)
+- INTC **−1%**, SOXX **−6%** → INTC *protected value* → **WIN** (today: a "loss" vs SPY)
+
+This strips sector beta and isolates the sentiment-driven, company-specific move —
+the thing a tweet could plausibly cause. **The machinery already exists**:
+[`labeling/benchmarks.py`](labeling/benchmarks.py) computes `abn_index` /
+`abn_sector` / `abn_peer` via [`config/membership.py`](config/membership.py)
+(`benchmarks_for`), built for the currently-parked micro track.
+
+Wiring it in means replacing the hardcoded SPY leg in `alpha/benchmark.py:validate()`
+with a per-instrument benchmark resolved from `benchmarks_for(ticker)`.
+
+**Two cautions we would carry into that work:**
+1. **Do not benchmark against a near-clone.** Measured on our own bars:
+   ρ(XLK, QQQ)=**0.970**, ρ(SMH, SOXX)=**0.982**. Judging an ETF against a
+   near-identical ETF drives abnormal return to microstructure noise. This applies
+   to ETF-vs-ETF pairs — *not* to single-stock-vs-sector (ρ(INTC, SOXX) is far lower),
+   which is the sound version.
+2. **Non-equity assets (GLD, UUP, TLT) have no equity benchmark.** UUP *is* a dollar
+   tracker, GLD *is* spot gold — benchmarking them against DXY/spot yields ≡0. The
+   general solution is a **per-asset permutation null** (compare tweet-conditioned
+   returns to that asset's own unconditional distribution);
+   [`eval/baselines.py:25`](eval/baselines.py) already implements `permutation_null`.
+
+**Honest expectation:** this could plausibly *rescue* signal that SPY-benchmarking
+destroyed — or confirm the null more rigorously. Both are useful. It requires the
+single-stock ingestion path and a fresh, once-only test scoring, which is why it is
+future work rather than a deadline-day change.
+
 ## Limitations & threats to validity
 
 - **Association, not causation.** With daily bars we measure 1-day drift, not the
   seconds-scale causal reaction. Macro confounding is documented, not deconfounded
   (N≈443 observational rows cannot identify causality).
-- **Reproducibility boundary.** The shipped EOD horizon is fully public
-  (yfinance + public tweet archives). The stronger 1h/30m edge needs a private
-  Alpaca feed, so it is **excluded from `shipped_horizons`**.
+- **Reproducibility boundary.** The daily path is fully public (yfinance + public
+  tweet archives) and is where the null was measured. The 1h effect that survives BH
+  needs a private Alpaca feed, so it is **excluded from `shipped_horizons`** and is
+  not claimed.
+- **The market data is fetched live, not from the committed CSV.**
+  `alpha/benchmark.py:52` calls `yf.download()` at runtime; `data/real/bars.csv` is
+  used only by the deprecated System-A modules. Reproducibility therefore depends on
+  yfinance returning the same history, not on the committed file.
 - **Small n.** The chronological test split is 89 tweets; we use Wilson intervals
   and exact binomial p-values (not the normal approximation) and BH-correct across
   the whole horizon registry.

@@ -42,14 +42,14 @@
     "val": "inspect errors + tune hyperparameters",
     "test": "SACRED \u2014 touch only once, for the final number"
   },
-  "n_total": 443,
-  "n_train": 266,
-  "n_val": 88,
-  "n_test": 89,
+  "n_total": 337,
+  "n_train": 202,
+  "n_val": 68,
+  "n_test": 67,
   "class_balance": {
-    "+1_long": 211,
-    "-1_short": 47,
+    "+1_long": 117,
+    "-1_short": 35,
     "0_noise": 185
   },
-  "win_rate": 0.582
+  "win_rate": 0.451
 }
