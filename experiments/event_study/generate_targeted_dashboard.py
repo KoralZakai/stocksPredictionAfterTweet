@@ -29,6 +29,8 @@ from html import escape
 from pathlib import Path
 from typing import Any
 
+from config.membership import name_of
+
 from experiments.event_study.engine import load_bars, s0_index, study_event
 
 OUT = Path("reports/dashboard.html")
@@ -179,7 +181,7 @@ def gather_window_series(bars: dict[str, list[Any]], anchors: list[dict[str, str
             series.append({"k": k, "d": a[j].date,
                            "pa": round(a[j].open if k == 0 else a[j].close, 4),
                            "pb": round(m[mk].open if k == 0 else m[mk].close, 4)})
-        out.append({**anc, "s0": a[i0].date, "series": series,
+        out.append({**anc, "tname": name_of(anc["ticker"]), "s0": a[i0].date, "series": series,
                     # last close BEFORE the post — the reference for the run-up, and
                     # the exact endpoint tab 1's prior-window table uses.
                     "prev_a": round(a[i0 - 1].close, 4),
@@ -294,6 +296,12 @@ stroke-linejoin:round;stroke-linecap:round}
 .axis{display:flex;justify-content:space-between;font-size:.72rem;color:var(--ink3);margin-top:6px}
 .vd{font-family:var(--mono);font-size:.85rem;letter-spacing:.02em;font-weight:700}
 .vd.down{color:var(--down)}.vd.flat{color:var(--flat)}
+.kv{display:grid;grid-template-columns:190px 1fr;gap:10px;padding:7px 0;
+border-bottom:1px solid var(--line);align-items:baseline}
+.kv .k{color:var(--ink3);font-size:.7rem;text-transform:uppercase;letter-spacing:.04em}
+.kv b{font-weight:600;font-size:.9rem}
+.nm{color:var(--ink3);font-weight:400;font-size:.78rem}
+@media(max-width:620px){.kv{grid-template-columns:1fr}}
 .spark .zero{stroke:var(--line);stroke-width:1;stroke-dasharray:2 3}
 .spark .line{fill:none;stroke-width:2}.spark .line.up{stroke:var(--up)}.spark .line.down{stroke:var(--down)}
 .spark .dot{fill:var(--ink3)}.spark .dot.up{fill:var(--up)}.spark .dot.down{fill:var(--down)}
@@ -326,9 +334,11 @@ function draw(){
   document.getElementById('fwdv').textContent=Y;
   document.getElementById('lstart').textContent='T − '+X+' sessions';
   document.getElementById('lend').textContent='T + '+Y+' sessions';
-  document.getElementById('tkr').textContent=a.ticker;
+  document.getElementById('tkr').textContent=a.ticker+' — '+(a.tname||a.ticker);
   document.getElementById('atext').textContent='“'+a.text+'”';
-  document.getElementById('as0').textContent='entry anchor '+a.s0;
+  document.getElementById('as0').textContent='posted '+a.ts.slice(0,16).replace('T',' ')+
+    ' UTC · entry anchor '+a.s0;
+  renderPred(a);
 
   const eFwd=at(Y), runup=runupAt(X);
   const pre=document.getElementById('pre'), post=document.getElementById('post');
@@ -372,6 +382,43 @@ function draw(){
     xt+
     `<g id="cross" style="display:none"><line class="xh"/><circle class="xhd" r="3.5"/>`+
     `<rect class="tipbg" rx="3"/><text class="tip"></text></g>`;
+}
+
+// The scorecard: plain-English tweet -> what the model EXPECTED -> what the market
+// ACTUALLY did, per named instrument. All cached from the registered run.
+function renderPred(a){
+  const box=document.getElementById('pred'); if(!box) return;
+  const p=a.pred;
+  if(!p){
+    box.innerHTML='<div class="myth"><b>NOT CLASSIFIED.</b> This post never entered '+
+      'the study — it did not pass the geopolitical/macro pre-filter, so the model was '+
+      'never asked for a prediction. That is itself the finding for the Intel case: the '+
+      'most-cited "tweet that moved a stock" is not market-relevant text at all.</div>';
+    return;
+  }
+  const arrow=d=>d==='up'?'▲ UP':d==='down'?'▼ DOWN':'– flat';
+  const rows=p.legs.map(l=>{
+    const ok=l.hit===true, miss=l.hit===false;
+    return `<tr><th>${l.ticker}<span class="nm"> ${l.name}</span></th>`+
+      `<td class="${l.predicted==='up'?'up':l.predicted==='down'?'down':'flat'}">${arrow(l.predicted)}</td>`+
+      `<td class="${l.actual>0?'up':'down'}">${l.actual==null?'n/a':fmt(l.actual)}</td>`+
+      `<td class="flat">${l.spy==null?'n/a':fmt(l.spy)}</td>`+
+      `<td class="${l.abn>0?'up':'down'}">${l.abn==null?'n/a':fmt(l.abn)}</td>`+
+      `<td class="${ok?'up':miss?'down':'flat'}">${ok?'✓ HIT':miss?'✗ MISS':'—'}</td></tr>`;}).join('');
+  const nh=p.legs.filter(l=>l.hit===true).length, ns=p.legs.filter(l=>l.hit!==null).length;
+  box.innerHTML=
+    `<div class="card"><h2>What the model expected — and what happened</h2>`+
+    `<div class="kv"><span class="k">in plain words, he said</span><b>${p.summary||'—'}</b></div>`+
+    `<div class="kv"><span class="k">theme · conviction</span><b>${p.scenario||'—'} · ${p.intensity??'—'}/10`+
+      ` <span class="nm">(split: ${p.split||'—'})</span></b></div>`+
+    `<div class="kv"><span class="k">so the market should…</span><b>${p.hypo_short||'—'}</b></div>`+
+    `<div class="kv"><span class="k">…and longer term</span><b>${p.hypo_long||'—'}</b></div>`+
+    `<div class="kv"><span class="k">why (economic link)</span><b>${p.macro_link||'—'}</b></div>`+
+    `<div class="scroll" style="margin-top:12px"><table><thead><tr><th>instrument</th>`+
+    `<th>EXPECTED</th><th>ACTUAL (EOD)</th><th>SPY</th><th>vs SPY</th><th>verdict</th></tr></thead>`+
+    `<tbody>${rows}</tbody></table></div>`+
+    `<p class="note">Scored on the entry session (EOD). "vs SPY" is the relative move —
+     the metric the study registers. Legs correct: <b>${nh} of ${ns}</b>.</p></div>`;
 }
 
 // Hover: read the MEASURED point nearest the cursor. No smoothing, no synthesis.
@@ -559,7 +606,8 @@ Y-axis is cumulative excess return vs SPY; the gold line is the entry anchor.</p
 <div class="k">derived verdict</div><div id="verdict" class="vd flat">—</div>
 <p class="note">The verdict is computed from the two measured numbers on screen
 (run-up &gt; 10% while the post-move is under a third of it ⇒ the move preceded the
-post). It is not a stored conclusion.</p></div>"""
+post). It is not a stored conclusion.</p></div>
+<div id="pred"></div>"""
 
     tabs = [("t1", "1 · Reverse Causality"), ("t2", "2 · Mean Reversion"),
             ("t3", "3 · Selection Bias"), ("t4", "4 · The Verdict"),
@@ -587,18 +635,45 @@ data/real/bars.csv + corpus_v3.csv + the registered study — nothing hardcoded<
 <script>{_JS}</script></body></html>"""
 
 
-def _anchors(intel: dict[str, Any], oil: dict[str, Any]) -> list[dict[str, str]]:
+def _prediction_for(text: str, rows: list[dict[str, Any]]) -> dict[str, Any] | None:
+    """The cached 70B call for this tweet: what it said in plain English, what it
+    expected, and what each named instrument actually did. None when the tweet never
+    entered the study (it did not pass the geo pre-filter) — which is itself a fact
+    worth showing rather than hiding."""
+    r = next((x for x in rows if x.get("text", "")[:60] == text[:60]), None)
+    if r is None:
+        return None
+    spy = (r.get("spy_returns") or {}).get("EOD")
+    legs = []
+    for i in r.get("instruments", []):
+        ret = (i.get("returns") or {}).get("EOD")
+        legs.append({
+            "ticker": i["ticker"], "name": name_of(i["ticker"]),
+            "predicted": i.get("predicted", ""), "actual": ret,
+            "spy": spy, "abn": (ret - spy) if (ret is not None and spy is not None) else None,
+            "hit": i.get("hit", {}).get("EOD"),
+        })
+    return {"scenario": r.get("scenario", ""), "summary": r.get("summary", ""),
+            "macro_link": r.get("macro_link", ""), "rationale": r.get("rationale", ""),
+            "hypo_short": r.get("hypothesis_short", ""),
+            "hypo_long": r.get("hypothesis_long", ""),
+            "intensity": r.get("intensity"), "split": r.get("split"), "legs": legs}
+
+
+def _anchors(intel: dict[str, Any], oil: dict[str, Any],
+             rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
     """Anchor tweets for the analyzer — taken from the REAL corpus + the REAL top
     measured events. Nothing invented; if a tweet isn't in the data, it isn't here."""
-    out: list[dict[str, str]] = []
+    out: list[dict[str, Any]] = []
     for m in intel["mentions"]:
         out.append({"ts": m["ts"], "ticker": "INTC", "text": m["text"][:150],
-                    "label": "Intel mention"})
+                    "label": "Intel mention", "pred": _prediction_for(m["text"], rows)})
     for p in oil["top"][:4]:
         # p["t0"] is the tweet's real timestamp — NOT p["s0"], which is already the
         # resolved anchor. Re-anchoring off s0 would shift the event by a session.
         out.append({"ts": p["t0"], "ticker": "USO", "text": p["text"][:150],
-                    "label": f"oil event · day-1 {p['car'][1] * 100:+.1f}%"})
+                    "label": f"oil event · day-1 {p['car'][1] * 100:+.1f}%",
+                    "pred": _prediction_for(p["text"], rows)})
     return out
 
 
@@ -608,7 +683,8 @@ def main() -> None:
     intel = gather_intel(bars)
     oil = gather_oil(bars, rng)
     verdict = gather_verdict()
-    series = gather_window_series(bars, _anchors(intel, oil))
+    rows = json.loads(RESULTS.read_text())
+    series = gather_window_series(bars, _anchors(intel, oil, rows))
     stamp = datetime.now(timezone.utc).replace(microsecond=0).isoformat()
     OUT.parent.mkdir(parents=True, exist_ok=True)
     OUT.write_text(render(intel, oil, verdict, series, stamp), encoding="utf-8")
