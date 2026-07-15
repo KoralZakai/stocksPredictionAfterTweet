@@ -10,18 +10,18 @@ Everyone on a trading desk knows the story. *He tweeted about Intel, and the sto
 months.* *He posts about Iran, oil spikes.* The anecdotes are vivid, specific, and everybody
 has one.
 
-I spent this project measuring it — 78,130 posts, 62 tickers, one 70B model reading the
-text of every tweet. And the anecdotes are not hallucinations: **the connection between his
-feed and the market is real, and you can see it in the data.** It just runs in the opposite
-direction from the one traders bet on. He tweeted about Tesla **thirteen times** while it
-fell 26%. Intel had already gained **+105%** when he posted the famous "Intel Stock
-continues to rise." The market moves, *then* he posts. Forward — the direction you could
-trade — the signal is a coin flip, and I can show that with pre-registered tests rather
-than vibes: **0 of 63 cells survive correction.**
+While the prevailing myth suggests that Trump's tweets drive market movements, my research —
+built on an analysis of 78,130 posts, with Llama-3.3-70B reading every market-relevant tweet —
+reveals a more nuanced reality. The findings demonstrate that the market tends to price in
+significant events long before the tweet is even posted. This indicates a case of reverse
+causality, where the market dictates Trump's narrative, rather than the other way around. He
+isn't moving the market; he is simply riding the wave of established trends.
 
-Getting to that answer honestly was the hard part. Seven times this pipeline produced a
-beautiful, publishable, *completely false* positive — each one looking exactly like the
-discovery the anecdotes promise. Those seven are the engineering content of this post.
+Forward — the direction you could trade — the signal is a coin flip, and I can show that with
+pre-registered tests rather than vibes: **0 of 63 cells survive correction.** Getting to that
+answer honestly was the hard part. Seven times this pipeline produced a beautiful,
+publishable, *completely false* positive — each one looking exactly like the discovery the
+anecdotes promise. Those seven are the engineering content of this post.
 
 ---
 
