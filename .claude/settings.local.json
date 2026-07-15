@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(uv --version)",
+      "Bash(py --version)",
+      "Bash(pip --version)",
+      "Bash(MSYS_NO_PATHCONV=1 ./.venv/Scripts/python.exe -c ' *)",
+      "Bash(MSYS_NO_PATHCONV=1 ./.venv/Scripts/ruff.exe check scripts/nebius_macro_validate.py)",
+      "Bash(MSYS_NO_PATHCONV=1 PYTHONPATH=. ./.venv/Scripts/python.exe scripts/nebius_macro_validate.py)",
+      "Bash(MSYS_NO_PATHCONV=1 ./.venv/Scripts/ruff.exe check reportgen/tweet_chart.py)",
+      "Bash(MSYS_NO_PATHCONV=1 PYTHONPATH=. ./.venv/Scripts/python.exe reportgen/tweet_chart.py)"
+    ]
+  }
+}
