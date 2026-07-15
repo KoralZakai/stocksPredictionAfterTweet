@@ -31,6 +31,8 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
+import shutil
 import subprocess
 import sys
 from datetime import datetime, timezone
@@ -56,6 +58,11 @@ DISCLAIMER = "Research output. Not investment advice."
 
 
 def _git_sha() -> str:
+    # In the container there is no git and no .git dir; deploy.sh bakes the sha in
+    # as CODE_REV at build time so the manifest is still traceable to a revision.
+    env_rev = os.environ.get("CODE_REV", "").strip()
+    if env_rev:
+        return env_rev
     try:
         out = subprocess.run(["git", "rev-parse", "--short", "HEAD"],
                              capture_output=True, text=True, check=True)
@@ -84,11 +91,16 @@ def _horizon_stats(test: list[dict[str, Any]], h: str) -> tuple[int, int]:
 
 
 def build_manifest(results: list[dict[str, Any]], *, alpha: float, corpus_file: str,
-                   now_utc: str) -> dict[str, Any]:
+                   now_utc: str, prompt_hash: str | None = None,
+                   profile: str = "stable") -> dict[str, Any]:
     """Pure manifest assembly from already-scored results. Testable in isolation.
 
     A horizon is in the registry only if it has scoreable test data; intraday
     horizons that are empty (no Alpaca) are recorded as skipped, not shipped.
+
+    `prompt_hash` defaults to the frozen stable prompt. Mode B (alpha.profiles)
+    passes its own hash — a manifest MUST carry the hash of the prompt that
+    actually produced its numbers, or the Endpoint would boot the wrong pairing.
     """
     test = [r for r in results if r.get("split") == "test"]
 
@@ -130,7 +142,8 @@ def build_manifest(results: list[dict[str, Any]], *, alpha: float, corpus_file: 
         "metric": METRIC,
         "split": SPLIT,
         "alpha": alpha,
-        "prompt_template_hash": prompt_template_hash(),
+        "profile": profile,
+        "prompt_template_hash": prompt_hash or prompt_template_hash(),
         "horizons": per_h,
         "registry": registry,
         "shipped_horizons": shipped,
@@ -204,6 +217,8 @@ def main() -> None:
     ap.add_argument("--band", type=float, default=0.0, help="beat-SPY noise band (0 = strict)")
     ap.add_argument("--alpha", type=float, default=0.05, help="BH significance level")
     ap.add_argument("--manifest", default=MANIFEST)
+    ap.add_argument("--dataset-out", default="",
+                    help="also copy macro_dataset.csv here (e.g. /data/reports/... on the bucket)")
     a = ap.parse_args()
 
     results = _load_or_run(a)
@@ -220,6 +235,13 @@ def main() -> None:
     _print_manifest(manifest)
     print(f"\n-> manifest -> {a.manifest}")
     print("-> dataset  -> reports/macro_dataset.csv")
+
+    # Publish the dataset to the shared bucket too (the Endpoint needs only the
+    # manifest, but the challenge lists macro_dataset.csv as a Job artifact).
+    if a.dataset_out and Path(a.dataset_out) != Path("reports/macro_dataset.csv"):
+        Path(a.dataset_out).parent.mkdir(parents=True, exist_ok=True)
+        shutil.copyfile("reports/macro_dataset.csv", a.dataset_out)
+        print(f"-> dataset  -> {a.dataset_out}")
 
 
 if __name__ == "__main__":

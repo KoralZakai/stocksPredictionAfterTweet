@@ -1,0 +1,352 @@
+{
+  "seed": 20260715,
+  "n_perm": 2000,
+  "sigma": 2.0,
+  "cells": [
+    {
+      "cohort": "CORPORATE",
+      "asset": "ITA",
+      "metric": "post_excess"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "ITA",
+      "metric": "abs_excess"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "ITA",
+      "metric": "vol_ratio"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "SMH",
+      "metric": "post_excess"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "SMH",
+      "metric": "abs_excess"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "SMH",
+      "metric": "vol_ratio"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "XLF",
+      "metric": "post_excess"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "XLF",
+      "metric": "abs_excess"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "XLF",
+      "metric": "vol_ratio"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "XLK",
+      "metric": "post_excess"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "XLK",
+      "metric": "abs_excess"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "XLK",
+      "metric": "vol_ratio"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "XLY",
+      "metric": "post_excess"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "XLY",
+      "metric": "abs_excess"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "XLY",
+      "metric": "vol_ratio"
+    },
+    {
+      "cohort": "GEOPOLITIC",
+      "asset": "GLD",
+      "metric": "post_excess"
+    },
+    {
+      "cohort": "GEOPOLITIC",
+      "asset": "GLD",
+      "metric": "abs_excess"
+    },
+    {
+      "cohort": "GEOPOLITIC",
+      "asset": "GLD",
+      "metric": "vol_ratio"
+    },
+    {
+      "cohort": "GEOPOLITIC",
+      "asset": "ITA",
+      "metric": "post_excess"
+    },
+    {
+      "cohort": "GEOPOLITIC",
+      "asset": "ITA",
+      "metric": "abs_excess"
+    },
+    {
+      "cohort": "GEOPOLITIC",
+      "asset": "ITA",
+      "metric": "vol_ratio"
+    },
+    {
+      "cohort": "GEOPOLITIC",
+      "asset": "USO",
+      "metric": "post_excess"
+    },
+    {
+      "cohort": "GEOPOLITIC",
+      "asset": "USO",
+      "metric": "abs_excess"
+    },
+    {
+      "cohort": "GEOPOLITIC",
+      "asset": "USO",
+      "metric": "vol_ratio"
+    },
+    {
+      "cohort": "GEOPOLITIC",
+      "asset": "VIXY",
+      "metric": "post_excess"
+    },
+    {
+      "cohort": "GEOPOLITIC",
+      "asset": "VIXY",
+      "metric": "abs_excess"
+    },
+    {
+      "cohort": "GEOPOLITIC",
+      "asset": "VIXY",
+      "metric": "vol_ratio"
+    },
+    {
+      "cohort": "GEOPOLITIC",
+      "asset": "XLE",
+      "metric": "post_excess"
+    },
+    {
+      "cohort": "GEOPOLITIC",
+      "asset": "XLE",
+      "metric": "abs_excess"
+    },
+    {
+      "cohort": "GEOPOLITIC",
+      "asset": "XLE",
+      "metric": "vol_ratio"
+    },
+    {
+      "cohort": "MACRO",
+      "asset": "GLD",
+      "metric": "post_excess"
+    },
+    {
+      "cohort": "MACRO",
+      "asset": "GLD",
+      "metric": "abs_excess"
+    },
+    {
+      "cohort": "MACRO",
+      "asset": "GLD",
+      "metric": "vol_ratio"
+    },
+    {
+      "cohort": "MACRO",
+      "asset": "TLT",
+      "metric": "post_excess"
+    },
+    {
+      "cohort": "MACRO",
+      "asset": "TLT",
+      "metric": "abs_excess"
+    },
+    {
+      "cohort": "MACRO",
+      "asset": "TLT",
+      "metric": "vol_ratio"
+    },
+    {
+      "cohort": "MACRO",
+      "asset": "UUP",
+      "metric": "post_excess"
+    },
+    {
+      "cohort": "MACRO",
+      "asset": "UUP",
+      "metric": "abs_excess"
+    },
+    {
+      "cohort": "MACRO",
+      "asset": "UUP",
+      "metric": "vol_ratio"
+    },
+    {
+      "cohort": "MACRO",
+      "asset": "VIXY",
+      "metric": "post_excess"
+    },
+    {
+      "cohort": "MACRO",
+      "asset": "VIXY",
+      "metric": "abs_excess"
+    },
+    {
+      "cohort": "MACRO",
+      "asset": "VIXY",
+      "metric": "vol_ratio"
+    },
+    {
+      "cohort": "MACRO",
+      "asset": "XLF",
+      "metric": "post_excess"
+    },
+    {
+      "cohort": "MACRO",
+      "asset": "XLF",
+      "metric": "abs_excess"
+    },
+    {
+      "cohort": "MACRO",
+      "asset": "XLF",
+      "metric": "vol_ratio"
+    },
+    {
+      "cohort": "NOISE",
+      "asset": "GLD",
+      "metric": "post_excess"
+    },
+    {
+      "cohort": "NOISE",
+      "asset": "GLD",
+      "metric": "abs_excess"
+    },
+    {
+      "cohort": "NOISE",
+      "asset": "GLD",
+      "metric": "vol_ratio"
+    },
+    {
+      "cohort": "NOISE",
+      "asset": "ITA",
+      "metric": "post_excess"
+    },
+    {
+      "cohort": "NOISE",
+      "asset": "ITA",
+      "metric": "abs_excess"
+    },
+    {
+      "cohort": "NOISE",
+      "asset": "ITA",
+      "metric": "vol_ratio"
+    },
+    {
+      "cohort": "NOISE",
+      "asset": "TLT",
+      "metric": "post_excess"
+    },
+    {
+      "cohort": "NOISE",
+      "asset": "TLT",
+      "metric": "abs_excess"
+    },
+    {
+      "cohort": "NOISE",
+      "asset": "TLT",
+      "metric": "vol_ratio"
+    },
+    {
+      "cohort": "NOISE",
+      "asset": "USO",
+      "metric": "post_excess"
+    },
+    {
+      "cohort": "NOISE",
+      "asset": "USO",
+      "metric": "abs_excess"
+    },
+    {
+      "cohort": "NOISE",
+      "asset": "USO",
+      "metric": "vol_ratio"
+    },
+    {
+      "cohort": "NOISE",
+      "asset": "UUP",
+      "metric": "post_excess"
+    },
+    {
+      "cohort": "NOISE",
+      "asset": "UUP",
+      "metric": "abs_excess"
+    },
+    {
+      "cohort": "NOISE",
+      "asset": "UUP",
+      "metric": "vol_ratio"
+    },
+    {
+      "cohort": "NOISE",
+      "asset": "VIXY",
+      "metric": "post_excess"
+    },
+    {
+      "cohort": "NOISE",
+      "asset": "VIXY",
+      "metric": "abs_excess"
+    },
+    {
+      "cohort": "NOISE",
+      "asset": "VIXY",
+      "metric": "vol_ratio"
+    },
+    {
+      "cohort": "NOISE",
+      "asset": "XLE",
+      "metric": "post_excess"
+    },
+    {
+      "cohort": "NOISE",
+      "asset": "XLE",
+      "metric": "abs_excess"
+    },
+    {
+      "cohort": "NOISE",
+      "asset": "XLE",
+      "metric": "vol_ratio"
+    },
+    {
+      "cohort": "NOISE",
+      "asset": "XLF",
+      "metric": "post_excess"
+    },
+    {
+      "cohort": "NOISE",
+      "asset": "XLF",
+      "metric": "abs_excess"
+    },
+    {
+      "cohort": "NOISE",
+      "asset": "XLF",
+      "metric": "vol_ratio"
+    }
+  ]
+}

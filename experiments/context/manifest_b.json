@@ -1,0 +1,27 @@
+{
+  "experiment": "system-b-contextual-dual-horizon",
+  "split": "val",
+  "horizon": "EOD",
+  "note_1h": "1h needs Alpaca; captured, not scored here",
+  "system_a": {
+    "n": 88,
+    "hits": 57,
+    "accuracy": 0.6477,
+    "ci95": [
+      0.5437,
+      0.7394
+    ],
+    "p_raw": 0.0037
+  },
+  "system_b": {
+    "n": 74,
+    "hits": 48,
+    "accuracy": 0.6486,
+    "ci95": [
+      0.535,
+      0.7476
+    ],
+    "p_raw": 0.007
+  },
+  "shipped_manifest_untouched": true
+}

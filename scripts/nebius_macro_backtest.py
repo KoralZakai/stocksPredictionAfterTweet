@@ -30,6 +30,7 @@ from pathlib import Path
 
 from data.sources.local import load_corpus
 from reportgen.macro_card import render_gallery
+from alpha.benchmark import session_phase
 from scripts.nebius_macro_validate import (
     HORIZONS, _env, _load_dotenv, _session_anchor, classify_tweet, forward_returns,
     relative_hit, validate,
@@ -57,15 +58,11 @@ def asset_class(ticker: str) -> str:
     return "single_stock"
 
 
-def session_phase(t0: datetime) -> str:
-    if t0.weekday() >= 5:
-        return "weekend"
-    h = t0.hour + t0.minute / 60.0
-    if h < 13.5:
-        return "premarket"
-    if h >= 20.0:
-        return "afterhours"
-    return "regular"
+# session_phase now lives in alpha.benchmark (DST-correct: the NYSE open is 13:30 UTC
+# in EDT but 14:30 in EST, and the close shifts with it). This module previously kept
+# its own copy with those hours hardcoded, which mislabelled every EST tweet posted
+# 13:30-14:30 (premarket read as regular) and 20:00-21:00 (in-session read as
+# afterhours). Re-exported here so existing importers keep working.
 
 
 # --- engineered "common-denominator" features (tweet-time, no leakage) ------------
@@ -199,6 +196,7 @@ def run(start: datetime, end: datetime, limit: int, model: str, base_url: str,
 
     results: list[dict] = []
     agg = {h: [0, 0] for h in HORIZONS}
+    unparseable: list[str] = []
     for i, tw in enumerate(cands, 1):
         ck = f"{tw.tweet_id}|{model}|{PROMPT_VERSION}"
         if ck in cache:
@@ -207,8 +205,17 @@ def run(start: datetime, end: datetime, limit: int, model: str, base_url: str,
             try:
                 pred = classify_tweet(tw.text, base_url=base_url, api_key=api_key, model=model)
             except SystemExit as e:
+                # No JSON at all in the response => likely systemic (auth, model id,
+                # quota). Stopping is right; partial results are still scored below.
                 print(f"  [{i}] Nebius error, stopping: {e}")
                 break
+            except json.JSONDecodeError as e:
+                # ONE malformed response must not destroy a multi-hour run. Skip this
+                # tweet and record it: dropping rows silently would shrink N invisibly,
+                # so the count is reported as a diagnostic before any scoring.
+                unparseable.append(tw.tweet_id)
+                print(f"  [{i}] unparseable model JSON, skipping tweet {tw.tweet_id}: {e}")
+                continue
             cache[ck] = pred
             Path(CACHE).parent.mkdir(parents=True, exist_ok=True)
             Path(CACHE).write_text(json.dumps(cache, indent=1))
@@ -246,6 +253,12 @@ def run(start: datetime, end: datetime, limit: int, model: str, base_url: str,
         lh, lt = _rate_over(res, LATE)
         print(f"  [{i}/{len(cands)}] {res['date']} {pred.get('scenario','?')[:26]:26} "
               f"early {eh}/{et} -> late {lh}/{lt}  {res['tag']}")
+
+    if unparseable:
+        print(f"\n!! {len(unparseable)}/{len(cands)} tweets skipped on unparseable model "
+              f"JSON: {unparseable[:10]}{' ...' if len(unparseable) > 10 else ''}")
+        print("   These are EXCLUDED from N below — not silent drops. A large count "
+              "means the prompt/model is unstable, and the run should not be shipped.")
 
     _assign_splits(results)
     Path(RESULTS).parent.mkdir(parents=True, exist_ok=True)
@@ -313,13 +326,26 @@ def _fmt(hit: int, tot: int) -> str:
 
 
 def _tweet_hit(result: dict, h: str) -> int | None:
-    """One call per tweet at horizon h: majority vote of its directional instruments.
-    None if the tweet made no scoreable directional call at h. Fixes the inflated-N
-    problem (correlated instruments within a tweet are NOT independent samples)."""
+    """One call per tweet at horizon h: STRICT majority vote of its directional
+    instruments. None if the tweet made no scoreable directional call at h, OR if the
+    basket splits exactly 50/50. Aggregating to the tweet fixes the inflated-N problem
+    (correlated instruments within one tweet are NOT independent samples).
+
+    TIE HANDLING (this was a real bug — see README "The tie-break artifact"): a basket
+    that splits 1-of-2 has NO majority, so it carries no directional verdict and is
+    UNSCOREABLE. The original rule was `>= 0.5`, which silently counted every tie as a
+    full WIN. Because ~49% of baskets hold exactly 2 instruments, that inflated the
+    headline EOD rate from ~0.50 (a coin flip) to 0.618. Scoring ties as losses (`> 0.5`)
+    is the mirror bug — it deflates to 0.393. Excluding them is the only unbiased choice,
+    and it agrees with the instrument-level estimate (0.502).
+    """
     hs = [i["hit"][h] for i in result["instruments"] if isinstance(i.get("hit", {}).get(h), bool)]
     if not hs:
         return None
-    return int(sum(hs) / len(hs) >= 0.5)
+    frac = sum(hs) / len(hs)
+    if frac == 0.5:
+        return None                      # no majority -> no verdict (not a win, not a loss)
+    return int(frac > 0.5)
 
 
 def signed_eod(r: dict) -> int | None:

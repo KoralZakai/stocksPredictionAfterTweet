@@ -5,7 +5,7 @@
 PY := ./.venv/Scripts/python.exe
 export PYTHONPATH := .
 
-.PHONY: smoke smoke-live manifest test lint serve help
+.PHONY: smoke smoke-live manifest test lint serve dashboard study help
 
 help:
 	@echo "smoke       - regenerate dataset + manifest from cached teacher outputs (offline, \$$0)"
@@ -14,6 +14,7 @@ help:
 	@echo "test        - run the full pytest suite"
 	@echo "lint        - ruff check ."
 	@echo "serve       - boot the /predict endpoint on :8080 (verifies the manifest hash)"
+	@echo "feedback    - score the calls /predict actually served (prospective replication)"
 
 # $0, no keys, fully offline: proves the pipeline + manifest end-to-end.
 smoke:
@@ -34,3 +35,17 @@ lint:
 
 serve:
 	./.venv/Scripts/uvicorn.exe serving.app:app --host 0.0.0.0 --port 8080
+
+# Pre-registered event study (offline, seeded): registry -> permutation nulls -> BH.
+study:
+	$(PY) experiments/event_study/run_study.py
+
+# Score what the Endpoint actually served: prediction_log.jsonl -> replication report.
+# Idempotent + safe to schedule; only horizons whose bar has CLOSED are scored.
+feedback:
+	$(PY) jobs/feedback.py
+
+# The Myth-Busting Quantitative Terminal -> reports/dashboard.html (self-contained).
+dashboard:
+	$(PY) experiments/event_study/generate_targeted_dashboard.py
+	cp reports/dashboard.html docs/dashboard.html  # docs/ is what GitHub Pages serves

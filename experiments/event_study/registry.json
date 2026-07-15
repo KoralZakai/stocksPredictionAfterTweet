@@ -1,0 +1,925 @@
+{
+  "label": "discovery-476",
+  "seed": 20260715,
+  "n_perm": 1000,
+  "cells": [
+    {
+      "cohort": "CORPORATE",
+      "asset": "AAPL",
+      "window": 1,
+      "family": "abs"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "AAPL",
+      "window": 1,
+      "family": "signed"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "AAPL",
+      "window": 1,
+      "family": "volume"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "AAPL",
+      "window": 3,
+      "family": "abs"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "AAPL",
+      "window": 3,
+      "family": "signed"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "AAPL",
+      "window": 3,
+      "family": "volume"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "AAPL",
+      "window": 5,
+      "family": "abs"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "AAPL",
+      "window": 5,
+      "family": "signed"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "AAPL",
+      "window": 5,
+      "family": "volume"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "AMZN",
+      "window": 1,
+      "family": "abs"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "AMZN",
+      "window": 1,
+      "family": "signed"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "AMZN",
+      "window": 1,
+      "family": "volume"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "AMZN",
+      "window": 3,
+      "family": "abs"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "AMZN",
+      "window": 3,
+      "family": "signed"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "AMZN",
+      "window": 3,
+      "family": "volume"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "AMZN",
+      "window": 5,
+      "family": "abs"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "AMZN",
+      "window": 5,
+      "family": "signed"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "AMZN",
+      "window": 5,
+      "family": "volume"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "BA",
+      "window": 1,
+      "family": "abs"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "BA",
+      "window": 1,
+      "family": "signed"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "BA",
+      "window": 1,
+      "family": "volume"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "BA",
+      "window": 3,
+      "family": "abs"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "BA",
+      "window": 3,
+      "family": "signed"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "BA",
+      "window": 3,
+      "family": "volume"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "BA",
+      "window": 5,
+      "family": "abs"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "BA",
+      "window": 5,
+      "family": "signed"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "BA",
+      "window": 5,
+      "family": "volume"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "DJT",
+      "window": 1,
+      "family": "abs"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "DJT",
+      "window": 1,
+      "family": "signed"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "DJT",
+      "window": 1,
+      "family": "volume"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "DJT",
+      "window": 3,
+      "family": "abs"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "DJT",
+      "window": 3,
+      "family": "signed"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "DJT",
+      "window": 3,
+      "family": "volume"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "DJT",
+      "window": 5,
+      "family": "abs"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "DJT",
+      "window": 5,
+      "family": "signed"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "DJT",
+      "window": 5,
+      "family": "volume"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "MSFT",
+      "window": 1,
+      "family": "abs"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "MSFT",
+      "window": 1,
+      "family": "signed"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "MSFT",
+      "window": 1,
+      "family": "volume"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "MSFT",
+      "window": 3,
+      "family": "abs"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "MSFT",
+      "window": 3,
+      "family": "signed"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "MSFT",
+      "window": 3,
+      "family": "volume"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "MSFT",
+      "window": 5,
+      "family": "abs"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "MSFT",
+      "window": 5,
+      "family": "signed"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "MSFT",
+      "window": 5,
+      "family": "volume"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "NVDA",
+      "window": 1,
+      "family": "abs"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "NVDA",
+      "window": 1,
+      "family": "signed"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "NVDA",
+      "window": 1,
+      "family": "volume"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "NVDA",
+      "window": 3,
+      "family": "abs"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "NVDA",
+      "window": 3,
+      "family": "signed"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "NVDA",
+      "window": 3,
+      "family": "volume"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "NVDA",
+      "window": 5,
+      "family": "abs"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "NVDA",
+      "window": 5,
+      "family": "signed"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "NVDA",
+      "window": 5,
+      "family": "volume"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "TSLA",
+      "window": 1,
+      "family": "abs"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "TSLA",
+      "window": 1,
+      "family": "signed"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "TSLA",
+      "window": 1,
+      "family": "volume"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "TSLA",
+      "window": 3,
+      "family": "abs"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "TSLA",
+      "window": 3,
+      "family": "signed"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "TSLA",
+      "window": 3,
+      "family": "volume"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "TSLA",
+      "window": 5,
+      "family": "abs"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "TSLA",
+      "window": 5,
+      "family": "signed"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "TSLA",
+      "window": 5,
+      "family": "volume"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "XLI",
+      "window": 1,
+      "family": "abs"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "XLI",
+      "window": 1,
+      "family": "signed"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "XLI",
+      "window": 1,
+      "family": "volume"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "XLI",
+      "window": 3,
+      "family": "abs"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "XLI",
+      "window": 3,
+      "family": "signed"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "XLI",
+      "window": 3,
+      "family": "volume"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "XLI",
+      "window": 5,
+      "family": "abs"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "XLI",
+      "window": 5,
+      "family": "signed"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "XLI",
+      "window": 5,
+      "family": "volume"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "XLK",
+      "window": 1,
+      "family": "abs"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "XLK",
+      "window": 1,
+      "family": "signed"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "XLK",
+      "window": 1,
+      "family": "volume"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "XLK",
+      "window": 3,
+      "family": "abs"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "XLK",
+      "window": 3,
+      "family": "signed"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "XLK",
+      "window": 3,
+      "family": "volume"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "XLK",
+      "window": 5,
+      "family": "abs"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "XLK",
+      "window": 5,
+      "family": "signed"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "XLK",
+      "window": 5,
+      "family": "volume"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "XLY",
+      "window": 1,
+      "family": "abs"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "XLY",
+      "window": 1,
+      "family": "signed"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "XLY",
+      "window": 1,
+      "family": "volume"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "XLY",
+      "window": 3,
+      "family": "abs"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "XLY",
+      "window": 3,
+      "family": "signed"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "XLY",
+      "window": 3,
+      "family": "volume"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "XLY",
+      "window": 5,
+      "family": "abs"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "XLY",
+      "window": 5,
+      "family": "signed"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "XLY",
+      "window": 5,
+      "family": "volume"
+    },
+    {
+      "cohort": "GEO_SHOCK",
+      "asset": "FXI",
+      "window": 1,
+      "family": "abs"
+    },
+    {
+      "cohort": "GEO_SHOCK",
+      "asset": "FXI",
+      "window": 1,
+      "family": "signed"
+    },
+    {
+      "cohort": "GEO_SHOCK",
+      "asset": "FXI",
+      "window": 1,
+      "family": "volume"
+    },
+    {
+      "cohort": "GEO_SHOCK",
+      "asset": "FXI",
+      "window": 3,
+      "family": "abs"
+    },
+    {
+      "cohort": "GEO_SHOCK",
+      "asset": "FXI",
+      "window": 3,
+      "family": "signed"
+    },
+    {
+      "cohort": "GEO_SHOCK",
+      "asset": "FXI",
+      "window": 3,
+      "family": "volume"
+    },
+    {
+      "cohort": "GEO_SHOCK",
+      "asset": "FXI",
+      "window": 5,
+      "family": "abs"
+    },
+    {
+      "cohort": "GEO_SHOCK",
+      "asset": "FXI",
+      "window": 5,
+      "family": "signed"
+    },
+    {
+      "cohort": "GEO_SHOCK",
+      "asset": "FXI",
+      "window": 5,
+      "family": "volume"
+    },
+    {
+      "cohort": "GEO_SHOCK",
+      "asset": "GLD",
+      "window": 1,
+      "family": "abs"
+    },
+    {
+      "cohort": "GEO_SHOCK",
+      "asset": "GLD",
+      "window": 1,
+      "family": "signed"
+    },
+    {
+      "cohort": "GEO_SHOCK",
+      "asset": "GLD",
+      "window": 1,
+      "family": "volume"
+    },
+    {
+      "cohort": "GEO_SHOCK",
+      "asset": "GLD",
+      "window": 3,
+      "family": "abs"
+    },
+    {
+      "cohort": "GEO_SHOCK",
+      "asset": "GLD",
+      "window": 3,
+      "family": "signed"
+    },
+    {
+      "cohort": "GEO_SHOCK",
+      "asset": "GLD",
+      "window": 3,
+      "family": "volume"
+    },
+    {
+      "cohort": "GEO_SHOCK",
+      "asset": "GLD",
+      "window": 5,
+      "family": "abs"
+    },
+    {
+      "cohort": "GEO_SHOCK",
+      "asset": "GLD",
+      "window": 5,
+      "family": "signed"
+    },
+    {
+      "cohort": "GEO_SHOCK",
+      "asset": "GLD",
+      "window": 5,
+      "family": "volume"
+    },
+    {
+      "cohort": "GEO_SHOCK",
+      "asset": "ITA",
+      "window": 1,
+      "family": "abs"
+    },
+    {
+      "cohort": "GEO_SHOCK",
+      "asset": "ITA",
+      "window": 1,
+      "family": "signed"
+    },
+    {
+      "cohort": "GEO_SHOCK",
+      "asset": "ITA",
+      "window": 1,
+      "family": "volume"
+    },
+    {
+      "cohort": "GEO_SHOCK",
+      "asset": "ITA",
+      "window": 3,
+      "family": "abs"
+    },
+    {
+      "cohort": "GEO_SHOCK",
+      "asset": "ITA",
+      "window": 3,
+      "family": "signed"
+    },
+    {
+      "cohort": "GEO_SHOCK",
+      "asset": "ITA",
+      "window": 3,
+      "family": "volume"
+    },
+    {
+      "cohort": "GEO_SHOCK",
+      "asset": "ITA",
+      "window": 5,
+      "family": "abs"
+    },
+    {
+      "cohort": "GEO_SHOCK",
+      "asset": "ITA",
+      "window": 5,
+      "family": "signed"
+    },
+    {
+      "cohort": "GEO_SHOCK",
+      "asset": "ITA",
+      "window": 5,
+      "family": "volume"
+    },
+    {
+      "cohort": "GEO_SHOCK",
+      "asset": "SPY",
+      "window": 1,
+      "family": "abs"
+    },
+    {
+      "cohort": "GEO_SHOCK",
+      "asset": "SPY",
+      "window": 1,
+      "family": "signed"
+    },
+    {
+      "cohort": "GEO_SHOCK",
+      "asset": "SPY",
+      "window": 1,
+      "family": "volume"
+    },
+    {
+      "cohort": "GEO_SHOCK",
+      "asset": "SPY",
+      "window": 3,
+      "family": "abs"
+    },
+    {
+      "cohort": "GEO_SHOCK",
+      "asset": "SPY",
+      "window": 3,
+      "family": "signed"
+    },
+    {
+      "cohort": "GEO_SHOCK",
+      "asset": "SPY",
+      "window": 3,
+      "family": "volume"
+    },
+    {
+      "cohort": "GEO_SHOCK",
+      "asset": "SPY",
+      "window": 5,
+      "family": "abs"
+    },
+    {
+      "cohort": "GEO_SHOCK",
+      "asset": "SPY",
+      "window": 5,
+      "family": "signed"
+    },
+    {
+      "cohort": "GEO_SHOCK",
+      "asset": "SPY",
+      "window": 5,
+      "family": "volume"
+    },
+    {
+      "cohort": "GEO_SHOCK",
+      "asset": "USO",
+      "window": 1,
+      "family": "abs"
+    },
+    {
+      "cohort": "GEO_SHOCK",
+      "asset": "USO",
+      "window": 1,
+      "family": "signed"
+    },
+    {
+      "cohort": "GEO_SHOCK",
+      "asset": "USO",
+      "window": 1,
+      "family": "volume"
+    },
+    {
+      "cohort": "GEO_SHOCK",
+      "asset": "USO",
+      "window": 3,
+      "family": "abs"
+    },
+    {
+      "cohort": "GEO_SHOCK",
+      "asset": "USO",
+      "window": 3,
+      "family": "signed"
+    },
+    {
+      "cohort": "GEO_SHOCK",
+      "asset": "USO",
+      "window": 3,
+      "family": "volume"
+    },
+    {
+      "cohort": "GEO_SHOCK",
+      "asset": "USO",
+      "window": 5,
+      "family": "abs"
+    },
+    {
+      "cohort": "GEO_SHOCK",
+      "asset": "USO",
+      "window": 5,
+      "family": "signed"
+    },
+    {
+      "cohort": "GEO_SHOCK",
+      "asset": "USO",
+      "window": 5,
+      "family": "volume"
+    },
+    {
+      "cohort": "GEO_SHOCK",
+      "asset": "VIXY",
+      "window": 1,
+      "family": "abs"
+    },
+    {
+      "cohort": "GEO_SHOCK",
+      "asset": "VIXY",
+      "window": 1,
+      "family": "signed"
+    },
+    {
+      "cohort": "GEO_SHOCK",
+      "asset": "VIXY",
+      "window": 1,
+      "family": "volume"
+    },
+    {
+      "cohort": "GEO_SHOCK",
+      "asset": "VIXY",
+      "window": 3,
+      "family": "abs"
+    },
+    {
+      "cohort": "GEO_SHOCK",
+      "asset": "VIXY",
+      "window": 3,
+      "family": "signed"
+    },
+    {
+      "cohort": "GEO_SHOCK",
+      "asset": "VIXY",
+      "window": 3,
+      "family": "volume"
+    },
+    {
+      "cohort": "GEO_SHOCK",
+      "asset": "VIXY",
+      "window": 5,
+      "family": "abs"
+    },
+    {
+      "cohort": "GEO_SHOCK",
+      "asset": "VIXY",
+      "window": 5,
+      "family": "signed"
+    },
+    {
+      "cohort": "GEO_SHOCK",
+      "asset": "VIXY",
+      "window": 5,
+      "family": "volume"
+    },
+    {
+      "cohort": "NOISE",
+      "asset": "SPY",
+      "window": 1,
+      "family": "abs"
+    },
+    {
+      "cohort": "NOISE",
+      "asset": "SPY",
+      "window": 1,
+      "family": "signed"
+    },
+    {
+      "cohort": "NOISE",
+      "asset": "SPY",
+      "window": 1,
+      "family": "volume"
+    },
+    {
+      "cohort": "NOISE",
+      "asset": "SPY",
+      "window": 3,
+      "family": "abs"
+    },
+    {
+      "cohort": "NOISE",
+      "asset": "SPY",
+      "window": 3,
+      "family": "signed"
+    },
+    {
+      "cohort": "NOISE",
+      "asset": "SPY",
+      "window": 3,
+      "family": "volume"
+    },
+    {
+      "cohort": "NOISE",
+      "asset": "SPY",
+      "window": 5,
+      "family": "abs"
+    },
+    {
+      "cohort": "NOISE",
+      "asset": "SPY",
+      "window": 5,
+      "family": "signed"
+    },
+    {
+      "cohort": "NOISE",
+      "asset": "SPY",
+      "window": 5,
+      "family": "volume"
+    }
+  ]
+}

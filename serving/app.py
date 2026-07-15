@@ -36,21 +36,36 @@ from pydantic import BaseModel
 
 from alpha.benchmark import daily_returns, _session_anchor, session_phase
 from alpha.classify import prompt_template_hash
+from alpha.profiles import PROFILES, Profile, active_profile
 from alpha.route import route_decision
+from serving.observe import log_prediction
 from alpha.schema import MarketContext, Quote, RealizedAlpha
 from market import select_provider
 from market.provider import Provider
 
 log = logging.getLogger("predict")
 DISCLAIMER = "Research output. Not investment advice."
+# Emitted for every tweet when the manifest ships no horizon (nothing survived BH
+# correction). The endpoint still runs and explains itself — it just refuses to call.
+NO_VALIDATED_EDGE = (
+    "no validated edge: no horizon survived Benjamini-Hochberg correction over the "
+    "test registry, so this deployment ships no tradeable horizon (shipped_horizons "
+    "is empty). The scenario and reasoning are research output, not a call."
+)
 MARKET_TIMEOUT_S = 1.5
 _QUOTE_TTL_S = 15.0
 
 
 # ---------------------------------------------------------------- boot verification
-def verify_manifest(manifest: dict[str, Any]) -> None:
-    """Refuse to start unless the live code + data match what the manifest certifies."""
-    live_prompt = prompt_template_hash()
+def verify_manifest(manifest: dict[str, Any],
+                    prompt_hash_fn: Callable[[], str] | None = None) -> None:
+    """Refuse to start unless the live code + data match what the manifest certifies.
+
+    `prompt_hash_fn` defaults to the frozen stable prompt hash; alpha.profiles passes
+    the ACTIVE profile's hash so Mode B is checked against its own manifest. The
+    pairing is what stops a profile's prompt being served against another's numbers.
+    """
+    live_prompt = (prompt_hash_fn or prompt_template_hash)()
     if manifest.get("prompt_template_hash") != live_prompt:
         raise RuntimeError(
             "PROMPT HASH MISMATCH: live classification prompt "
@@ -69,8 +84,13 @@ def verify_manifest(manifest: dict[str, Any]) -> None:
 
 # ---------------------------------------------------------------- decision plane
 def _default_classify(text: str) -> dict[str, Any]:
-    """Real Nebius zero-shot classification (tweet text only)."""
-    from alpha.classify import DEFAULT_BASE, DEFAULT_MODEL, classify_tweet
+    """Real Nebius zero-shot classification (tweet text only) — stable profile."""
+    return _profile_classify(PROFILES["stable"], text)
+
+
+def _profile_classify(prof: Profile, text: str) -> dict[str, Any]:
+    """Run the ACTIVE profile's classifier. Tweet text only — the decision plane."""
+    from alpha.classify import DEFAULT_BASE, DEFAULT_MODEL
     from alpha.env import env, load_dotenv
     load_dotenv()
     api_key = env("NEBIUS_API_KEY", "EXPO_PUBLIC_NEBIUS_API_KEY")
@@ -78,7 +98,7 @@ def _default_classify(text: str) -> dict[str, Any]:
         raise RuntimeError("No NEBIUS_API_KEY for classification.")
     model = env("NEBIUS_MODEL", "EXPO_PUBLIC_NEBIUS_MODEL", default=DEFAULT_MODEL)
     base = env("NEBIUS_BASE_URL", "EXPO_PUBLIC_NEBIUS_BASE_URL", default=DEFAULT_BASE)
-    return classify_tweet(text, base_url=base, api_key=api_key, model=model)
+    return prof.classify(text, base_url=base, api_key=api_key, model=model)
 
 
 def _parse_t0(t0_utc: str) -> datetime | None:
@@ -202,19 +222,41 @@ class PredictIn(BaseModel):
     author: str = ""
 
 
-def create_app(*, manifest_path: str = "reports/validation_manifest.json",
+def create_app(*, manifest_path: str | None = None,
                classify_fn: Callable[[str], dict[str, Any]] | None = None,
-               provider: Provider | None = None) -> FastAPI:
-    mpath = Path(os.environ.get("MANIFEST_PATH", manifest_path))
+               provider: Provider | None = None,
+               profile: Profile | None = None) -> FastAPI:
+    """Build the app for the ACTIVE profile (env SIGNAL_PROFILE, default 'stable').
+
+    Path precedence: MANIFEST_PATH env > explicit manifest_path arg > profile default.
+    Mode A (default) is byte-identical to before profiles existed.
+    """
+    prof = profile or active_profile()
+    mpath = Path(os.environ.get("MANIFEST_PATH", manifest_path or prof.manifest_path))
     if not mpath.exists():
         raise RuntimeError(f"MANIFEST MISSING: {mpath} — the Endpoint refuses to start.")
     manifest: dict[str, Any] = json.loads(mpath.read_text())
-    verify_manifest(manifest)                       # refuse to start on any drift
+    verify_manifest(manifest, prompt_hash_fn=prof.prompt_hash)   # drift -> refuse to start
 
-    classify = classify_fn or _default_classify
+    classify = classify_fn or (lambda text: _profile_classify(prof, text))
     market = MarketPlane(provider or select_provider())
     shipped = manifest.get("shipped_horizons") or []
-    app = FastAPI(title="tweet-alpha /predict")
+    app = FastAPI(title=f"tweet-alpha /predict [{prof.name}]")
+
+    def _observe(req: PredictIn, routed: Any, served_decision: str) -> None:
+        """Append what we served to the prediction log — the Job's input (jobs/feedback.py).
+
+        Logs `routed`, not the response body: the no-validated-edge response deliberately
+        carries NO instruments (it is refusing to name anything), but the replication set
+        needs the instruments the model actually named in order to score them later. The
+        served contract is unchanged; the log is a strict superset of it.
+        """
+        log_prediction(
+            tweet_text=req.tweet_text, t0_utc=req.t0_utc, author=req.author,
+            response={"scenario": routed.scenario, "reasoning": routed.reasoning,
+                      "decision": routed.decision,
+                      "instruments": [asdict(i) for i in routed.instruments]},
+            manifest=manifest, profile=prof.name, served_decision=served_decision)
 
     @app.post("/predict")
     def predict(req: PredictIn) -> dict[str, Any]:
@@ -224,8 +266,21 @@ def create_app(*, manifest_path: str = "reports/validation_manifest.json",
 
         # ---- DECISION PLANE: tweet text ONLY ----
         classified = classify(req.tweet_text)
-        routed = route_decision(classified)
-        horizon = shipped[0] if shipped else None
+        routed = route_decision(classified, whitelist=prof.whitelist)
+
+        # No horizon survived BH correction over the registry => there is no validated
+        # edge, so there is no call to make. Refuse EVERY tweet, not just the marginal
+        # ones: a null result must not be dressed up as a signal (CLAUDE.md 4, 8). The
+        # classification is still returned as research output — it explains what the
+        # model saw, while `decision` refuses to act on it.
+        if not shipped:
+            out = _abstain(manifest, NO_VALIDATED_EDGE)
+            out["scenario"] = routed.scenario
+            out["reasoning"] = routed.reasoning
+            _observe(req, routed, out["decision"])
+            return out
+
+        horizon = shipped[0]
         resp: dict[str, Any] = {
             "decision": routed.decision,
             "instruments": [asdict(i) for i in routed.instruments],
@@ -242,6 +297,10 @@ def create_app(*, manifest_path: str = "reports/validation_manifest.json",
         # ---- MARKET PLANE: after the fact, nullable, never feeds back ----
         mc = market.context(routed.instruments, t0) if routed.instruments else None
         resp["market_context"] = asdict(mc) if mc else None
+        # Log AFTER the market plane, but log `routed` — never `mc`. The market context is
+        # a post-hoc convenience for the caller and must not leak into the record of what
+        # was decided from text alone (the one-way firewall, app docstring).
+        _observe(req, routed, resp["decision"])
         return resp
 
     @app.get("/market/{ticker}")
@@ -257,6 +316,9 @@ def create_app(*, manifest_path: str = "reports/validation_manifest.json",
     def health() -> dict[str, Any]:
         return {
             "status": "ok",
+            "profile": prof.name,
+            "experimental": prof.experimental,
+            "manifest_path": str(mpath),
             "manifest_version": manifest.get("code_rev"),
             "corpus_sha256": manifest.get("corpus", {}).get("sha256"),
             "prompt_template_hash": manifest.get("prompt_template_hash"),

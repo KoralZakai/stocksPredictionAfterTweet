@@ -78,7 +78,14 @@ TICKER_NAME: dict[str, str] = {
     "XLV": "Health Care sector ETF", "XLY": "Consumer Discretionary sector ETF",
     "XLP": "Consumer Staples sector ETF", "XLB": "Materials sector ETF",
     "SMH": "Semiconductor sector ETF", "SOXX": "Semiconductor sector ETF (iShares)",
-    "ITA": "Aerospace & Defense ETF",
+    "ITA": "Aerospace & Defense ETF", "PAVE": "US Infrastructure ETF",
+    # commodities / macro instruments — the LLM emits these for oil/gold/rates/FX
+    # posts, so a bare ticker is unreadable in reports without a plain-English name.
+    "USO": "Crude Oil fund (WTI)", "VIXY": "VIX short-term futures (fear gauge)",
+    "GLD": "Gold trust", "DBC": "Broad commodity index fund",
+    "WEAT": "Wheat fund", "CORN": "Corn fund",
+    "TLT": "20+ Year Treasury bonds", "UUP": "US Dollar index fund",
+    "FXI": "China large-cap ETF",
     # single names
     "AAPL": "Apple", "MSFT": "Microsoft", "NVDA": "NVIDIA", "AMD": "AMD",
     "AVGO": "Broadcom", "INTC": "Intel", "TSM": "TSMC (Taiwan Semiconductor)",

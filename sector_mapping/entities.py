@@ -22,10 +22,35 @@ from dataclasses import dataclass
 from config.universe import SECTOR_STOCKS
 from sector_mapping.rules import sector_scores
 
-# "intel" the word ("US intel flagged...") is intelligence, not the chipmaker —
-# not preceded by us/american/the, not followed by spy-speak (tests/test_entities.py).
-INTC_GUARDED = (r"(?<!\bus )(?<!\bu\.s\. )(?<!american )(?<!\bthe )\bintel\b"
-                r"(?!\s+(?:community|agenc|official|secret|report|source|chief|director|briefing|assessment|committee|leak))")
+# "intel" the word ("US intel flagged...") is intelligence, not the chipmaker. In a
+# political corpus that sense DOMINATES: of 55 bare-"intel" matches in corpus_v3, 51
+# (93%) were intelligence. This is the DJT-signature artifact's twin — a ticker rule
+# matching a common English word — so it gets the same treatment.
+#
+# The old guard only blocked the word AFTER intel ("intel leak") and a few words before
+# ("US intel"). It therefore let through "leaking intel", "destroy intel", "Danish intel",
+# "Obama Intel Chief", "Ex-intel official", and every URL slug ("us-intel-has-known"),
+# while the direction it did block was the rarer one.
+#
+# Now precision-first — the same call as GS_GUARDED below: an "intel" only resolves to
+# INTC when the post ALSO carries company context. Both orders are matched because the
+# context can precede the word ("the CEO of INTEL") or follow it ("Intel Stock"); `re`
+# has no variable-width lookbehind, so the second alternative spans from the context word
+# to the mention. Only truthiness and the label are used, so a wide span is harmless.
+_INTC_CTX = (r"(?:chips?\b|semiconductor|foundry|fabs?\b|wafer|nanometer|cpu|processor|"
+             r"ceo|chief executive|stock|shares?\b|stake|shareholder|equity|owns?\b|"
+             # `deals?` is whole-word on BOTH sides on purpose: a bare `\bdeal` prefix
+             # matched "incapable of DEALing", which dragged a Snowden intelligence
+             # tweet into INTC. Context words this generic must not match substrings.
+             r"corp\b|inside\b|lip-?bu|gelsinger|billion|\bdeals?\b)")
+# (?<!-) and [-\s] in the lookahead cover URL slugs, where there is no space to anchor on.
+_INTC_BARE = (r"(?<!\bus )(?<!\bu\.s\. )(?<!american )(?<!\bthe )(?<!russia )(?<!russian )"
+              r"(?<!house )(?<!senate )(?<!obama )(?<!cia )(?<!fbi )(?<!danish )(?<!spy )"
+              r"(?<!ex-)(?<!leaking )(?<!destroy )(?<!\bmy )(?<!nat )(?<!-)"
+              r"\bintel\b"
+              r"(?![-\s]+(?:community|agenc|official|secret|report|source|chief|director|"
+              r"briefing|assessment|committee|leak|panel|team|warn|driven|agent|comm\b))")
+INTC_GUARDED = rf"{_INTC_BARE}(?=(?s:.)*{_INTC_CTX})|{_INTC_CTX}(?s:.)*?{_INTC_BARE}"
 
 # "Goldman" is a common politician surname (Reps. Dan/Craig Goldman), always
 # adjacent to a first name — no lookbehind saves a bare surname without a name
@@ -33,6 +58,23 @@ INTC_GUARDED = (r"(?<!\bus )(?<!\bu\.s\. )(?<!american )(?<!\bthe )\bintel\b"
 # ponytail: bare "Goldman" for the bank is now a miss; add a bank-context
 # allowlist ("goldman" near sachs/stock/CEO/Solomon) only if such misses recur.
 GS_GUARDED = r"\bgoldman sachs\b"
+
+# Trump SIGNS his posts "DJT" — 754 of 762 DJT "mentions" in the 2025-26 corpus were
+# that sign-off, not a reference to the stock. A trailing DJT (optionally followed by
+# punctuation and/or a link) is a signature. Mid-text "DJT stock is up" still matches.
+#
+# This REPLACES an earlier deliberate choice to let the signature match, on the theory
+# that "downstream views must treat signature-only hits as non-company content". No
+# downstream filter was ever written, so every consumer inherited the false positives.
+# The intended use case (DJT as a Trump-exposed ticker) needs no matcher at all —
+# every post in this corpus is already by Trump. tests/test_entities.py pins the guard.
+DJT_TICKER_GUARDED = (r"(?<!president )(?<!\bpres\. )"
+                      r"\bdjt\b(?![\s\-–—!.,:;\"')\]]*(?:https?://\S+\s*)?$)")
+
+# "Anti Trump Media" / "the Trump media" is the PRESS, not Trump Media & Technology.
+# Require the company sense: not preceded by anti-/the, not followed by press words.
+DJT_MEDIA_GUARDED = (r"(?<!anti[- ])(?<!\bthe )\btrump media\b"
+                     r"(?!\s+(?:coverage|outlets?|bias|machine|complex|empire|hoax))")
 
 # ticker -> name/alias/exec/brand patterns Trump actually tweeted (word-boundaried).
 ENTITY_TRIGGERS: dict[str, tuple[str, ...]] = {
@@ -58,7 +100,7 @@ ENTITY_TRIGGERS: dict[str, tuple[str, ...]] = {
     "LMT": (r"\block ?heed\b", r"\bf-?35\b"), "NOC": (r"\bnorthrop\b",),
     "GD": (r"\bgeneral dynamics\b",),
     # Trump-related public holding (Trump Media, lists 2024-03; DATASEARCH §3)
-    "DJT": (r"\btrump media\b", r"\btruth social\b", r"\bdjt\b"),
+    "DJT": (DJT_MEDIA_GUARDED, r"\btruth social\b", DJT_TICKER_GUARDED),
 }
 _ENT = {tk: tuple(re.compile(p, re.I) for p in pats) for tk, pats in ENTITY_TRIGGERS.items()}
 

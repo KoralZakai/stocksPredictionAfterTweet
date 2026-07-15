@@ -1,0 +1,26 @@
+# Build context hygiene. Without this the context is ~716MB and every build spends
+# ~200s transferring it — and `COPY . .` drops the host's Windows .venv on top of the
+# Linux venv that `uv sync` just built in the image.
+.venv/
+.git/
+__pycache__/
+*.pyc
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Secrets — never bake into an image.
+.env
+deploy/nebius/.env
+
+# Raw inputs. data/ is ALSO a python package (data/sources, data/storage) that the
+# Job imports, so the *.py must survive — only the bulk payload is dropped. The live
+# run reads corpus_v3.csv; market data comes from yfinance over the network, so the
+# multi-MB bars/*.csv are not needed in-image.
+data/
+!data/**/*.py
+!data/real/corpus_v3.csv
+
+experiments/
+docs/
+*.log

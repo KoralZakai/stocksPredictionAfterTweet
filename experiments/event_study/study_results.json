@@ -1,0 +1,1633 @@
+{
+  "label": "discovery-476",
+  "seed": 20260715,
+  "n_perm": 1000,
+  "n_events_by_cohort": {
+    "GEO_SHOCK": 1158,
+    "NOISE": 92,
+    "CORPORATE": 13
+  },
+  "cells": [
+    {
+      "cohort": "CORPORATE",
+      "asset": "AAPL",
+      "window": 1,
+      "family": "abs",
+      "n": 1,
+      "skipped": "n<5"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "AAPL",
+      "window": 1,
+      "family": "signed",
+      "n": 1,
+      "skipped": "n<5"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "AAPL",
+      "window": 1,
+      "family": "volume",
+      "n": 1,
+      "skipped": "n<5"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "AAPL",
+      "window": 3,
+      "family": "abs",
+      "n": 1,
+      "skipped": "n<5"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "AAPL",
+      "window": 3,
+      "family": "signed",
+      "n": 1,
+      "skipped": "n<5"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "AAPL",
+      "window": 3,
+      "family": "volume",
+      "n": 1,
+      "skipped": "n<5"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "AAPL",
+      "window": 5,
+      "family": "abs",
+      "n": 1,
+      "skipped": "n<5"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "AAPL",
+      "window": 5,
+      "family": "signed",
+      "n": 1,
+      "skipped": "n<5"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "AAPL",
+      "window": 5,
+      "family": "volume",
+      "n": 1,
+      "skipped": "n<5"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "AMZN",
+      "window": 1,
+      "family": "abs",
+      "n": 1,
+      "skipped": "n<5"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "AMZN",
+      "window": 1,
+      "family": "signed",
+      "n": 1,
+      "skipped": "n<5"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "AMZN",
+      "window": 1,
+      "family": "volume",
+      "n": 1,
+      "skipped": "n<5"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "AMZN",
+      "window": 3,
+      "family": "abs",
+      "n": 1,
+      "skipped": "n<5"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "AMZN",
+      "window": 3,
+      "family": "signed",
+      "n": 1,
+      "skipped": "n<5"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "AMZN",
+      "window": 3,
+      "family": "volume",
+      "n": 1,
+      "skipped": "n<5"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "AMZN",
+      "window": 5,
+      "family": "abs",
+      "n": 1,
+      "skipped": "n<5"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "AMZN",
+      "window": 5,
+      "family": "signed",
+      "n": 1,
+      "skipped": "n<5"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "AMZN",
+      "window": 5,
+      "family": "volume",
+      "n": 1,
+      "skipped": "n<5"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "BA",
+      "window": 1,
+      "family": "abs",
+      "n": 1,
+      "skipped": "n<5"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "BA",
+      "window": 1,
+      "family": "signed",
+      "n": 1,
+      "skipped": "n<5"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "BA",
+      "window": 1,
+      "family": "volume",
+      "n": 1,
+      "skipped": "n<5"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "BA",
+      "window": 3,
+      "family": "abs",
+      "n": 1,
+      "skipped": "n<5"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "BA",
+      "window": 3,
+      "family": "signed",
+      "n": 1,
+      "skipped": "n<5"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "BA",
+      "window": 3,
+      "family": "volume",
+      "n": 1,
+      "skipped": "n<5"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "BA",
+      "window": 5,
+      "family": "abs",
+      "n": 1,
+      "skipped": "n<5"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "BA",
+      "window": 5,
+      "family": "signed",
+      "n": 1,
+      "skipped": "n<5"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "BA",
+      "window": 5,
+      "family": "volume",
+      "n": 1,
+      "skipped": "n<5"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "DJT",
+      "window": 1,
+      "family": "abs",
+      "n": 1,
+      "skipped": "n<5"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "DJT",
+      "window": 1,
+      "family": "signed",
+      "n": 1,
+      "skipped": "n<5"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "DJT",
+      "window": 1,
+      "family": "volume",
+      "n": 1,
+      "skipped": "n<5"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "DJT",
+      "window": 3,
+      "family": "abs",
+      "n": 1,
+      "skipped": "n<5"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "DJT",
+      "window": 3,
+      "family": "signed",
+      "n": 1,
+      "skipped": "n<5"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "DJT",
+      "window": 3,
+      "family": "volume",
+      "n": 1,
+      "skipped": "n<5"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "DJT",
+      "window": 5,
+      "family": "abs",
+      "n": 1,
+      "skipped": "n<5"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "DJT",
+      "window": 5,
+      "family": "signed",
+      "n": 1,
+      "skipped": "n<5"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "DJT",
+      "window": 5,
+      "family": "volume",
+      "n": 1,
+      "skipped": "n<5"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "MSFT",
+      "window": 1,
+      "family": "abs",
+      "n": 1,
+      "skipped": "n<5"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "MSFT",
+      "window": 1,
+      "family": "signed",
+      "n": 1,
+      "skipped": "n<5"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "MSFT",
+      "window": 1,
+      "family": "volume",
+      "n": 1,
+      "skipped": "n<5"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "MSFT",
+      "window": 3,
+      "family": "abs",
+      "n": 1,
+      "skipped": "n<5"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "MSFT",
+      "window": 3,
+      "family": "signed",
+      "n": 1,
+      "skipped": "n<5"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "MSFT",
+      "window": 3,
+      "family": "volume",
+      "n": 1,
+      "skipped": "n<5"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "MSFT",
+      "window": 5,
+      "family": "abs",
+      "n": 1,
+      "skipped": "n<5"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "MSFT",
+      "window": 5,
+      "family": "signed",
+      "n": 1,
+      "skipped": "n<5"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "MSFT",
+      "window": 5,
+      "family": "volume",
+      "n": 1,
+      "skipped": "n<5"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "NVDA",
+      "window": 1,
+      "family": "abs",
+      "n": 1,
+      "skipped": "n<5"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "NVDA",
+      "window": 1,
+      "family": "signed",
+      "n": 1,
+      "skipped": "n<5"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "NVDA",
+      "window": 1,
+      "family": "volume",
+      "n": 1,
+      "skipped": "n<5"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "NVDA",
+      "window": 3,
+      "family": "abs",
+      "n": 1,
+      "skipped": "n<5"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "NVDA",
+      "window": 3,
+      "family": "signed",
+      "n": 1,
+      "skipped": "n<5"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "NVDA",
+      "window": 3,
+      "family": "volume",
+      "n": 1,
+      "skipped": "n<5"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "NVDA",
+      "window": 5,
+      "family": "abs",
+      "n": 1,
+      "skipped": "n<5"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "NVDA",
+      "window": 5,
+      "family": "signed",
+      "n": 1,
+      "skipped": "n<5"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "NVDA",
+      "window": 5,
+      "family": "volume",
+      "n": 1,
+      "skipped": "n<5"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "TSLA",
+      "window": 1,
+      "family": "abs",
+      "n": 1,
+      "skipped": "n<5"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "TSLA",
+      "window": 1,
+      "family": "signed",
+      "n": 1,
+      "skipped": "n<5"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "TSLA",
+      "window": 1,
+      "family": "volume",
+      "n": 1,
+      "skipped": "n<5"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "TSLA",
+      "window": 3,
+      "family": "abs",
+      "n": 1,
+      "skipped": "n<5"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "TSLA",
+      "window": 3,
+      "family": "signed",
+      "n": 1,
+      "skipped": "n<5"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "TSLA",
+      "window": 3,
+      "family": "volume",
+      "n": 1,
+      "skipped": "n<5"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "TSLA",
+      "window": 5,
+      "family": "abs",
+      "n": 1,
+      "skipped": "n<5"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "TSLA",
+      "window": 5,
+      "family": "signed",
+      "n": 1,
+      "skipped": "n<5"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "TSLA",
+      "window": 5,
+      "family": "volume",
+      "n": 1,
+      "skipped": "n<5"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "XLI",
+      "window": 1,
+      "family": "abs",
+      "n": 1,
+      "skipped": "n<5"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "XLI",
+      "window": 1,
+      "family": "signed",
+      "n": 1,
+      "skipped": "n<5"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "XLI",
+      "window": 1,
+      "family": "volume",
+      "n": 1,
+      "skipped": "n<5"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "XLI",
+      "window": 3,
+      "family": "abs",
+      "n": 1,
+      "skipped": "n<5"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "XLI",
+      "window": 3,
+      "family": "signed",
+      "n": 1,
+      "skipped": "n<5"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "XLI",
+      "window": 3,
+      "family": "volume",
+      "n": 1,
+      "skipped": "n<5"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "XLI",
+      "window": 5,
+      "family": "abs",
+      "n": 1,
+      "skipped": "n<5"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "XLI",
+      "window": 5,
+      "family": "signed",
+      "n": 1,
+      "skipped": "n<5"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "XLI",
+      "window": 5,
+      "family": "volume",
+      "n": 1,
+      "skipped": "n<5"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "XLK",
+      "window": 1,
+      "family": "abs",
+      "n": 3,
+      "skipped": "n<5"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "XLK",
+      "window": 1,
+      "family": "signed",
+      "n": 3,
+      "skipped": "n<5"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "XLK",
+      "window": 1,
+      "family": "volume",
+      "n": 3,
+      "skipped": "n<5"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "XLK",
+      "window": 3,
+      "family": "abs",
+      "n": 3,
+      "skipped": "n<5"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "XLK",
+      "window": 3,
+      "family": "signed",
+      "n": 3,
+      "skipped": "n<5"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "XLK",
+      "window": 3,
+      "family": "volume",
+      "n": 3,
+      "skipped": "n<5"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "XLK",
+      "window": 5,
+      "family": "abs",
+      "n": 3,
+      "skipped": "n<5"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "XLK",
+      "window": 5,
+      "family": "signed",
+      "n": 3,
+      "skipped": "n<5"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "XLK",
+      "window": 5,
+      "family": "volume",
+      "n": 3,
+      "skipped": "n<5"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "XLY",
+      "window": 1,
+      "family": "abs",
+      "n": 2,
+      "skipped": "n<5"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "XLY",
+      "window": 1,
+      "family": "signed",
+      "n": 2,
+      "skipped": "n<5"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "XLY",
+      "window": 1,
+      "family": "volume",
+      "n": 2,
+      "skipped": "n<5"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "XLY",
+      "window": 3,
+      "family": "abs",
+      "n": 2,
+      "skipped": "n<5"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "XLY",
+      "window": 3,
+      "family": "signed",
+      "n": 2,
+      "skipped": "n<5"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "XLY",
+      "window": 3,
+      "family": "volume",
+      "n": 2,
+      "skipped": "n<5"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "XLY",
+      "window": 5,
+      "family": "abs",
+      "n": 2,
+      "skipped": "n<5"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "XLY",
+      "window": 5,
+      "family": "signed",
+      "n": 2,
+      "skipped": "n<5"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "XLY",
+      "window": 5,
+      "family": "volume",
+      "n": 2,
+      "skipped": "n<5"
+    },
+    {
+      "cohort": "GEO_SHOCK",
+      "asset": "FXI",
+      "window": 1,
+      "family": "abs",
+      "n": 193,
+      "n_overlapping": 184,
+      "observed": 0.00488,
+      "null_mean": 0.00499,
+      "p_raw": 0.6044,
+      "p_bh": 0.9201,
+      "survives_bh": false
+    },
+    {
+      "cohort": "GEO_SHOCK",
+      "asset": "FXI",
+      "window": 1,
+      "family": "signed",
+      "n": 193,
+      "n_overlapping": 184,
+      "observed": -0.0002,
+      "null_mean": -0.0007,
+      "p_raw": 0.8771,
+      "p_bh": 0.9366,
+      "survives_bh": false
+    },
+    {
+      "cohort": "GEO_SHOCK",
+      "asset": "FXI",
+      "window": 1,
+      "family": "volume",
+      "n": 193,
+      "n_overlapping": 184,
+      "observed": 0.88564,
+      "null_mean": 0.90514,
+      "p_raw": 0.6983,
+      "p_bh": 0.9231,
+      "survives_bh": false
+    },
+    {
+      "cohort": "GEO_SHOCK",
+      "asset": "FXI",
+      "window": 3,
+      "family": "abs",
+      "n": 193,
+      "n_overlapping": 184,
+      "observed": 0.0149,
+      "null_mean": 0.01457,
+      "p_raw": 0.3716,
+      "p_bh": 0.8073,
+      "survives_bh": false
+    },
+    {
+      "cohort": "GEO_SHOCK",
+      "asset": "FXI",
+      "window": 3,
+      "family": "signed",
+      "n": 193,
+      "n_overlapping": 184,
+      "observed": -0.00264,
+      "null_mean": -0.0017,
+      "p_raw": 0.2617,
+      "p_bh": 0.8051,
+      "survives_bh": false
+    },
+    {
+      "cohort": "GEO_SHOCK",
+      "asset": "FXI",
+      "window": 3,
+      "family": "volume",
+      "n": 193,
+      "n_overlapping": 184,
+      "observed": 0.88692,
+      "null_mean": 0.90574,
+      "p_raw": 0.7612,
+      "p_bh": 0.9231,
+      "survives_bh": false
+    },
+    {
+      "cohort": "GEO_SHOCK",
+      "asset": "FXI",
+      "window": 5,
+      "family": "abs",
+      "n": 193,
+      "n_overlapping": 184,
+      "observed": 0.01936,
+      "null_mean": 0.01945,
+      "p_raw": 0.5265,
+      "p_bh": 0.8505,
+      "survives_bh": false
+    },
+    {
+      "cohort": "GEO_SHOCK",
+      "asset": "FXI",
+      "window": 5,
+      "family": "signed",
+      "n": 193,
+      "n_overlapping": 184,
+      "observed": -0.00393,
+      "null_mean": -0.00303,
+      "p_raw": 0.3347,
+      "p_bh": 0.8073,
+      "survives_bh": false
+    },
+    {
+      "cohort": "GEO_SHOCK",
+      "asset": "FXI",
+      "window": 5,
+      "family": "volume",
+      "n": 193,
+      "n_overlapping": 184,
+      "observed": 0.89118,
+      "null_mean": 0.90797,
+      "p_raw": 0.7582,
+      "p_bh": 0.9231,
+      "survives_bh": false
+    },
+    {
+      "cohort": "GEO_SHOCK",
+      "asset": "GLD",
+      "window": 1,
+      "family": "abs",
+      "n": 193,
+      "n_overlapping": 184,
+      "observed": 0.00608,
+      "null_mean": 0.00604,
+      "p_raw": 0.4446,
+      "p_bh": 0.8344,
+      "survives_bh": false
+    },
+    {
+      "cohort": "GEO_SHOCK",
+      "asset": "GLD",
+      "window": 1,
+      "family": "signed",
+      "n": 193,
+      "n_overlapping": 184,
+      "observed": -0.00194,
+      "null_mean": -0.00193,
+      "p_raw": 0.4855,
+      "p_bh": 0.8488,
+      "survives_bh": false
+    },
+    {
+      "cohort": "GEO_SHOCK",
+      "asset": "GLD",
+      "window": 1,
+      "family": "volume",
+      "n": 193,
+      "n_overlapping": 184,
+      "observed": 1.08868,
+      "null_mean": 1.17117,
+      "p_raw": 0.9311,
+      "p_bh": 0.9776,
+      "survives_bh": false
+    },
+    {
+      "cohort": "GEO_SHOCK",
+      "asset": "GLD",
+      "window": 3,
+      "family": "abs",
+      "n": 193,
+      "n_overlapping": 184,
+      "observed": 0.01717,
+      "null_mean": 0.0171,
+      "p_raw": 0.4565,
+      "p_bh": 0.8344,
+      "survives_bh": false
+    },
+    {
+      "cohort": "GEO_SHOCK",
+      "asset": "GLD",
+      "window": 3,
+      "family": "signed",
+      "n": 193,
+      "n_overlapping": 184,
+      "observed": -0.00486,
+      "null_mean": -0.00251,
+      "p_raw": 0.0799,
+      "p_bh": 0.7552,
+      "survives_bh": false
+    },
+    {
+      "cohort": "GEO_SHOCK",
+      "asset": "GLD",
+      "window": 3,
+      "family": "volume",
+      "n": 193,
+      "n_overlapping": 184,
+      "observed": 1.09054,
+      "null_mean": 1.17301,
+      "p_raw": 0.965,
+      "p_bh": 0.9806,
+      "survives_bh": false
+    },
+    {
+      "cohort": "GEO_SHOCK",
+      "asset": "GLD",
+      "window": 5,
+      "family": "abs",
+      "n": 193,
+      "n_overlapping": 184,
+      "observed": 0.02425,
+      "null_mean": 0.0235,
+      "p_raw": 0.2927,
+      "p_bh": 0.8051,
+      "survives_bh": false
+    },
+    {
+      "cohort": "GEO_SHOCK",
+      "asset": "GLD",
+      "window": 5,
+      "family": "signed",
+      "n": 193,
+      "n_overlapping": 184,
+      "observed": -0.00644,
+      "null_mean": -0.00299,
+      "p_raw": 0.0649,
+      "p_bh": 0.7552,
+      "survives_bh": false
+    },
+    {
+      "cohort": "GEO_SHOCK",
+      "asset": "GLD",
+      "window": 5,
+      "family": "volume",
+      "n": 193,
+      "n_overlapping": 184,
+      "observed": 1.0947,
+      "null_mean": 1.17603,
+      "p_raw": 0.96,
+      "p_bh": 0.9806,
+      "survives_bh": false
+    },
+    {
+      "cohort": "GEO_SHOCK",
+      "asset": "ITA",
+      "window": 1,
+      "family": "abs",
+      "n": 193,
+      "n_overlapping": 184,
+      "observed": 0.00761,
+      "null_mean": 0.00713,
+      "p_raw": 0.1299,
+      "p_bh": 0.7552,
+      "survives_bh": false
+    },
+    {
+      "cohort": "GEO_SHOCK",
+      "asset": "ITA",
+      "window": 1,
+      "family": "signed",
+      "n": 193,
+      "n_overlapping": 184,
+      "observed": -0.00135,
+      "null_mean": -0.00138,
+      "p_raw": 0.5225,
+      "p_bh": 0.8505,
+      "survives_bh": false
+    },
+    {
+      "cohort": "GEO_SHOCK",
+      "asset": "ITA",
+      "window": 1,
+      "family": "volume",
+      "n": 193,
+      "n_overlapping": 184,
+      "observed": 1.17185,
+      "null_mean": 1.22002,
+      "p_raw": 0.6484,
+      "p_bh": 0.9231,
+      "survives_bh": false
+    },
+    {
+      "cohort": "GEO_SHOCK",
+      "asset": "ITA",
+      "window": 3,
+      "family": "abs",
+      "n": 193,
+      "n_overlapping": 184,
+      "observed": 0.01396,
+      "null_mean": 0.01325,
+      "p_raw": 0.1948,
+      "p_bh": 0.7552,
+      "survives_bh": false
+    },
+    {
+      "cohort": "GEO_SHOCK",
+      "asset": "ITA",
+      "window": 3,
+      "family": "signed",
+      "n": 193,
+      "n_overlapping": 184,
+      "observed": -0.00341,
+      "null_mean": -0.00194,
+      "p_raw": 0.1019,
+      "p_bh": 0.7552,
+      "survives_bh": false
+    },
+    {
+      "cohort": "GEO_SHOCK",
+      "asset": "ITA",
+      "window": 3,
+      "family": "volume",
+      "n": 193,
+      "n_overlapping": 184,
+      "observed": 1.22988,
+      "null_mean": 1.22152,
+      "p_raw": 0.4136,
+      "p_bh": 0.8344,
+      "survives_bh": false
+    },
+    {
+      "cohort": "GEO_SHOCK",
+      "asset": "ITA",
+      "window": 5,
+      "family": "abs",
+      "n": 193,
+      "n_overlapping": 184,
+      "observed": 0.01865,
+      "null_mean": 0.01771,
+      "p_raw": 0.1788,
+      "p_bh": 0.7552,
+      "survives_bh": false
+    },
+    {
+      "cohort": "GEO_SHOCK",
+      "asset": "ITA",
+      "window": 5,
+      "family": "signed",
+      "n": 193,
+      "n_overlapping": 184,
+      "observed": -0.00446,
+      "null_mean": -0.00216,
+      "p_raw": 0.0739,
+      "p_bh": 0.7552,
+      "survives_bh": false
+    },
+    {
+      "cohort": "GEO_SHOCK",
+      "asset": "ITA",
+      "window": 5,
+      "family": "volume",
+      "n": 193,
+      "n_overlapping": 184,
+      "observed": 1.26365,
+      "null_mean": 1.21821,
+      "p_raw": 0.1658,
+      "p_bh": 0.7552,
+      "survives_bh": false
+    },
+    {
+      "cohort": "GEO_SHOCK",
+      "asset": "SPY",
+      "window": 1,
+      "family": "abs",
+      "n": 193,
+      "n_overlapping": 184,
+      "observed": 0.00553,
+      "null_mean": 0.00598,
+      "p_raw": 0.7912,
+      "p_bh": 0.9231,
+      "survives_bh": false
+    },
+    {
+      "cohort": "GEO_SHOCK",
+      "asset": "SPY",
+      "window": 1,
+      "family": "signed",
+      "n": 193,
+      "n_overlapping": 184,
+      "observed": -0.00027,
+      "null_mean": -0.00018,
+      "p_raw": 0.7273,
+      "p_bh": 0.9231,
+      "survives_bh": false
+    },
+    {
+      "cohort": "GEO_SHOCK",
+      "asset": "SPY",
+      "window": 1,
+      "family": "volume",
+      "n": 193,
+      "n_overlapping": 184,
+      "observed": 1.07392,
+      "null_mean": 1.09899,
+      "p_raw": 0.7443,
+      "p_bh": 0.9231,
+      "survives_bh": false
+    },
+    {
+      "cohort": "GEO_SHOCK",
+      "asset": "SPY",
+      "window": 3,
+      "family": "abs",
+      "n": 193,
+      "n_overlapping": 184,
+      "observed": 0.01191,
+      "null_mean": 0.01188,
+      "p_raw": 0.4635,
+      "p_bh": 0.8344,
+      "survives_bh": false
+    },
+    {
+      "cohort": "GEO_SHOCK",
+      "asset": "SPY",
+      "window": 3,
+      "family": "signed",
+      "n": 193,
+      "n_overlapping": 184,
+      "observed": 0.00205,
+      "null_mean": 0.00014,
+      "p_raw": 0.1089,
+      "p_bh": 0.7552,
+      "survives_bh": false
+    },
+    {
+      "cohort": "GEO_SHOCK",
+      "asset": "SPY",
+      "window": 3,
+      "family": "volume",
+      "n": 193,
+      "n_overlapping": 184,
+      "observed": 1.08212,
+      "null_mean": 1.10042,
+      "p_raw": 0.6923,
+      "p_bh": 0.9231,
+      "survives_bh": false
+    },
+    {
+      "cohort": "GEO_SHOCK",
+      "asset": "SPY",
+      "window": 5,
+      "family": "abs",
+      "n": 193,
+      "n_overlapping": 184,
+      "observed": 0.01568,
+      "null_mean": 0.01532,
+      "p_raw": 0.3536,
+      "p_bh": 0.8073,
+      "survives_bh": false
+    },
+    {
+      "cohort": "GEO_SHOCK",
+      "asset": "SPY",
+      "window": 5,
+      "family": "signed",
+      "n": 193,
+      "n_overlapping": 184,
+      "observed": 0.002,
+      "null_mean": 0.00039,
+      "p_raw": 0.2038,
+      "p_bh": 0.7552,
+      "survives_bh": false
+    },
+    {
+      "cohort": "GEO_SHOCK",
+      "asset": "SPY",
+      "window": 5,
+      "family": "volume",
+      "n": 193,
+      "n_overlapping": 184,
+      "observed": 1.09135,
+      "null_mean": 1.10189,
+      "p_raw": 0.6134,
+      "p_bh": 0.9201,
+      "survives_bh": false
+    },
+    {
+      "cohort": "GEO_SHOCK",
+      "asset": "USO",
+      "window": 1,
+      "family": "abs",
+      "n": 193,
+      "n_overlapping": 184,
+      "observed": 0.0112,
+      "null_mean": 0.01046,
+      "p_raw": 0.1808,
+      "p_bh": 0.7552,
+      "survives_bh": false
+    },
+    {
+      "cohort": "GEO_SHOCK",
+      "asset": "USO",
+      "window": 1,
+      "family": "signed",
+      "n": 193,
+      "n_overlapping": 184,
+      "observed": -0.00115,
+      "null_mean": 0.00036,
+      "p_raw": 0.3067,
+      "p_bh": 0.8051,
+      "survives_bh": false
+    },
+    {
+      "cohort": "GEO_SHOCK",
+      "asset": "USO",
+      "window": 1,
+      "family": "volume",
+      "n": 193,
+      "n_overlapping": 184,
+      "observed": 1.97279,
+      "null_mean": 1.65049,
+      "p_raw": 0.038,
+      "p_bh": 0.7552,
+      "survives_bh": false
+    },
+    {
+      "cohort": "GEO_SHOCK",
+      "asset": "USO",
+      "window": 3,
+      "family": "abs",
+      "n": 193,
+      "n_overlapping": 184,
+      "observed": 0.02805,
+      "null_mean": 0.02787,
+      "p_raw": 0.4446,
+      "p_bh": 0.8344,
+      "survives_bh": false
+    },
+    {
+      "cohort": "GEO_SHOCK",
+      "asset": "USO",
+      "window": 3,
+      "family": "signed",
+      "n": 193,
+      "n_overlapping": 184,
+      "observed": 0.00118,
+      "null_mean": 0.00307,
+      "p_raw": 0.8242,
+      "p_bh": 0.9264,
+      "survives_bh": false
+    },
+    {
+      "cohort": "GEO_SHOCK",
+      "asset": "USO",
+      "window": 3,
+      "family": "volume",
+      "n": 193,
+      "n_overlapping": 184,
+      "observed": 1.97256,
+      "null_mean": 1.69309,
+      "p_raw": 0.0639,
+      "p_bh": 0.7552,
+      "survives_bh": false
+    },
+    {
+      "cohort": "GEO_SHOCK",
+      "asset": "USO",
+      "window": 5,
+      "family": "abs",
+      "n": 193,
+      "n_overlapping": 184,
+      "observed": 0.04032,
+      "null_mean": 0.0383,
+      "p_raw": 0.2338,
+      "p_bh": 0.7751,
+      "survives_bh": false
+    },
+    {
+      "cohort": "GEO_SHOCK",
+      "asset": "USO",
+      "window": 5,
+      "family": "signed",
+      "n": 193,
+      "n_overlapping": 184,
+      "observed": 0.00589,
+      "null_mean": 0.00583,
+      "p_raw": 0.4985,
+      "p_bh": 0.8488,
+      "survives_bh": false
+    },
+    {
+      "cohort": "GEO_SHOCK",
+      "asset": "USO",
+      "window": 5,
+      "family": "volume",
+      "n": 193,
+      "n_overlapping": 184,
+      "observed": 1.96417,
+      "null_mean": 1.72221,
+      "p_raw": 0.0989,
+      "p_bh": 0.7552,
+      "survives_bh": false
+    },
+    {
+      "cohort": "GEO_SHOCK",
+      "asset": "VIXY",
+      "window": 1,
+      "family": "abs",
+      "n": 193,
+      "n_overlapping": 184,
+      "observed": 0.01366,
+      "null_mean": 0.01468,
+      "p_raw": 0.7892,
+      "p_bh": 0.9231,
+      "survives_bh": false
+    },
+    {
+      "cohort": "GEO_SHOCK",
+      "asset": "VIXY",
+      "window": 1,
+      "family": "signed",
+      "n": 193,
+      "n_overlapping": 184,
+      "observed": -0.00031,
+      "null_mean": -0.00082,
+      "p_raw": 0.8681,
+      "p_bh": 0.9366,
+      "survives_bh": false
+    },
+    {
+      "cohort": "GEO_SHOCK",
+      "asset": "VIXY",
+      "window": 1,
+      "family": "volume",
+      "n": 193,
+      "n_overlapping": 184,
+      "observed": 1.24615,
+      "null_mean": 1.27739,
+      "p_raw": 0.6953,
+      "p_bh": 0.9231,
+      "survives_bh": false
+    },
+    {
+      "cohort": "GEO_SHOCK",
+      "asset": "VIXY",
+      "window": 3,
+      "family": "abs",
+      "n": 193,
+      "n_overlapping": 184,
+      "observed": 0.02758,
+      "null_mean": 0.02799,
+      "p_raw": 0.5455,
+      "p_bh": 0.8591,
+      "survives_bh": false
+    },
+    {
+      "cohort": "GEO_SHOCK",
+      "asset": "VIXY",
+      "window": 3,
+      "family": "signed",
+      "n": 193,
+      "n_overlapping": 184,
+      "observed": 0.00075,
+      "null_mean": -0.00073,
+      "p_raw": 0.8222,
+      "p_bh": 0.9264,
+      "survives_bh": false
+    },
+    {
+      "cohort": "GEO_SHOCK",
+      "asset": "VIXY",
+      "window": 3,
+      "family": "volume",
+      "n": 193,
+      "n_overlapping": 184,
+      "observed": 1.23884,
+      "null_mean": 1.28561,
+      "p_raw": 0.8382,
+      "p_bh": 0.9264,
+      "survives_bh": false
+    },
+    {
+      "cohort": "GEO_SHOCK",
+      "asset": "VIXY",
+      "window": 5,
+      "family": "abs",
+      "n": 193,
+      "n_overlapping": 184,
+      "observed": 0.03878,
+      "null_mean": 0.03799,
+      "p_raw": 0.3676,
+      "p_bh": 0.8073,
+      "survives_bh": false
+    },
+    {
+      "cohort": "GEO_SHOCK",
+      "asset": "VIXY",
+      "window": 5,
+      "family": "signed",
+      "n": 193,
+      "n_overlapping": 184,
+      "observed": -8e-05,
+      "null_mean": -0.00111,
+      "p_raw": 0.982,
+      "p_bh": 0.982,
+      "survives_bh": false
+    },
+    {
+      "cohort": "GEO_SHOCK",
+      "asset": "VIXY",
+      "window": 5,
+      "family": "volume",
+      "n": 193,
+      "n_overlapping": 184,
+      "observed": 1.2568,
+      "null_mean": 1.28972,
+      "p_raw": 0.7762,
+      "p_bh": 0.9231,
+      "survives_bh": false
+    },
+    {
+      "cohort": "NOISE",
+      "asset": "SPY",
+      "window": 1,
+      "family": "abs",
+      "n": 92,
+      "n_overlapping": 66,
+      "observed": 0.00621,
+      "null_mean": 0.00599,
+      "p_raw": 0.3477,
+      "p_bh": 0.8073,
+      "survives_bh": false
+    },
+    {
+      "cohort": "NOISE",
+      "asset": "SPY",
+      "window": 1,
+      "family": "signed",
+      "n": 92,
+      "n_overlapping": 66,
+      "observed": 0.00085,
+      "null_mean": -0.00013,
+      "p_raw": 0.4256,
+      "p_bh": 0.8344,
+      "survives_bh": false
+    },
+    {
+      "cohort": "NOISE",
+      "asset": "SPY",
+      "window": 1,
+      "family": "volume",
+      "n": 92,
+      "n_overlapping": 66,
+      "observed": 1.13471,
+      "null_mean": 1.0981,
+      "p_raw": 0.2288,
+      "p_bh": 0.7751,
+      "survives_bh": false
+    },
+    {
+      "cohort": "NOISE",
+      "asset": "SPY",
+      "window": 3,
+      "family": "abs",
+      "n": 92,
+      "n_overlapping": 66,
+      "observed": 0.0131,
+      "null_mean": 0.01184,
+      "p_raw": 0.1648,
+      "p_bh": 0.7552,
+      "survives_bh": false
+    },
+    {
+      "cohort": "NOISE",
+      "asset": "SPY",
+      "window": 3,
+      "family": "signed",
+      "n": 92,
+      "n_overlapping": 66,
+      "observed": 0.00316,
+      "null_mean": 0.00018,
+      "p_raw": 0.0789,
+      "p_bh": 0.7552,
+      "survives_bh": false
+    },
+    {
+      "cohort": "NOISE",
+      "asset": "SPY",
+      "window": 3,
+      "family": "volume",
+      "n": 92,
+      "n_overlapping": 66,
+      "observed": 1.12343,
+      "null_mean": 1.10101,
+      "p_raw": 0.2977,
+      "p_bh": 0.8051,
+      "survives_bh": false
+    },
+    {
+      "cohort": "NOISE",
+      "asset": "SPY",
+      "window": 5,
+      "family": "abs",
+      "n": 92,
+      "n_overlapping": 66,
+      "observed": 0.017,
+      "null_mean": 0.01527,
+      "p_raw": 0.1319,
+      "p_bh": 0.7552,
+      "survives_bh": false
+    },
+    {
+      "cohort": "NOISE",
+      "asset": "SPY",
+      "window": 5,
+      "family": "signed",
+      "n": 92,
+      "n_overlapping": 66,
+      "observed": 0.00091,
+      "null_mean": 0.00035,
+      "p_raw": 0.6843,
+      "p_bh": 0.9231,
+      "survives_bh": false
+    },
+    {
+      "cohort": "NOISE",
+      "asset": "SPY",
+      "window": 5,
+      "family": "volume",
+      "n": 92,
+      "n_overlapping": 66,
+      "observed": 1.13105,
+      "null_mean": 1.10474,
+      "p_raw": 0.2697,
+      "p_bh": 0.8051,
+      "survives_bh": false
+    }
+  ],
+  "top_case_studies": [
+    {
+      "cohort": "GEO_SHOCK",
+      "asset": "USO",
+      "s0": "2026-03-09",
+      "car_1d": -0.1323,
+      "overlapping": true,
+      "tweet": "U.S. Trade Deficit Nearly Cut in Half Since Liberation Day: https://www.breitbart.com/economy/2026/02/19/u-s-trade-deficit-nearly-cut-in-half-since-liberation-day/"
+    },
+    {
+      "cohort": "GEO_SHOCK",
+      "asset": "USO",
+      "s0": "2025-06-23",
+      "car_1d": -0.0876,
+      "overlapping": true,
+      "tweet": "I am very happy to report that I have arranged, along with Secretary of State Marco Rubio, a wonderful Treaty between the Democratic Republic of the Congo, and the Republic of Rwanda, in their War, wh"
+    },
+    {
+      "cohort": "GEO_SHOCK",
+      "asset": "VIXY",
+      "s0": "2025-04-14",
+      "car_1d": -0.0654,
+      "overlapping": true,
+      "tweet": "Russia has to get moving. Too many people ere DYING, thousands a week, in a terrible and senseless war - A war that should have never happened, and wouldn\u2019t have happened, if I were President!!!"
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "AAPL",
+      "s0": "2025-04-09",
+      "car_1d": 0.0609,
+      "overlapping": false,
+      "tweet": "This is a GREAT time to move your COMPANY into the United States of America, like Apple, and so many others, in record numbers, are doing. ZERO TARIFFS, and almost immediate Electrical/Energy hook ups"
+    },
+    {
+      "cohort": "GEO_SHOCK",
+      "asset": "VIXY",
+      "s0": "2026-04-14",
+      "car_1d": 0.05,
+      "overlapping": true,
+      "tweet": "For those people that still read The Failing New York Times and, despite the fact that Iran has been totally OBLITERATED, Militarily, and otherwise, you would think that Iran is actually winning or, a"
+    },
+    {
+      "cohort": "GEO_SHOCK",
+      "asset": "VIXY",
+      "s0": "2025-04-10",
+      "car_1d": 0.0495,
+      "overlapping": true,
+      "tweet": "Based on the lack of respect that China has shown to the World\u2019s Markets, I am hereby raising the Tariff charged to China by the United States of America to 125%, effective immediately. At some point,"
+    },
+    {
+      "cohort": "GEO_SHOCK",
+      "asset": "GLD",
+      "s0": "2026-01-30",
+      "car_1d": -0.0489,
+      "overlapping": true,
+      "tweet": "Based on the fact that Canada has wrongfully, illegally, and steadfastly refused to certify the Gulfstream 500, 600, 700, and 800 Jets, one of the greatest, most technologically advanced airplanes eve"
+    },
+    {
+      "cohort": "GEO_SHOCK",
+      "asset": "VIXY",
+      "s0": "2025-05-12",
+      "car_1d": -0.0489,
+      "overlapping": true,
+      "tweet": "After a long night of talks mediated by the United States, I am pleased to announce that India and Pakistan have agreed to a FULL AND IMMEDIATE CEASEFIRE. Congratulations to both Countries on using Co"
+    },
+    {
+      "cohort": "NOISE",
+      "asset": "SPY",
+      "s0": "2025-04-08",
+      "car_1d": -0.0485,
+      "overlapping": true,
+      "tweet": "\u201cRates are plummeting, oil prices are plummeting, deregulation is happening. President Trump is not going to bend...\""
+    },
+    {
+      "cohort": "GEO_SHOCK",
+      "asset": "VIXY",
+      "s0": "2025-04-07",
+      "car_1d": 0.0467,
+      "overlapping": true,
+      "tweet": "My Administration has been working very hard on a Deal to SAVE TIKTOK, and we have made tremendous progress. The Deal requires more work to ensure all necessary approvals are signed, which is why I am"
+    }
+  ]
+}

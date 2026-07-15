@@ -1,0 +1,25 @@
+# Line-ending policy. Without this, core.autocrlf rewrites files on checkout and the
+# bytes differ per platform — which silently breaks a hash pin.
+#
+# ORDER MATTERS: the LAST matching pattern wins, so the catch-all goes FIRST and the
+# byte-frozen overrides come after it. (Putting `* text=auto` last silently defeats
+# every -text rule below it.)
+
+# Default: normalise to LF in the repo, let git do what it likes on checkout.
+* text=auto
+
+# THE LOAD-BEARING RULE: serving/app.py verify_manifest() refuses to start unless
+# sha256(data/real/corpus_v3.csv) == the manifest's corpus.sha256. That hash is over
+# the file's BYTES, so any CRLF<->LF conversion changes it and the Endpoint dies with
+# CORPUS HASH MISMATCH. -text freezes the bytes: every clone, on every OS, checks out
+# byte-identical to what was measured.
+data/real/*.csv     -text
+data/fixtures/*.csv -text
+
+# Same reasoning for artifacts a manifest/report hash may cover.
+reports/*.json      -text
+reports/*.csv       -text
+
+# Generated/vendored — keep them out of diffs and language stats.
+*.html              -text linguist-generated
+uv.lock             -diff
