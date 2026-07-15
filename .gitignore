@@ -22,3 +22,4 @@ wheels/
 
 # Pipeline run artifacts
 runs/
+reports/prospective_replication.json

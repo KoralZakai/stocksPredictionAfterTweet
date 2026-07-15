@@ -12,18 +12,18 @@ enumerated in `registry.json` **before** scoring. Market model per event: OLS
 beta vs SPY on 120 sessions ending 6 before s0 (SPY itself: Brown-Warner
 mean-adjusted). Entry anchor = first open strictly after t0. Permutation null =
 same statistic on random session-days, drawn **with replacement**; one BH pass
-over all 72 cells. Seed 20260715, N_perm=1000, fully offline (committed daily bars).
+over all 63 cells. Seed 20260715, N_perm=1000, fully offline (committed daily bars).
 
 ## Result: **nothing survives. 0 of 63 cells.** (min p_bh = 0.76)
 
 | closest cells (all fail) | n | observed | null | p_raw | p_bh |
 |---|---|---|---|---|---|
-| GEO_SHOCK / GLD w=5 signed | 184 | −0.0070 | −0.0029 | 0.043 | 0.831 |
-| GEO_SHOCK / ITA w=3 signed | 184 | −0.0036 | −0.0018 | 0.074 | 0.831 |
-| GEO_SHOCK / USO w=1 volume | 184 | 1.99× | 1.71× | 0.106 | 0.831 |
+| GEO_SHOCK / USO w=1 volume | 193 | 1.97× | 1.65× | 0.038 | 0.755 |
+| GEO_SHOCK / USO w=3 volume | 193 | 1.97× | 1.69× | 0.064 | 0.755 |
+| GEO_SHOCK / GLD w=5 signed | 193 | -0.0064 | -0.0030 | 0.065 | 0.755 |
 
 Even the suggestive-looking USO volume (~2× estimation baseline after oil
-tweets) fails: the null pool *also* runs 1.71× — elevated volume is the 2025-26
+tweets) fails: the null pool *also* runs 1.65× — elevated volume is the 2025-26
 oil regime, not the tweets.
 
 ## Why the anecdotes feel true anyway: two artifacts we caught mid-study
@@ -45,16 +45,24 @@ oil regime, not the tweets.
 
 | s0 | cohort/asset | CAR 1d | tweet |
 |---|---|---|---|
-| 2026-03-09 | GEO_SHOCK/USO | **−13.2%** | "There will be no deal with Iran except UNCONDITIONAL SURRENDER!…" |
-| 2026-02-17 | CORPORATE/DJT | −10.2% | "Happy President's Day! Prices and Inflation are Way Down…" |
-| 2025-06-23 | GEO_SHOCK/USO | −8.8% | "I am very happy to report that I have arranged… [Iran ceasefire]" |
-| 2025-08-14 | CORPORATE/INTC | **+8.0%** | tweet that day was about **Comey** — unrelated to Intel |
+| 2026-03-09 | GEO_SHOCK/USO | **-13.2%** | "U.S. Trade Deficit Nearly Cut in Half Since Liberation Day: https://www.…" |
+| 2025-06-23 | GEO_SHOCK/USO | **-8.8%** | "I am very happy to report that I have arranged, along with Secretary of…" |
+| 2025-04-14 | GEO_SHOCK/VIXY | **-6.5%** | "Russia has to get moving. Too many people ere DYING, thousands a week, i…" |
+| 2025-04-09 | CORPORATE/AAPL | **+6.1%** | "This is a GREAT time to move your COMPANY into the United States of Amer…" |
 
-Hormuz-type oil moves on Iran days are real and large — *individually*. But the
-INTC row is the tell: an 8% Intel move "after a Trump tweet" whose tweet had
-nothing to do with Intel. When someone posts every day, every big market move
-has a same-day tweet. **The anecdotes are survivorship + coincidence-by-
-saturation; the population effect, measured against an honest null, is zero.**
+Hormuz-type oil moves on Iran days are real and large — *individually*. But read
+the top row: the biggest oil move in the study is anchored to a tweet about the
+**trade deficit**, not about Iran or oil at all. When someone posts every day,
+every big market move has a same-day tweet available to blame. **The anecdotes are
+survivorship + coincidence-by-saturation; the population effect, measured against
+an honest null, is zero.**
+
+> *Correction (2026-07-15):* an earlier revision used a `CORPORATE/INTC +8.0%` row here
+> whose tweet was about **Comey** — offered as proof of coincidence. It was worse than
+> that: the tweet only entered the INTC cohort because the entity rule read "intel" (as
+> in *intelligence*) as the chipmaker. The row was a mapping bug, not a coincidence. The
+> mapper is fixed and the table above is regenerated; the point it illustrated survives
+> on a row that is real.
 
 ## Exhibit A: the Intel tweet is REVERSE CAUSALITY
 

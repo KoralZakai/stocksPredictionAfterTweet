@@ -42,7 +42,7 @@ single most-cited geopolitical event. Correctly anchored to **Friday 03-06** rat
 than Monday 03-09, the model's fear trade (oil ↑, defence ↑, VIX ↑) goes from **0/3
 to 3/3**. Oil gapped **+9.4%** into the open we had been skipping. **The
 "obvious" trade was right — and our clock had recorded it as wrong.** One event
-proves nothing (n=1, and the study still returns 0/72), but it is the fairest
+proves nothing (n=1, and the study still returns 0/63), but it is the fairest
 version of the sceptic's best case, and it deserved a correct clock.
 
 This is what the system was built to do. Per the project charter: *a rigorous null
@@ -206,22 +206,53 @@ curl -s -X POST http://<endpoint>/predict -H 'content-type: application/json' -d
 ```
 ```jsonc
 {
-  "decision": "SHORT",
-  "instruments": [{"ticker": "SMH", "direction": "down", "benchmark": "SPY"},
-                  {"ticker": "XLK", "direction": "down", "benchmark": "SPY"}],
-  "scenario": "Trade War", "reasoning": "tariffs raise input costs for chipmakers",
-  "horizon": "EOD",
-  "cohort_base_rate": {
-  "cohort_base_rate": null,   // no horizon survived BH -> no accuracy is cited
+  "decision": "ABSTAIN",          // every tweet, by design -- see below
+  "instruments": [],              // the abstain path names nothing
+  "scenario": "Trade War",        // the 70B's read of the text: research output
+  "reasoning": "Tariffs boost US industry, hurt China",
+  "abstain_reason": "no validated edge: no horizon survived Benjamini-Hochberg
+      correction over the test registry, so this deployment ships no tradeable
+      horizon (shipped_horizons is empty). The scenario and reasoning are
+      research output, not a call.",
   "horizon": null,
-  "market_context": {"provider": "yfinance", "session_phase": "premarket",
-                     "entry_anchor_utc": "2025-03-03T13:30:00+00:00", "quotes": [],
-                     "realized_alpha_since_t0": []},   // null on any market-plane failure
-  "manifest_version": "7852708", "disclaimer": "Research output. Not investment advice."
+  "cohort_base_rate": null,       // no horizon survived BH -> no accuracy is cited
+  "market_context": null,         // null on any market-plane failure, or when
+                                  //   no instrument resolved
+  "manifest_version": "bb7d6a6",
+  "disclaimer": "Research output. Not investment advice."
 }
 ```
 `GET /health` returns the manifest version, corpus + prompt hashes, and shipped
 horizons. `GET /market/{ticker}` returns a quote + benchmark (market plane).
+
+### The feedback loop — `/predict` → log → Job → replication report
+
+Every served call is appended to a bucket-mounted log (`serving/observe.py`; the log
+records **no outcome** — at `t0` the outcome does not exist, and writing one would be
+the point-in-time leak of §3.1). A second Job scores it once each horizon has *closed*:
+
+```bash
+make feedback     # = PYTHONPATH=. .venv/Scripts/python.exe jobs/feedback.py
+# [feedback] logged=3 matured=2 look #1 (BH denominator 4)
+# [feedback]    EOD  n=1  hit=0.000  p_raw=1.000  p_bh=1.000  no
+# [feedback]     3d  n=2  hit=1.000  p_raw=0.250  p_bh=0.500  no   <- 2/2 and still not a finding
+```
+
+Three things it deliberately refuses to do, because the obvious version of this loop is
+the fastest way to manufacture the signal the study says isn't there:
+
+1. **Live calls are a replication set, never training data.** Callers choose which tweets
+   to send, so the sample is *selected*, not sampled — and what people find interesting
+   correlates with the big moves under test.
+2. **It cannot be re-run into significance.** Every look is counted and the correction is
+   applied over `registry × n_looks`, so the bar **rises** each run (same data: look #1
+   `p_bh=0.500` → look #2 `p_bh=1.000`). Re-scoring a growing log until `p < α` reaches
+   significance with probability 1 on pure noise.
+3. **It never writes the manifest.** Shipping a horizon stays a human decision
+   (test-enforced in `tests/test_feedback_loop.py`).
+
+Maturity needs no calendar arithmetic: `forward_returns` only returns a horizon whose bar
+exists, so the Job is idempotent and safe to schedule.
 
 **Abstention is a first-class success.** `/predict` returns `ABSTAIN` when the
 tweet isn't market-relevant, no whitelisted instrument resolves, or `t0` is
@@ -313,9 +344,9 @@ corporate mentions) *visibly* move markets, so the flat average must be hiding
 localized signal. We tested exactly that with a pre-registered **event study**
 ([full report](experiments/event_study/REPORT.md)): outcome-blind cohorts
 (GEO_SHOCK / CORPORATE / NOISE from text-only tags), market-model CAR + abnormal
-volume over 1/3/5 sessions, permutation nulls, one BH pass over all 72 cells.
+volume over 1/3/5 sessions, permutation nulls, one BH pass over all 63 cells.
 
-**Result: 0 of 72 cells survive** (min p_bh = 0.83). The famous moves are real
+**Result: 0 of 63 cells survive** (min p_bh = 0.76). The famous moves are real
 *individually* — our data surfaces "no deal with Iran except UNCONDITIONAL
 SURRENDER" → USO −13.2% — but the population effect is zero. Three exhibits
 explain *why the anecdotes feel true*:

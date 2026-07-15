@@ -14,6 +14,7 @@ help:
 	@echo "test        - run the full pytest suite"
 	@echo "lint        - ruff check ."
 	@echo "serve       - boot the /predict endpoint on :8080 (verifies the manifest hash)"
+	@echo "feedback    - score the calls /predict actually served (prospective replication)"
 
 # $0, no keys, fully offline: proves the pipeline + manifest end-to-end.
 smoke:
@@ -38,6 +39,11 @@ serve:
 # Pre-registered event study (offline, seeded): registry -> permutation nulls -> BH.
 study:
 	$(PY) experiments/event_study/run_study.py
+
+# Score what the Endpoint actually served: prediction_log.jsonl -> replication report.
+# Idempotent + safe to schedule; only horizons whose bar has CLOSED are scored.
+feedback:
+	$(PY) jobs/feedback.py
 
 # The Myth-Busting Quantitative Terminal -> reports/dashboard.html (self-contained).
 dashboard:
