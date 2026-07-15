@@ -13,11 +13,12 @@ __pycache__/
 .env
 deploy/nebius/.env
 
-# Raw inputs the Job does not read. It runs --from-results off reports/, and the
-# Endpoint only needs reports/validation_manifest.json.
-# ponytail: if a live --limit run ever needs data/real/corpus_v3.csv in-image,
-# un-ignore that one file rather than all of data/.
+# Raw inputs. data/ is ALSO a python package (data/sources, data/storage) that the
+# Job imports, so the *.py must survive — only the bulk payload is dropped. The live
+# run reads corpus_v3.csv; market data comes from yfinance over the network, so the
+# multi-MB bars/*.csv are not needed in-image.
 data/
+!data/**/*.py
 !data/real/corpus_v3.csv
 
 experiments/
