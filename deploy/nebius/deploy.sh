@@ -1,18 +1,19 @@
 #!/usr/bin/env bash
-# Deploy the pipeline to Nebius Serverless AI: 6 batch Jobs (the DAG) + 1
-# Endpoint (/predict). One CPU image serves all of them, so batch and serve
-# cannot drift (§3.2, §12).
+# Deploy the SHIPPED System-B pipeline to Nebius Serverless AI:
+#   1 batch JOB  (jobs/backtest -> writes validation_manifest.json to the bucket)
+#   1 ENDPOINT   (serving/app.py -> loads + hash-verifies that manifest, serves /predict)
+# Two purpose-built CPU images, one repo, so batch and serve cannot drift (3.2).
 #
-# NOT YET RUN AGAINST A TENANT. Every command below is written from the public
-# Nebius CLI docs, but nothing here has been executed on a real project. Run it
-# in DRY_RUN first, read the commands, then drop DRY_RUN.
+# Supersedes the deleted System-A DAG script.
 #
+# Usage (run from git-bash; authenticate the Nebius CLI first):
+#   nebius init                                            # login + pick tenant/project
 #   cp deploy/nebius/env.example deploy/nebius/.env && $EDITOR deploy/nebius/.env
-#   DRY_RUN=1 ./deploy/nebius/deploy.sh all     # print every command, touch nothing
-#   ./deploy/nebius/deploy.sh image             # build + push the image
-#   ./deploy/nebius/deploy.sh jobs              # submit the DAG, in order
-#   ./deploy/nebius/deploy.sh endpoint          # stand up /predict
-#   ./deploy/nebius/deploy.sh urls              # print endpoint URL for the README
+#   DRY_RUN=1 ./deploy/nebius/deploy.sh all              # print every command, touch nothing
+#   ./deploy/nebius/deploy.sh image                      # build + push BOTH images
+#   ./deploy/nebius/deploy.sh job                        # run backtest-and-validate ($0)
+#   ./deploy/nebius/deploy.sh endpoint                   # stand up /predict
+#   ./deploy/nebius/deploy.sh verify                     # curl /health
 #
 # Docs: https://docs.nebius.com/serverless/jobs/manage
 #       https://docs.nebius.com/serverless/endpoints/manage
@@ -25,53 +26,57 @@ ROOT="$(cd "$HERE/../.." && pwd)"
 
 DRY_RUN="${DRY_RUN:-0}"
 RUN_ID="${RUN_ID:-$(date -u +%Y%m%dT%H%M%SZ)}"
-DATA=/data                    # shared bucket mount, identical in every job
-RUNS="$DATA/runs/$RUN_ID"
+DATA=/data                                   # shared bucket mount, identical in job + endpoint
+MANIFEST_IN_BUCKET="$DATA/reports/validation_manifest.json"
 
-# CPU-only. Overridden from .env.
-NB_PLATFORM="${NB_PLATFORM:-cpu-e2}"
-NB_PRESET="${NB_PRESET:-2vcpu-8gb}"
+# CPU-only. Overridden from .env. These are the values the shipped deployment
+# actually ran on (aijob-e00j2dskdm71qp3b3k / aiendpoint-e00fs92qgq1h4wzb2s).
+NB_PLATFORM="${NB_PLATFORM:-cpu-d3}"
+NB_PRESET="${NB_PRESET:-4vcpu-16gb}"
 NB_TIMEOUT="${NB_TIMEOUT:-1h}"
 
-die() { printf '\033[31merror:\033[0m %s\n' "$*" >&2; exit 1; }
+# Image tags: one registry path, two tags (job vs endpoint).
+IMG_JOB="${NB_IMAGE_JOB:-${NB_IMAGE:-}-backtest}"
+IMG_API="${NB_IMAGE_API:-${NB_IMAGE:-}-predict}"
+
+die()  { printf '\033[31merror:\033[0m %s\n' "$*" >&2; exit 1; }
 info() { printf '\033[36m==>\033[0m %s\n' "$*"; }
 
-# Print the command always; execute it only when DRY_RUN=0.
-# %q-quote each word so the printed line is copy-pasteable and multi-word
-# arguments (notably --args "jobs/x.py --flag v") are visibly single tokens.
+# Print the command always; execute it only when DRY_RUN=0. %q keeps it copy-pasteable.
 run() {
-  printf '\033[2m$'
-  printf ' %q' "$@"
-  printf '\033[0m\n'
+  printf '\033[2m$'; printf ' %q' "$@"; printf '\033[0m\n'
   [ "$DRY_RUN" = "1" ] || "$@"
 }
-
 require() {
   for v in "$@"; do
     [ -n "${!v:-}" ] || die "$v is unset. Copy deploy/nebius/env.example to deploy/nebius/.env and fill it in."
   done
 }
 
-# --- image --------------------------------------------------------------------
+# --- images -------------------------------------------------------------------
 cmd_image() {
   require NB_IMAGE
-  info "build + push $NB_IMAGE (linux/amd64 — Nebius runs x86, your Mac may not)"
-  run docker build --platform linux/amd64 -f "$ROOT/deploy/Dockerfile" -t "$NB_IMAGE" "$ROOT"
-  run docker push "$NB_IMAGE"
+  info "build + push $IMG_JOB and $IMG_API (linux/amd64 — Nebius runs x86)"
+  run docker build --platform linux/amd64 -f "$ROOT/jobs/backtest/Dockerfile" -t "$IMG_JOB" "$ROOT"
+  run docker push "$IMG_JOB"
+  run docker build --platform linux/amd64 -f "$ROOT/serving/Dockerfile" -t "$IMG_API" "$ROOT"
+  run docker push "$IMG_API"
 }
 
-# --- jobs ---------------------------------------------------------------------
-# Each job is a thin CLI over the pure modules (§13: the serverless layer holds
-# zero science). They chain by artifact I/O under $RUNS on the shared bucket.
-job() {
-  local name="$1"; shift
-  require NB_PROJECT_ID NB_SUBNET_ID NB_IMAGE NB_BUCKET
+# --- job: backtest-and-validate ----------------------------------------------
+# Thin CLI over alpha/ (the serverless layer holds zero science). --from-results
+# reproduces the committed manifest for $0; drop it (and add the NEBIUS_API_KEY
+# secret) for a full ~443-tweet live classification (a few cents, ~15-25 min).
+cmd_job() {
+  require NB_PROJECT_ID NB_SUBNET_ID NB_BUCKET
+  [ -n "${IMG_JOB// }" ] || die "NB_IMAGE (or NB_IMAGE_JOB) is unset."
+  info "run backtest-and-validate (run id $RUN_ID) -> $MANIFEST_IN_BUCKET"
   run nebius ai job create \
     --parent-id "$NB_PROJECT_ID" \
-    --name "${name}-${RUN_ID}" \
-    --image "$NB_IMAGE" \
+    --name "backtest-and-validate-${RUN_ID}" \
+    --image "$IMG_JOB" \
     --container-command python \
-    --args "$*" \
+    --args "jobs/backtest/entrypoint.py --from-results --manifest ${MANIFEST_IN_BUCKET} --dataset-out ${DATA}/reports/macro_dataset.csv" \
     --env "PYTHONPATH=/app" \
     --env "RUN_ID=$RUN_ID" \
     --volume "s3://${NB_BUCKET}:${DATA}" \
@@ -79,110 +84,61 @@ job() {
     --preset "$NB_PRESET" \
     --timeout "$NB_TIMEOUT" \
     --subnet-id "$NB_SUBNET_ID"
+  info "job submitted. Wait for it to finish (writes the manifest) BEFORE the endpoint."
 }
 
-cmd_jobs() {
-  info "submitting the DAG (run id $RUN_ID) — each job consumes the previous one's artifacts"
-
-  # 1. ingest: validate raw (reject tz-naive / duplicate keys) -> snapshot
-  job data-ingestion jobs/data_ingestion.py \
-    --tweets "$DATA/real/tweets.csv" --bars "$DATA/real/bars.csv" --out "$RUNS"
-
-  # 2. llm_features: OFFLINE signal extraction, once per post, content-addressed
-  #    cache. Without ANTHROPIC_API_KEY this deterministically falls back to the
-  #    keyword extractor rather than failing.
-  job llm-features jobs/llm_features.py \
-    --in "$RUNS" --out "$RUNS/llm_signals.json"
-
-  # 3. labels + point-in-time features via the single decide() path
-  job dataset-build jobs/dataset_build.py \
-    --in "$RUNS" --out "$RUNS/dataset.json"
-
-  # 4. fit GBT + calibrate the conformal abstainer on a time-ordered tail
-  job training jobs/training.py \
-    --dataset "$RUNS/dataset.json" --out "$RUNS/model" --horizon 3
-
-  # 5. purged + embargoed walk-forward CV, baselines, permutation null, BH, power gate
-  job evaluation jobs/evaluation.py \
-    --dataset "$RUNS/dataset.json" --out "$RUNS"
-
-  # 6. THE deliverable: the signal-or-null dashboard
-  job reporting jobs/reporting.py \
-    --events "$DATA/real/stock_event_dataset.csv" \
-    --signals "$RUNS/llm_signals.json" \
-    --out "$RUNS/eden_dashboard.html"
-
-  # 7. v-multibench: train/test the per-stock multi-benchmark direction model.
-  #    Consumes data/real/labeled_multibench.csv (built by scripts/build_multibench.py;
-  #    ponytail: that builder still uses repo-relative paths — run it in-image or
-  #    parametrize its paths before wiring as a standalone /data job).
-  job train-multibench jobs/train_multibench.py \
-    --data "$DATA/real/labeled_multibench.csv" \
-    --out "$RUNS/multibench_model" --horizon 3d
-
-  info "follow a job:  nebius ai job logs <job_id> --follow"
-  info "list them:     nebius ai job list --parent-id \$NB_PROJECT_ID"
-}
-
-# --- endpoint -----------------------------------------------------------------
+# --- endpoint: /predict -------------------------------------------------------
+# Hash-verifies the manifest at boot; refuses to start on a corpus/prompt-hash
+# mismatch. NEBIUS_API_KEY (live /predict calls the 70B) comes from .env, never
+# committed.
+#
+# ponytail: no --volume. The manifest is baked into the image (serving/Dockerfile
+# defaults MANIFEST_PATH=/app/reports/...), so the Endpoint does not depend on the
+# Job having run first, and cannot fail on an unmounted /data. Mount the bucket and
+# override MANIFEST_PATH only if you want the Job's freshly-written manifest.
+#
+# The image ENTRYPOINT/CMD already runs uvicorn on 8080 — no --container-command
+# override needed. Nebius wants --container-port <port>/<protocol>, not --port.
 cmd_endpoint() {
-  require NB_PROJECT_ID NB_SUBNET_ID NB_IMAGE NB_BUCKET NB_ENDPOINT_TOKEN
-  info "creating /predict endpoint (token auth, public)"
-
-  # Only pass registry credentials when they are actually set — an empty
-  # --registry-username is a malformed flag, not "no credentials".
-  local -a creds=()
-  if [ -n "${NB_REGISTRY_USERNAME:-}" ]; then
-    creds+=(--registry-username "$NB_REGISTRY_USERNAME"
-            --registry-password "${NB_REGISTRY_PASSWORD:-}")
-  fi
-
-  # Serves the SAME decide() the batch jobs use. Abstains when no model is
-  # mounted, which is the honest cold-start output rather than a guess.
+  require NB_PROJECT_ID NB_SUBNET_ID
+  [ -n "${IMG_API// }" ] || die "NB_IMAGE (or NB_IMAGE_API) is unset."
+  # serving/app.py reads NEBIUS_API_KEY or EXPO_PUBLIC_NEBIUS_API_KEY; /health is
+  # fine without one but /predict 500s, so fail loudly here instead of at runtime.
+  local key="${NEBIUS_API_KEY:-${EXPO_PUBLIC_NEBIUS_API_KEY:-}}"
+  [ -n "$key" ] || die "NEBIUS_API_KEY (or EXPO_PUBLIC_NEBIUS_API_KEY) unset — /predict cannot call the model."
+  info "deploy /predict endpoint"
   run nebius ai endpoint create \
     --parent-id "$NB_PROJECT_ID" \
-    --name "tweet-signal-predict" \
-    --image "$NB_IMAGE" \
-    "${creds[@]+"${creds[@]}"}" \
-    --container-command python \
-    --args "serving/endpoint.py" \
-    --container-port 8080 \
+    --name "predict-${RUN_ID}" \
+    --image "$IMG_API" \
+    --container-port 8080/http \
+    --public \
+    --auth none \
     --env "PYTHONPATH=/app" \
-    --env "BARS_CSV=${DATA}/real/bars.csv" \
-    --env "MODEL_DIR=${RUNS}/model" \
-    --env "MB_MODEL_DIR=${RUNS}/multibench_model" \
-    --volume "s3://${NB_BUCKET}:${DATA}" \
-    --auth token \
-    --token "$NB_ENDPOINT_TOKEN" \
+    --env "MANIFEST_PATH=/app/reports/validation_manifest.json" \
+    --env "NEBIUS_API_KEY=${key}" \
     --platform "$NB_PLATFORM" \
     --preset "$NB_PRESET" \
-    --subnet-id "$NB_SUBNET_ID" \
-    --public
+    --subnet-id "$NB_SUBNET_ID"
 }
 
-cmd_urls() {
-  require NB_PROJECT_ID
-  info "endpoint URL (paste into the README's proof-of-execution section)"
-  run nebius ai endpoint list --parent-id "$NB_PROJECT_ID" --format json
-  cat <<'EOF'
-
-Then smoke-test it:
-
-  curl -s -X POST "$ENDPOINT_URL/predict" \
-    -H "Authorization: Bearer $NB_ENDPOINT_TOKEN" \
-    -H 'Content-Type: application/json' \
-    -d '{"tweet_text":"drill baby drill energy dominance","timestamp":"2025-02-20T22:00:00Z"}'
-
-Expected shape (ABSTAIN is correct when no model is mounted):
-  {"ticker":"XLE","direction":"ABSTAIN","confidence":0.0,"abstain":true,"map_confidence":1.0}
-EOF
+# --- verify -------------------------------------------------------------------
+cmd_verify() {
+  [ -n "${ENDPOINT_URL:-}" ] || die "set ENDPOINT_URL=https://... (from: nebius ai endpoint get ...)"
+  info "GET ${ENDPOINT_URL}/health"
+  run curl -fsS "${ENDPOINT_URL}/health"
+  echo
+  info "POST ${ENDPOINT_URL}/predict (sample tweet)"
+  run curl -fsS -X POST "${ENDPOINT_URL}/predict" -H 'content-type: application/json' \
+    -d '{"tweet_text":"We will impose massive tariffs on all Chinese semiconductors.","t0_utc":"2025-03-03T14:00:00+00:00","author":"realDonaldTrump"}'
+  echo
 }
 
 case "${1:-}" in
   image)    cmd_image ;;
-  jobs)     cmd_jobs ;;
+  job)      cmd_job ;;
   endpoint) cmd_endpoint ;;
-  urls)     cmd_urls ;;
-  all)      cmd_image; cmd_jobs; cmd_endpoint; cmd_urls ;;
-  *) die "usage: $0 {image|jobs|endpoint|urls|all}   (prefix with DRY_RUN=1 to print only)" ;;
+  verify)   cmd_verify ;;
+  all)      cmd_image; cmd_job; cmd_endpoint ;;
+  *) die "usage: $0 {image|job|endpoint|verify|all}   (DRY_RUN=1 to preview)" ;;
 esac

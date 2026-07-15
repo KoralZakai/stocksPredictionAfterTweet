@@ -85,11 +85,16 @@ def _horizon_stats(test: list[dict[str, Any]], h: str) -> tuple[int, int]:
 
 
 def build_manifest(results: list[dict[str, Any]], *, alpha: float, corpus_file: str,
-                   now_utc: str) -> dict[str, Any]:
+                   now_utc: str, prompt_hash: str | None = None,
+                   profile: str = "stable") -> dict[str, Any]:
     """Pure manifest assembly from already-scored results. Testable in isolation.
 
     A horizon is in the registry only if it has scoreable test data; intraday
     horizons that are empty (no Alpaca) are recorded as skipped, not shipped.
+
+    `prompt_hash` defaults to the frozen stable prompt. Mode B (alpha.profiles)
+    passes its own hash — a manifest MUST carry the hash of the prompt that
+    actually produced its numbers, or the Endpoint would boot the wrong pairing.
     """
     test = [r for r in results if r.get("split") == "test"]
 
@@ -131,7 +136,8 @@ def build_manifest(results: list[dict[str, Any]], *, alpha: float, corpus_file: 
         "metric": METRIC,
         "split": SPLIT,
         "alpha": alpha,
-        "prompt_template_hash": prompt_template_hash(),
+        "profile": profile,
+        "prompt_template_hash": prompt_hash or prompt_template_hash(),
         "horizons": per_h,
         "registry": registry,
         "shipped_horizons": shipped,

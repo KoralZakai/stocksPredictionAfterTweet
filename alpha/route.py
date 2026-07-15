@@ -38,12 +38,17 @@ WHITELIST: frozenset[str] = (
 MACRO_BENCHMARK = "SPY"
 
 
-def route_decision(classified: dict[str, Any]) -> RoutedDecision:
+def route_decision(classified: dict[str, Any],
+                   whitelist: frozenset[str] | None = None) -> RoutedDecision:
     """Collapse the LLM's instrument basket into a single LONG/SHORT/ABSTAIN call.
 
     ABSTAIN when the post is not market-relevant (no instruments), or no instrument
     resolves to the whitelist, or no instrument carries a directional (up/down) call.
+
+    `whitelist` defaults to the frozen stable universe — Mode B (alpha.profiles)
+    passes its expanded macro set. Default behaviour is unchanged.
     """
+    allowed = WHITELIST if whitelist is None else whitelist
     scenario = str(classified.get("scenario", "") or "")
     reasoning = str(classified.get("rationale", "") or classified.get("macro_link", "") or "")
     raw = classified.get("instruments") or []
@@ -56,7 +61,7 @@ def route_decision(classified: dict[str, Any]) -> RoutedDecision:
             continue                      # neutral / missing -> not a directional call
         if tk == MACRO_BENCHMARK:
             continue                      # SPY is the benchmark; it cannot beat itself
-        if tk not in WHITELIST:
+        if tk not in allowed:
             continue                      # outside whitelist -> unresolvable
         resolved.append(Instrument(ticker=tk, direction=direction, benchmark=MACRO_BENCHMARK))
 
