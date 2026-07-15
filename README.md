@@ -6,9 +6,9 @@ read of a political tweet carry measurable, statistically significant short-term
 directional information about US sector ETFs — beyond market beta?*
 
 **The honest result: no.** Not at any horizon we can reproduce. On the held-out
-chronological test set the daily signal is **a coin flip — EOD 50.7%** (n=67,
-Wilson 95% CI [0.391, 0.624], p=0.50). Longer horizons are worse (3d 44.1%, 1w
-42.9%, 1mo 25.7%). **`shipped_horizons` is empty**: nothing survived
+chronological test set the daily signal is **a coin flip — EOD 52.2%** (n=67,
+Wilson 95% CI [0.405, 0.637], p=0.40). Longer horizons are worse (3d 44.1%, 1w
+44.3%, 1mo 27.1%). **`shipped_horizons` is empty**: nothing survived
 Benjamini-Hochberg correction that we can reproduce without private data, so the
 `/predict` endpoint serves its classification while **citing no accuracy at all**.
 
@@ -17,6 +17,7 @@ version of this README reported *"EOD 61.8%, p=0.033, beats the market."* That
 number was an **artifact of one line of tie-breaking logic** — see
 [The tie-break artifact](#the-tie-break-artifact) below. Two independent unbiased
 estimators put the true test rate at **0.507** and **0.502**. The signal is null.
+(EOD is **0.522** after a later fix to the market clock — see below. Still a coin flip.)
 
 **The 1h horizon looked like a survivor — it isn't.** After the fix, 1h read
 67.8% (n=59, p_bh=0.026). Two diagnostics then explained it away: (1) **selection
@@ -27,9 +28,27 @@ faster edge; (2) **wrong null** — per-asset unconditional beat-SPY base rates 
 averages ≈ 0 (ITA −0.06, XLI −0.10, LMT −0.13). The 1h effect is an artifact of
 comparing a favorable subset against the wrong baseline.
 
+**A third bug, found by chasing one tweet: the market clock ignored DST.**
+`US_OPEN_UTC_HOUR` was hardcoded to **13.5** — correct only in EDT. From November to
+mid-March the NYSE opens **14:30 UTC**, so every tweet posted 13:30–14:30 UTC in
+winter was treated as post-open and pushed to the *next* session. Not a leak (it
+anchors *later*, using *less* information — which is why none of our leak tests
+caught it) but it scored the wrong day. Now resolved per-date via `zoneinfo`, with
+one shared `session_phase` (a second buggy copy lived in `scripts/`).
+
+It moved **8 of 476 rows** (EOD 0.507 → **0.522**, still null) — but one of those
+rows matters: the *"no deal with Iran except UNCONDITIONAL SURRENDER"* post, our
+single most-cited geopolitical event. Correctly anchored to **Friday 03-06** rather
+than Monday 03-09, the model's fear trade (oil ↑, defence ↑, VIX ↑) goes from **0/3
+to 3/3**. Oil gapped **+9.4%** into the open we had been skipping. **The
+"obvious" trade was right — and our clock had recorded it as wrong.** One event
+proves nothing (n=1, and the study still returns 0/72), but it is the fairest
+version of the sceptic's best case, and it deserved a correct clock.
+
 This is what the system was built to do. Per the project charter: *a rigorous null
 result is a full success.* The deliverable is an evaluation that **refused to
-confirm its own hypothesis** — including catching an error that flattered us.
+confirm its own hypothesis** — and that kept finding its own errors, in both
+directions, right up to the deadline.
 
 ## The tie-break artifact
 

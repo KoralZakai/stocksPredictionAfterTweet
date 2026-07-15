@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
-  "generated_at_utc": "2026-07-15T11:21:39+00:00",
-  "code_rev": "dd348ea",
+  "generated_at_utc": "2026-07-15T15:37:28+00:00",
+  "code_rev": "15ec9a2",
   "corpus": {
     "file": "data/real/corpus_v3.csv",
     "sha256": "febe2439d07edd43f2ed330eff80e08b59365bc7a71a4fe1cd90d7c983146d15",
@@ -15,15 +15,15 @@
   "horizons": {
     "EOD": {
       "n_test": 67,
-      "hits_test": 34,
-      "hit_rate_test": 0.5075,
+      "hits_test": 35,
+      "hit_rate_test": 0.5224,
       "ci95": [
-        0.3906,
-        0.6235
+        0.4048,
+        0.6375
       ],
-      "p_raw": 0.5,
+      "p_raw": 0.403597,
       "requires_alpaca": false,
-      "p_bh": 0.99999,
+      "p_bh": 0.807194,
       "survives_bh": false
     },
     "3d": {
@@ -36,46 +36,46 @@
       ],
       "p_raw": 0.862505,
       "requires_alpaca": false,
-      "p_bh": 0.99999,
+      "p_bh": 0.999971,
       "survives_bh": false
     },
     "1w": {
       "n_test": 70,
-      "hits_test": 30,
-      "hit_rate_test": 0.4286,
+      "hits_test": 31,
+      "hit_rate_test": 0.4429,
       "ci95": [
-        0.3194,
-        0.5452
+        0.3325,
+        0.5592
       ],
-      "p_raw": 0.905892,
+      "p_raw": 0.859011,
       "requires_alpaca": false,
-      "p_bh": 0.99999,
+      "p_bh": 0.999971,
       "survives_bh": false
     },
     "1mo": {
       "n_test": 70,
-      "hits_test": 18,
-      "hit_rate_test": 0.2571,
+      "hits_test": 19,
+      "hit_rate_test": 0.2714,
       "ci95": [
-        0.1693,
-        0.3703
+        0.1812,
+        0.3854
       ],
-      "p_raw": 0.99999,
+      "p_raw": 0.999971,
       "requires_alpaca": false,
-      "p_bh": 0.99999,
+      "p_bh": 0.999971,
       "survives_bh": false
     },
     "30m": {
       "n_test": 62,
-      "hits_test": 39,
-      "hit_rate_test": 0.629,
+      "hits_test": 38,
+      "hit_rate_test": 0.6129,
       "ci95": [
-        0.5046,
-        0.7384
+        0.4885,
+        0.7242
       ],
-      "p_raw": 0.027949,
+      "p_raw": 0.048977,
       "requires_alpaca": true,
-      "p_bh": 0.083847,
+      "p_bh": 0.146931,
       "survives_bh": false
     },
     "1h": {

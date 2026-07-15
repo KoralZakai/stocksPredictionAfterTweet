@@ -71,6 +71,35 @@ def test_cohorts_are_text_only() -> None:
                        "scenario": "US Politics"})[0] == "CORPORATE"
 
 
+def test_us_open_utc_hour_tracks_dst() -> None:
+    """NYSE opens 09:30 ET = 13:30 UTC in EDT but 14:30 UTC in EST. A hardcoded 13.5
+    mis-anchored every tweet posted 13:30-14:30 UTC from Nov to mid-March."""
+    from datetime import date as _d
+
+    from alpha.benchmark import us_open_utc_hour
+    assert us_open_utc_hour(_d(2026, 7, 15)) == 13.5      # EDT (summer)
+    assert us_open_utc_hour(_d(2026, 3, 6)) == 14.5       # EST — DST starts Mar 8 2026
+    assert us_open_utc_hour(_d(2026, 3, 9)) == 13.5       # EDT, day after the switch
+    assert us_open_utc_hour(_d(2026, 1, 15)) == 14.5      # EST (winter)
+
+
+def test_est_pre_open_tweet_anchors_same_day() -> None:
+    """The regression: 2026-03-06 13:49 UTC is BEFORE that day's 14:30 UTC open (EST),
+    so it must anchor to 03-06 itself — not skip to the next session."""
+    from alpha.benchmark import _session_anchor, session_phase
+    t0 = datetime(2026, 3, 6, 13, 49, tzinfo=timezone.utc)
+    anchor = _session_anchor(t0)
+    assert anchor.date().isoformat() == "2026-03-06", "EST pre-open tweet skipped a session"
+    assert (anchor.hour, anchor.minute) == (14, 30), "should anchor to that day's real open"
+    # The SAME clock time in July is INSIDE regular hours (13:30 EDT open), so the
+    # tweet is immediately tradeable and anchors to itself. Identical UTC time, two
+    # different correct answers — which is exactly what the hardcoded 13.5 could not do.
+    jul_t0 = datetime(2026, 7, 15, 13, 49, tzinfo=timezone.utc)
+    assert _session_anchor(jul_t0) == jul_t0
+    assert session_phase(jul_t0) == "regular"
+    assert session_phase(t0) == "premarket"
+
+
 def test_window_series_anchor_respects_tweet_hour() -> None:
     """An AFTER-CLOSE post must not treat its own session as post-event. A naive
     `date >= day` anchor did exactly that and under-measured the Intel run-up by

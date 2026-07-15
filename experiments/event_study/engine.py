@@ -22,7 +22,7 @@ from dataclasses import dataclass
 from datetime import datetime
 from pathlib import Path
 
-from alpha.benchmark import US_OPEN_UTC_HOUR
+from alpha.benchmark import us_open_utc_hour
 
 BARS_CSV = Path("data/real/bars.csv")
 EST_LEN = 120       # estimation window, trading sessions
@@ -60,7 +60,7 @@ def s0_index(bars: list[Bar], t0: datetime) -> int | None:
     i = bisect_left([b.date for b in bars], d0)
     if i < len(bars) and bars[i].date == d0:
         t0h = t0.hour + t0.minute / 60.0
-        if US_OPEN_UTC_HOUR > t0h:          # same-day open still ahead of the tweet
+        if us_open_utc_hour(t0.date()) > t0h:      # that date's open is still ahead of t0
             return i
         i += 1
     return i if i < len(bars) else None

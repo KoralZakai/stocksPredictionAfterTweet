@@ -11,15 +11,35 @@ strictly after t0. No same-day leak. Covered by tests.
 from __future__ import annotations
 
 from collections.abc import Callable
-from datetime import datetime, timedelta
+from datetime import date, datetime, time, timedelta, timezone
 from typing import Any
+from zoneinfo import ZoneInfo
 
 import pandas as pd
 import yfinance as yf
 
 Fwd = Callable[[str, datetime], "dict[str, float] | None"]
 
-US_OPEN_UTC_HOUR = 13.5  # ~9:30 ET; a session's open is "after t0" if this hour > t0.
+_NY = ZoneInfo("America/New_York")
+
+# NYSE opens 09:30 ET, which is 13:30 UTC in EDT but 14:30 UTC in EST. This constant
+# is the EDT value and is kept ONLY for backwards compatibility with importers; it is
+# NOT used for anchoring. Use us_open_utc_hour(date) instead.
+US_OPEN_UTC_HOUR = 13.5
+_SESSION_HOURS = 6.5          # 09:30 -> 16:00 ET
+
+
+def us_open_utc_hour(d: date) -> float:
+    """UTC hour of the 09:30 ET open ON THAT DATE. 13.5 in EDT, 14.5 in EST.
+
+    A hardcoded 13.5 silently mis-anchors every tweet posted 13:30-14:30 UTC between
+    November and mid-March: the code thinks the open has passed when it has not, and
+    skips a session. Not a leak (it anchors LATER, using less information) but a real
+    measurement error — it scored the wrong session. zoneinfo is stdlib; no new dep.
+    """
+    et = datetime.combine(d, time(9, 30), tzinfo=_NY)
+    u = et.astimezone(timezone.utc)
+    return u.hour + u.minute / 60.0
 
 # Two timescales, ONE ordered ladder:
 #   30m/1h  -> Alpaca 1-min IEX bars (yfinance has no intraday history past ~60d).
@@ -59,7 +79,8 @@ def daily_returns(ticker: str, t0: datetime) -> dict[str, float]:
     s = _sessions(df)
     t0h = t0.hour + t0.minute / 60.0
     i0 = next((i for i, (d, _, _) in enumerate(s)
-               if d.date() > t0.date() or (d.date() == t0.date() and US_OPEN_UTC_HOUR > t0h)), None)
+               if d.date() > t0.date()
+               or (d.date() == t0.date() and us_open_utc_hour(d.date()) > t0h)), None)
     if i0 is None:
         return {}
     entry = s[i0][1]
@@ -79,25 +100,34 @@ def session_phase(t0: datetime) -> str:
     if t0.weekday() >= 5:
         return "weekend"
     h = t0.hour + t0.minute / 60.0
-    if h < 13.5:
+    o = us_open_utc_hour(t0.date())          # DST-correct: 13.5 in EDT, 14.5 in EST
+    if h < o:
         return "premarket"
-    if h >= 20.0:
+    if h >= o + _SESSION_HOURS:
         return "afterhours"
     return "regular"
 
 
+def _open_dt(d: date) -> datetime:
+    """The 09:30 ET open of session `d`, as a tz-aware UTC datetime."""
+    h = us_open_utc_hour(d)
+    return datetime.combine(d, time(int(h), round((h % 1) * 60)), tzinfo=timezone.utc)
+
+
 def _session_anchor(t0: datetime) -> datetime:
     """When the tweet becomes tradeable: t0 if in regular hours, else the next
-    session open (~13:30 UTC). Ignores holidays — fine for an intraday reaction."""
+    session open. Ignores holidays — fine for an intraday reaction. DST-correct:
+    the open is resolved per-date, not assumed to be 13:30 UTC year-round."""
     hour = t0.hour + t0.minute / 60.0
-    if t0.weekday() < 5 and US_OPEN_UTC_HOUR <= hour < 20.0:
+    o = us_open_utc_hour(t0.date())
+    if t0.weekday() < 5 and o <= hour < o + _SESSION_HOURS:
         return t0
-    if t0.weekday() < 5 and hour < US_OPEN_UTC_HOUR:
-        return t0.replace(hour=13, minute=30, second=0, microsecond=0)
-    d = (t0 + timedelta(days=1)).replace(hour=13, minute=30, second=0, microsecond=0)
+    if t0.weekday() < 5 and hour < o:
+        return _open_dt(t0.date())
+    d = (t0 + timedelta(days=1)).date()
     while d.weekday() >= 5:
         d += timedelta(days=1)
-    return d
+    return _open_dt(d)
 
 
 def intraday_returns(ticker: str, t0: datetime) -> dict[str, float]:

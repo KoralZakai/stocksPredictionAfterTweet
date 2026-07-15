@@ -47,9 +47,9 @@
   "n_val": 68,
   "n_test": 67,
   "class_balance": {
-    "+1_long": 117,
-    "-1_short": 35,
-    "0_noise": 185
+    "+1_long": 118,
+    "-1_short": 36,
+    "0_noise": 183
   },
-  "win_rate": 0.451
+  "win_rate": 0.457
 }
