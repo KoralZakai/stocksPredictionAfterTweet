@@ -34,6 +34,23 @@ INTC_GUARDED = (r"(?<!\bus )(?<!\bu\.s\. )(?<!american )(?<!\bthe )\bintel\b"
 # allowlist ("goldman" near sachs/stock/CEO/Solomon) only if such misses recur.
 GS_GUARDED = r"\bgoldman sachs\b"
 
+# Trump SIGNS his posts "DJT" — 754 of 762 DJT "mentions" in the 2025-26 corpus were
+# that sign-off, not a reference to the stock. A trailing DJT (optionally followed by
+# punctuation and/or a link) is a signature. Mid-text "DJT stock is up" still matches.
+#
+# This REPLACES an earlier deliberate choice to let the signature match, on the theory
+# that "downstream views must treat signature-only hits as non-company content". No
+# downstream filter was ever written, so every consumer inherited the false positives.
+# The intended use case (DJT as a Trump-exposed ticker) needs no matcher at all —
+# every post in this corpus is already by Trump. tests/test_entities.py pins the guard.
+DJT_TICKER_GUARDED = (r"(?<!president )(?<!\bpres\. )"
+                      r"\bdjt\b(?![\s\-–—!.,:;\"')\]]*(?:https?://\S+\s*)?$)")
+
+# "Anti Trump Media" / "the Trump media" is the PRESS, not Trump Media & Technology.
+# Require the company sense: not preceded by anti-/the, not followed by press words.
+DJT_MEDIA_GUARDED = (r"(?<!anti[- ])(?<!\bthe )\btrump media\b"
+                     r"(?!\s+(?:coverage|outlets?|bias|machine|complex|empire|hoax))")
+
 # ticker -> name/alias/exec/brand patterns Trump actually tweeted (word-boundaried).
 ENTITY_TRIGGERS: dict[str, tuple[str, ...]] = {
     "XOM": (r"\bexxon\b", r"\bexxonmobil\b"), "CVX": (r"\bchevron\b",),
@@ -58,7 +75,7 @@ ENTITY_TRIGGERS: dict[str, tuple[str, ...]] = {
     "LMT": (r"\block ?heed\b", r"\bf-?35\b"), "NOC": (r"\bnorthrop\b",),
     "GD": (r"\bgeneral dynamics\b",),
     # Trump-related public holding (Trump Media, lists 2024-03; DATASEARCH §3)
-    "DJT": (r"\btrump media\b", r"\btruth social\b", r"\bdjt\b"),
+    "DJT": (DJT_MEDIA_GUARDED, r"\btruth social\b", DJT_TICKER_GUARDED),
 }
 _ENT = {tk: tuple(re.compile(p, re.I) for p in pats) for tk, pats in ENTITY_TRIGGERS.items()}
 

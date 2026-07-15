@@ -22,12 +22,18 @@ set -euo pipefail
 
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ROOT="$(cd "$HERE/../.." && pwd)"
-[ -f "$HERE/.env" ] && set -a && . "$HERE/.env" && set +a
+# Strip CR: the .env is edited on Windows, but this also runs under WSL, where a
+# trailing \r rides into every value ("1h\r" is not a duration).
+[ -f "$HERE/.env" ] && set -a && . <(tr -d '\r' < "$HERE/.env") && set +a
 
 DRY_RUN="${DRY_RUN:-0}"
 RUN_ID="${RUN_ID:-$(date -u +%Y%m%dT%H%M%SZ)}"
-DATA=/data                                   # shared bucket mount, identical in job + endpoint
-MANIFEST_IN_BUCKET="$DATA/reports/validation_manifest.json"
+# Bucket mount point. /app/runs/real is where the code already caches the LLM
+# predictions (scripts/nebius_macro_backtest.py: CACHE = runs/real/nebius_predictions.json,
+# relative to WORKDIR=/app), so mounting the bucket THERE makes a live run's
+# classifications survive the container — a rerun re-reads them for $0.
+DATA=/app/runs/real
+MANIFEST_IN_BUCKET="$DATA/validation_manifest.json"
 
 # CPU-only. Overridden from .env. These are the values the shipped deployment
 # actually ran on (aijob-e00j2dskdm71qp3b3k / aiendpoint-e00fs92qgq1h4wzb2s).
@@ -43,8 +49,11 @@ die()  { printf '\033[31merror:\033[0m %s\n' "$*" >&2; exit 1; }
 info() { printf '\033[36m==>\033[0m %s\n' "$*"; }
 
 # Print the command always; execute it only when DRY_RUN=0. %q keeps it copy-pasteable.
+# Secrets are redacted on the way out — this output lands in terminals and CI logs.
 run() {
-  printf '\033[2m$'; printf ' %q' "$@"; printf '\033[0m\n'
+  printf '\033[2m$'
+  printf ' %q' "$@" | sed -E 's/(NEBIUS_API_KEY=|ANTHROPIC_API_KEY=|NB_ENDPOINT_TOKEN=)[^ ]*/\1<redacted>/g'
+  printf '\033[0m\n'
   [ "$DRY_RUN" = "1" ] || "$@"
 }
 require() {
@@ -64,22 +73,35 @@ cmd_image() {
 }
 
 # --- job: backtest-and-validate ----------------------------------------------
-# Thin CLI over alpha/ (the serverless layer holds zero science). --from-results
-# reproduces the committed manifest for $0; drop it (and add the NEBIUS_API_KEY
-# secret) for a full ~443-tweet live classification (a few cents, ~15-25 min).
+# Thin CLI over alpha/ (the serverless layer holds zero science).
+#
+# JOB_ARGS picks the mode:
+#   --live --limit N   classify N tweets on Nebius, then score  (needs NEBIUS_API_KEY)
+#   --from-results     score the cached predictions, no LLM, $0
+# Mount by bucket RESOURCE ID (storagebucket-...), NOT s3://<name>: the s3:// form
+# needs AWS-profile/MysteryBox credentials, the ID form is authorised by the job's
+# own service account. `nebius storage bucket get --name koral-bucket` prints the id.
+JOB_ARGS="${JOB_ARGS:---live --limit ${LIMIT:-1000}}"
+
 cmd_job() {
-  require NB_PROJECT_ID NB_SUBNET_ID NB_BUCKET
+  require NB_PROJECT_ID NB_SUBNET_ID NB_BUCKET_ID
   [ -n "${IMG_JOB// }" ] || die "NB_IMAGE (or NB_IMAGE_JOB) is unset."
-  info "run backtest-and-validate (run id $RUN_ID) -> $MANIFEST_IN_BUCKET"
+  local key="${NEBIUS_API_KEY:-${EXPO_PUBLIC_NEBIUS_API_KEY:-}}"
+  case "$JOB_ARGS" in
+    *--live*) [ -n "$key" ] || die "JOB_ARGS has --live but NEBIUS_API_KEY is unset — the run cannot classify." ;;
+  esac
+  info "run backtest-and-validate (run id $RUN_ID, args: $JOB_ARGS) -> $MANIFEST_IN_BUCKET"
   run nebius ai job create \
     --parent-id "$NB_PROJECT_ID" \
     --name "backtest-and-validate-${RUN_ID}" \
     --image "$IMG_JOB" \
     --container-command python \
-    --args "jobs/backtest/entrypoint.py --from-results --manifest ${MANIFEST_IN_BUCKET} --dataset-out ${DATA}/reports/macro_dataset.csv" \
+    --args "jobs/backtest/entrypoint.py ${JOB_ARGS} --manifest ${MANIFEST_IN_BUCKET} --dataset-out ${DATA}/macro_dataset.csv" \
     --env "PYTHONPATH=/app" \
+    --env "PYTHONUNBUFFERED=1" \
     --env "RUN_ID=$RUN_ID" \
-    --volume "s3://${NB_BUCKET}:${DATA}" \
+    --env "NEBIUS_API_KEY=${key}" \
+    --volume "${NB_BUCKET_ID}:${DATA}:rw" \
     --platform "$NB_PLATFORM" \
     --preset "$NB_PRESET" \
     --timeout "$NB_TIMEOUT" \

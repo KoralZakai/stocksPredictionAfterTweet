@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
-  "generated_at_utc": "2026-07-15T15:37:28+00:00",
-  "code_rev": "15ec9a2",
+  "generated_at_utc": "2026-07-15T16:49:53+00:00",
+  "code_rev": "bb7d6a6",
   "corpus": {
     "file": "data/real/corpus_v3.csv",
     "sha256": "febe2439d07edd43f2ed330eff80e08b59365bc7a71a4fe1cd90d7c983146d15",

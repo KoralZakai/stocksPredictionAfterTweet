@@ -131,7 +131,7 @@ post_date,hour_utc,phase,weekend_flag,market_closed,intensity,scenario,n_instrum
 2025-08-01,14.4,regular,0,0,8,US Politics,4,0,0,Regular_Hours,Trump endorses Michael Whatley for US Senate,Potential policy shifts under new senator,0,0,1,1,train
 2025-08-02,11.93,weekend,1,1,6,Immigration,2,0,0,Monday_Open_Shock,Border numbers are down with zero illegal entries,Immigration affects labor market and economy,0,1,1,0,train
 2025-08-04,14.83,regular,0,0,9,Geopolitics / Trade,3,1,0,Regular_Hours,US to raise tariffs on India due to Russian oil purchases,Trade war escalation,0,,,0,train
-2025-08-07,22.72,afterhours,0,1,9,Geopolitics / Peace,4,1,1,Noise_Zone,Trump hosts peace summit with Azerbaijan and Armenia,Reduced conflict increases economic opportunities,0,0,1,1,train
+2025-08-07,22.72,afterhours,0,1,9,Geopolitics / Peace,4,0,1,Noise_Zone,Trump hosts peace summit with Azerbaijan and Armenia,Reduced conflict increases economic opportunities,0,0,1,1,train
 2025-08-08,20.23,afterhours,0,1,8,Geopolitics / Peace,2,1,1,Monday_Open_Shock,President aims to bring peace and stability worldwide,Reduced conflict lowers defense spending,0,0,0,1,train
 2025-08-08,23.65,afterhours,0,1,8,Trade Policy,3,0,0,Monday_Open_Shock,Tariffs collected $152 billion,Tariff revenue impacts trade balance,1,1,,0,train
 2025-08-10,15.05,weekend,1,1,8,Law and Order,4,0,1,Monday_Open_Shock,President vows to make capital safer,"Urban renewal, law enforcement",0,,,0,train
@@ -147,7 +147,7 @@ post_date,hour_utc,phase,weekend_flag,market_closed,intensity,scenario,n_instrum
 2025-08-21,13.58,regular,0,0,8,Geopolitics / War,3,1,0,Regular_Hours,Ukraine can't win without attacking Russia,War impacts global trade and security,0,1,,0,train
 2025-08-22,20.32,afterhours,0,1,8,Trade Policy,3,0,1,Monday_Open_Shock,US to tariff furniture imports,Protectionism boosts domestic industry,0,1,0,0,train
 2025-08-26,0.52,premarket,0,1,9,Trade War,4,1,1,Noise_Zone,US will impose tariffs on countries with digital taxes,Trade tensions affect global trade and tech stocks,0,0,0,0,train
-2025-09-01,1.7,premarket,0,1,8,Trade Policy,3,1,1,Monday_Open_Shock,Tariffs brought $15T investment to USA,Tariff removal hurts investment,0,,,0,train
+2025-09-01,1.7,premarket,0,1,8,Trade Policy,3,0,1,Monday_Open_Shock,Tariffs brought $15T investment to USA,Tariff removal hurts investment,0,,,0,train
 2025-09-05,10.23,premarket,0,1,8,Geopolitics / Trade,3,1,0,Noise_Zone,US lost India and Russia to China,Trade alliances shift,0,,0,,train
 2025-09-06,23.67,weekend,1,1,8,Geopolitics / War,2,0,0,Monday_Open_Shock,Department of War mentioned,War affects defense stocks,0,0,0,1,train
 2025-09-10,15.15,regular,0,0,8,Geopolitics / Conflict,3,1,0,Regular_Hours,Russia violating Poland's airspace,Escalation fears,0,0,,,train
@@ -165,7 +165,7 @@ post_date,hour_utc,phase,weekend_flag,market_closed,intensity,scenario,n_instrum
 2025-10-09,11.72,premarket,0,1,6,Geopolitics / Peace,2,0,0,Noise_Zone,Ambassador Mike Huckabee brought peace to Middle East,Peace reduces conflict-related costs,0,0,0,0,train
 2025-10-10,14.95,regular,0,0,9,Geopolitics / Trade War,4,1,1,Regular_Hours,"China imposes export controls, US may retaliate",Trade war escalation affects global markets,0,1,1,0,train
 2025-10-12,15.07,weekend,1,1,8,Geopolitics / Domestic Politics,2,1,0,Monday_Open_Shock,Trump calls Ukraine impeachment a hoax,Political instability affects market sentiment,0,0,1,0,train
-2025-10-17,3.98,premarket,0,1,8,US Politics,2,1,0,Noise_Zone,President claims Blue Slip rule is unfair,Judicial appointments impact policy,0,1,0,0,train
+2025-10-17,3.98,premarket,0,1,8,US Politics,2,0,0,Noise_Zone,President claims Blue Slip rule is unfair,Judicial appointments impact policy,0,1,0,0,train
 2025-10-22,16.7,regular,0,0,8,Trade Policy,3,1,0,Regular_Hours,Tariffs helped cattle ranchers,Trade barriers impact agriculture,-1,0,0,1,train
 2025-10-24,2.65,premarket,0,1,9,Geopolitics / Trade,4,1,1,Noise_Zone,US terminates trade talks with Canada,Trade tensions impact economy,1,1,1,0,train
 2025-10-24,11.33,premarket,0,1,8,Trade War,4,1,0,Noise_Zone,"Canada cheated on tariffs, charging US farmers 400%","Trade tensions rise, affecting US-Canada trade",0,,1,0,train
@@ -202,8 +202,8 @@ post_date,hour_utc,phase,weekend_flag,market_closed,intensity,scenario,n_instrum
 2025-11-17,2.57,premarket,0,1,8,US Politics / Local Election,2,0,0,Monday_Open_Shock,Endorsing Emilio Gonzales for Miami mayor,"Pro-business, low-tax policies may boost local economy",0,,,1,train
 2025-11-18,22.6,afterhours,0,1,8,Regulation,2,1,0,Noise_Zone,US AI growth threatened by overregulation,Regulatory clarity boosts investment,1,0,0,0,train
 2025-11-19,19.27,regular,0,0,8,Geopolitics / Peace,2,1,0,Regular_Hours,"Author condemns Sudan atrocities, vows US help","Humanitarian aid, regional stability",0,,,1,val
-2025-11-23,1.97,weekend,1,1,8,Geopolitics / Trade,4,1,0,Monday_Open_Shock,President claims tariffs stopped wars and boosted economy,Tariffs impact trade balances and inflation,0,,,1,val
-2025-11-24,10.63,premarket,0,1,9,Trade Policy,5,1,0,Monday_Open_Shock,Tariffs will increase US revenue,Tariff revenue boosts US trade balance,1,,,,val
+2025-11-23,1.97,weekend,1,1,8,Geopolitics / Trade,4,0,0,Monday_Open_Shock,President claims tariffs stopped wars and boosted economy,Tariffs impact trade balances and inflation,0,,,1,val
+2025-11-24,10.63,premarket,0,1,9,Trade Policy,5,0,0,Monday_Open_Shock,Tariffs will increase US revenue,Tariff revenue boosts US trade balance,1,,,,val
 2025-11-25,22.83,afterhours,0,1,8,US Politics,3,0,0,Noise_Zone,Governor Jim Pillen endorsed for re-election,"Pro-business, tax cut policies may boost economy",1,,,0,val
 2025-11-29,12.37,weekend,1,1,8,Trade Policy,4,0,0,Monday_Open_Shock,Tariffs made US rich and strong,Trade barriers impact economy,0,,,1,val
 2025-12-01,15.92,regular,0,0,8,Geopolitics / Peace,4,1,1,Regular_Hours,US supports Syria's progress and peace with Israel,Reduced tensions boost regional stability,0,0,1,0,val
@@ -219,7 +219,7 @@ post_date,hour_utc,phase,weekend_flag,market_closed,intensity,scenario,n_instrum
 2025-12-19,4.5,premarket,0,1,8,Economic Policy,3,0,0,Noise_Zone,Trump achieves economic goals,Fiscal stimulus boosts growth,1,,,1,val
 2025-12-20,21.65,weekend,1,1,8,US Politics,4,0,0,Monday_Open_Shock,Nassau County Executive Bruce Blakeman runs for NY Governor,"Tax cuts, deregulation, and energy dominance could boost economy",1,,,1,val
 2025-12-23,15.18,regular,0,0,9,Economic Growth,4,0,0,Regular_Hours,Q3 GDP exceeded expectations at 4.3%,Strong GDP growth boosts market sentiment,0,1,0,1,val
-2025-12-25,0.03,premarket,0,1,8,Geopolitics / Economy,4,1,0,Noise_Zone,President DJT claims success in economy and national security,Strong economy and national security can boost market confidence,0,,,1,val
+2025-12-25,0.03,premarket,0,1,8,Geopolitics / Economy,4,0,0,Noise_Zone,President DJT claims success in economy and national security,Strong economy and national security can boost market confidence,0,,,1,val
 2025-12-28,14.6,weekend,1,1,8,Geopolitics / Peace,2,1,1,Monday_Open_Shock,Thailand and Cambodia to stop fighting,Reduced conflict lowers defense spending,-1,,,0,val
 2025-12-30,21.8,afterhours,0,1,6,Politics / Judiciary,1,0,0,Noise_Zone,Judges challenge Trump policies,Policy uncertainty,1,,,1,val
 2025-12-31,18.7,regular,0,0,6,Geopolitics / Peace,2,1,0,Regular_Hours,Russia is blocking peace,Conflict affects global markets,1,0,1,,val
@@ -233,7 +233,7 @@ post_date,hour_utc,phase,weekend_flag,market_closed,intensity,scenario,n_instrum
 2026-01-14,11.65,premarket,0,1,9,Geopolitics / Expansion,3,1,0,Noise_Zone,US needs Greenland for national security,Territorial control impacts global power balance,1,,,1,val
 2026-01-15,23.4,afterhours,0,1,6,Geopolitics / Peace,2,0,1,Noise_Zone,Trump forms a Board of Peace,Peace efforts can reduce defense spending,0,,,,val
 2026-01-19,2.0,premarket,0,1,6,Geopolitics / Regime Change,2,1,0,Monday_Open_Shock,"Trump may visit free Iran, Havana, Caracas","Regime change affects oil, trade",0,,,1,val
-2026-01-19,22.07,afterhours,0,1,6,Domestic Politics,2,1,0,Noise_Zone,Complaint about media focus and border policy,Immigration policy affects labor market,1,,,,val
+2026-01-19,22.07,afterhours,0,1,6,Domestic Politics,2,0,0,Noise_Zone,Complaint about media focus and border policy,Immigration policy affects labor market,1,,,,val
 2026-01-23,0.55,premarket,0,1,8,US Politics,4,0,0,Noise_Zone,Trump endorses John Wahl for Alabama Lieutenant Governor,"pro-business, anti-regulation policies",0,,,1,val
 2026-01-23,6.38,premarket,0,1,8,Geopolitics / Peace,2,1,0,Noise_Zone,Trump launches Board of Peace at Davos,Reduced conflict risk,0,,,0,val
 2026-01-23,20.28,afterhours,0,1,6,Geopolitics / Trade,3,1,0,Regular_Hours,"Canada opposes Golden Dome, favors China trade","Trade tensions, protectionism",1,1,0,0,val
@@ -255,7 +255,7 @@ post_date,hour_utc,phase,weekend_flag,market_closed,intensity,scenario,n_instrum
 2026-02-09,22.72,afterhours,0,1,9,Geopolitics / Trade,4,1,1,Noise_Zone,Trump demands fairness from Canada,Trade tensions affect markets,0,,,1,val
 2026-02-11,23.27,afterhours,0,1,9,Trade Policy,4,0,0,Noise_Zone,Trump threatens Republicans who vote against tariffs,Tariffs impact trade deficit and national security,1,,,1,val
 2026-02-13,22.03,afterhours,0,1,9,US Politics,3,0,1,Monday_Open_Shock,Trump demands voter ID law,Polarization affects policy,0,,,,val
-2026-02-16,19.45,regular,0,0,8,Economy / Confidence,3,1,0,Regular_Hours,"President claims low inflation, high markets, strong military",Confidence boost may increase spending,1,,,,val
+2026-02-16,19.45,regular,0,0,8,Economy / Confidence,3,0,0,Regular_Hours,"President claims low inflation, high markets, strong military",Confidence boost may increase spending,1,,,,val
 2026-02-17,1.03,premarket,0,1,8,US Politics,1,0,0,Noise_Zone,Endorsing Alex Mealer for Congress,Election outcome may impact policy,1,,,1,val
 2026-02-17,2.15,premarket,0,1,8,US Politics,4,0,0,Noise_Zone,Pete Sessions endorsed for re-election,Pro-business policies,1,,,1,val
 2026-02-17,2.17,premarket,0,1,8,US Politics,2,0,0,Noise_Zone,Congresswoman endorsed for re-election,Fiscal policy and defense spending,1,,,1,val
@@ -263,7 +263,7 @@ post_date,hour_utc,phase,weekend_flag,market_closed,intensity,scenario,n_instrum
 2026-02-21,0.07,weekend,1,1,8,Trade Policy,3,0,0,Monday_Open_Shock,Author criticizes Supreme Court for tariff decision,Tariff revenue impact on trade balance,1,,,1,val
 2026-02-21,15.98,weekend,1,1,9,Trade War,4,0,1,Monday_Open_Shock,President Trump raises tariffs to 15%,Tariffs impact trade balances,1,,,1,val
 2026-02-23,12.05,premarket,0,1,8,Geopolitics / Trade,4,1,0,Monday_Open_Shock,President Trump claims the Supreme Court gave him more power to impose tariffs,Tariffs can impact trade and economy,1,,,1,val
-2026-02-23,14.82,regular,0,0,8,Trade War,3,1,0,Regular_Hours,President claims power to impose tariffs without Congress,"Tariffs impact trade, inflation, and growth",1,,,1,val
+2026-02-23,14.82,regular,0,0,8,Trade War,3,0,0,Regular_Hours,President claims power to impose tariffs without Congress,"Tariffs impact trade, inflation, and growth",1,,,1,val
 2026-02-27,15.6,regular,0,0,8,Immigration,3,0,0,Regular_Hours,Trump has fewest illegal border crossings in 50 years,Less immigration can reduce labor supply,0,0,1,0,val
 2026-02-27,16.43,regular,0,0,8,US Politics,4,0,0,Regular_Hours,Candidate endorsed by prominent Republicans,Fiscal policy and regulation changes,1,1,1,0,val
 2026-02-27,20.78,afterhours,0,1,9,Geopolitics / National Security,3,0,1,Regular_Hours,US to cease use of Anthropic's tech,gov't tech ban impacts national security,-1,,0,1,val
@@ -290,10 +290,10 @@ post_date,hour_utc,phase,weekend_flag,market_closed,intensity,scenario,n_instrum
 2026-03-20,13.72,regular,0,0,8,Geopolitics / Conflict,3,1,0,Regular_Hours,"NATO is weak without US, won't help with Iran",Global conflict affects oil prices,0,1,1,0,test
 2026-03-21,16.87,weekend,1,1,8,US Politics,4,0,0,Monday_Open_Shock,Trump endorses Julia Letlow for Senate,Pro-business policies may boost economy,0,1,1,0,test
 2026-03-21,22.62,weekend,1,1,8,Geopolitics / War,3,1,0,Monday_Open_Shock,US claims to have defeated Iran,Conflict impacts oil prices,0,0,0,0,test
-2026-03-23,0.52,premarket,0,1,8,US Politics,2,1,0,Monday_Open_Shock,DJT demands voter ID and other reforms,Policy uncertainty affects markets,1,0,0,0,test
-2026-03-23,12.95,premarket,0,1,8,Immigration,2,1,0,Monday_Open_Shock,Trump criticizes Biden's border policy,Border policy affects labor market,-1,1,1,,test
+2026-03-23,0.52,premarket,0,1,8,US Politics,2,0,0,Monday_Open_Shock,DJT demands voter ID and other reforms,Policy uncertainty affects markets,1,0,0,0,test
+2026-03-23,12.95,premarket,0,1,8,Immigration,2,0,0,Monday_Open_Shock,Trump criticizes Biden's border policy,Border policy affects labor market,-1,1,1,,test
 2026-03-24,19.95,regular,0,0,8,US Politics / Elections,3,0,0,Regular_Hours,Trump endorses T.W. Shannon for Oklahoma Lieutenant Governor,Election outcome may impact state policies,1,0,0,0,test
-2026-03-26,10.65,premarket,0,1,8,Geopolitics / Conflict,3,1,0,Noise_Zone,Iran must make a deal or face consequences,Trade and sanctions affected by Iran deal,1,0,0,0,test
+2026-03-26,10.65,premarket,0,1,8,Geopolitics / Conflict,3,0,0,Noise_Zone,Iran must make a deal or face consequences,Trade and sanctions affected by Iran deal,1,0,0,0,test
 2026-03-26,22.5,afterhours,0,1,9,Geopolitics / Immigration,4,0,1,Noise_Zone,President Trump vows to protect US from illegal immigration,Immigration policy affects labor market and border security,-1,1,1,1,test
 2026-03-28,22.6,weekend,1,1,8,Geopolitics / Conflict,3,1,0,Monday_Open_Shock,Trump not backing down on Iran,Escalation affects oil prices,1,,,0,test
 2026-03-30,11.43,premarket,0,1,9,Geopolitics / War,4,1,1,Monday_Open_Shock,US threatens Iran with destruction if deal not reached,Geopolitical tensions affect oil prices,1,,,0,test
