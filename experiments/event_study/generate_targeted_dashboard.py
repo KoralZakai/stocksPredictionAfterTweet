@@ -9,7 +9,7 @@ hypotheses and the controls that killed each one:
                               big oil moves with NO tweet (recovering harder).
   Tab 3  SELECTION BIAS     - sorting by biggest mover manufactures a greatest-hits
                               reel: an Iran SOCCER tweet "moves" oil +17%.
-  Tab 4  THE VERDICT        - 0/72 registered cells survive BH.
+  Tab 4  THE VERDICT        - 0 of the registered cells survive BH.
 
 Every number is COMPUTED HERE from data/real/bars.csv + corpus_v3.csv + the
 registered study output. Nothing is hardcoded — the page regenerates and can be
@@ -30,7 +30,7 @@ from pathlib import Path
 from typing import Any
 
 from config.membership import name_of
-from sector_mapping.entities import entity_matches
+from sector_mapping.entities import entity_matches, is_direct_mention
 
 from experiments.event_study.engine import load_bars, s0_index, study_event
 
@@ -43,10 +43,13 @@ WINDOWS = (1, 3, 5, 10, 21, 42)
 SEED = 20260715
 LO, HI = "2025-01-01", "2026-07-06"
 
-_INTEL_RX = re.compile(
-    r"\b(intel corp|intel's|intel chip|intel stock|stake in intel)\b"
-    r"|\bIntel\b(?=[^a-z]*(chip|semi|fab|plant|factory|stock|share|stake|deal|billion|CEO))",
-    re.I)
+# Intel-the-company detection lives in ONE place: the shared, tested entity mapper
+# (sector_mapping/entities.py, CLAUDE.md 6). This file used to keep its own private
+# regex, and the two disagreed — the private one only looked for company context AFTER
+# the word, so it scored "The CEO of INTEL must resign", "I met with Mr. Lip-Bu Tan, of
+# Intel" and "I PAID ZERO FOR INTEL" as NOT-Intel, and tab 1 reported 3 mentions where
+# the corpus holds 8. Two mappers means two answers to "what is this tweet about"; the
+# cohort labels and the exhibit could never agree. There is now one.
 _OIL_RX = re.compile(r"\b(iran|hormuz|strait|opec|oil|crude|drill|refiner|tanker)\b", re.I)
 
 
@@ -90,9 +93,21 @@ def gather_intel(bars: dict[str, list[Any]]) -> dict[str, Any]:
         # Normalise before deduping: the same post is mirrored across platforms with
         # curly vs straight apostrophes, so a raw-prefix key lets duplicates through.
         key = re.sub(r"[^a-z0-9]", "", r["text"][:90].lower())
-        if _INTEL_RX.search(r["text"]) and key not in seen:
+        if is_direct_mention(r["text"], "INTC") and key not in seen:
             seen.add(key)
             hits.append({"ts": r["timestamp_utc"][:16], "text": r["text"][:180]})
+    # EVERY mention gets its before/after measured, not just the famous one. The old
+    # private regex kept 3 of these 8 — and the 5 it dropped are the ones that do NOT
+    # look like reverse causality (INTC was FALLING before the "CEO must resign" post,
+    # then rose). A rule that silently keeps the supporting cases and drops the rest is
+    # the anecdote generator this dashboard exists to expose, running on our own exhibit.
+    for h in hits:
+        h_t0 = datetime.fromisoformat(h["ts"]).replace(tzinfo=timezone.utc)
+        pw = _prior_window(bars, "INTC", h_t0, 21)
+        er = study_event(bars, "INTC", h_t0, WINDOWS)
+        h["prior21"] = (pw[0] - pw[1]) if pw else None
+        h["post21"] = (er.car.get(21) if er else None)
+
     hero = next((h for h in hits if "continues to rise" in h["text"].lower()), None)
     prior: list[dict[str, Any]] = []
     post: dict[int, float] = {}
@@ -146,16 +161,49 @@ def gather_oil(bars: dict[str, list[Any]], rng: random.Random) -> dict[str, Any]
 # The SAME panel is drawn for every anchor. Fixed up front on purpose: choosing which
 # assets to show per tweet is how you cherry-pick a story. If an asset is irrelevant to
 # a post, its flat line IS the information.
+#
+# These 20 are ETFs — indices and sectors. They stay the fixed control set for EVERY
+# tweet and every aggregate on the page. A tweet's OWN company (INTC on an Intel post)
+# is added on top per-anchor by `_mentioned`, never swapped in: the control cannot move
+# with the tweet or it is not a control.
 PANEL: tuple[str, ...] = ("SPY", "QQQ", "DIA", "USO", "VIXY", "GLD", "TLT", "UUP",
                           "FXI", "XLE", "XLK", "XLF", "XLI", "XLV", "XLY", "XLP",
                           "XLB", "ITA", "SMH", "DBC")
+
+
+def _mentioned(text: str, bars: dict[str, list[Any]]) -> list[str]:
+    """The companies THIS tweet actually names — so an Intel post shows INTC, not just
+    the sector ETFs it happens to sit inside.
+
+    Reuses the rule-based, human-verified entity mapper (CLAUDE.md 6). No ML mapper, and
+    nothing new invented here: `_cohort_of` already routes cohorts through these exact
+    matches, so the panel and the cohort label can never disagree about what a tweet is
+    about.
+
+    `direct` tier only. The mapper also returns `competitor` ride-alongs (an Intel post
+    pulls AMD/NVDA/TSM) — real, but they are an inference about who else is affected, not
+    what the tweet says, and they would quietly triple the panel.
+
+    DJT is excluded, matching `_cohort_of`. Trump signs posts "President DJT", which the
+    ticker rule read as a mention of his own listed company — 754 of 762 'corporate'
+    mentions were that signature. The mapper no longer matches the bare signature, but
+    the exclusion stays: this is the second line of defence on an artifact that already
+    shipped once.
+    """
+    return sorted(t for t, m in entity_matches(text).items()
+                  if m.tier == "direct" and t != "DJT" and t in bars)
 
 
 def gather_panel_series(bars: dict[str, list[Any]], anchors: list[dict[str, Any]],
                         span: int = 42) -> list[dict[str, Any]]:
     """Every anchor x the full panel. Session dates are shared across US equities, so
     they are stored ONCE per anchor and each asset keeps only two price arrays — that
-    compaction is what lets the page carry 20 assets instead of 12."""
+    compaction is what lets the page carry 20 assets instead of 12.
+
+    The panel is PANEL plus whatever this tweet's model call named. The extras matter:
+    without them a leg on a single name (LMT, CAT) has no measured price on the page and
+    its EXPECTED could not be scored at the slider's window at all.
+    """
     m = bars.get("SPY")
     if not m:
         return []
@@ -166,8 +214,10 @@ def gather_panel_series(bars: dict[str, list[Any]], anchors: list[dict[str, Any]
         if spy_i0 is None or spy_i0 - span < 0 or spy_i0 + span >= len(m):
             continue
         dates = [m[spy_i0 + k].date for k in range(-span, span + 1)]
+        named = [leg["ticker"] for leg in (anc.get("pred") or {}).get("legs", [])]
+        mentioned = _mentioned(anc.get("text", ""), bars)
         assets: dict[str, Any] = {}
-        for tk in PANEL:
+        for tk in dict.fromkeys((*PANEL, *named, *mentioned)):
             a = bars.get(tk)
             if not a:
                 continue
@@ -182,8 +232,11 @@ def gather_panel_series(bars: dict[str, list[Any]], anchors: list[dict[str, Any]
                     ok = False
                     break
                 at_anchor = (off == span)
-                pa.append(round(ba.open if at_anchor else ba.close, 2))
-                pb.append(round(bm.open if at_anchor else bm.close, 2))
+                # 4dp = the source precision in bars.csv, i.e. lossless. Rounding to 2dp
+                # to shrink the page silently moved cheap assets by ~3bp (DBC ~$22), which
+                # breaks the page's one promise: every number is a real measured price.
+                pa.append(round(ba.open if at_anchor else ba.close, 4))
+                pb.append(round(bm.open if at_anchor else bm.close, 4))
             if not ok or len(pa) != len(dates):
                 continue
             prev = by.get(dates[span - 1])
@@ -194,7 +247,10 @@ def gather_panel_series(bars: dict[str, list[Any]], anchors: list[dict[str, Any]
         if not assets:
             continue
         out.append({**anc, "s0": m[spy_i0].date, "dates": dates, "span": span,
-                    "assets": assets, "names": {t: name_of(t) for t in assets}})
+                    "assets": assets, "names": {t: name_of(t) for t in assets},
+                    # the company the tweet itself names, present only when it resolved
+                    # to real bars — the page must never label an asset it cannot draw
+                    "mentioned": [t for t in mentioned if t in assets]})
     return out
 
 
@@ -266,11 +322,11 @@ def gather_breakdown(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
         if h is None or sp not in ("train", "test"):
             continue
         for dim, val in (("cohort", _cohort_of(r.get("text", ""), r.get("scenario", ""))),
-                         ("session", r.get("phase", "?")),
-                         ("intensity", f"intensity {r.get('intensity')}")):
+                         ("session", str(r.get("phase", "?"))),
+                         ("intensity", f"level {r.get('intensity')} of 10")):
             agg[(dim, val)][sp][0] += h
             agg[(dim, val)][sp][1] += 1
-    out = []
+    out: list[dict[str, Any]] = []
     for (dim, val), v in agg.items():
         tr, te = v["train"], v["test"]
         if tr[1] < 8 or te[1] < 5:
@@ -279,6 +335,114 @@ def gather_breakdown(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
         out.append({"dim": dim, "group": val, "train": round(a, 3), "n_train": tr[1],
                     "test": round(b, 3), "n_test": te[1], "shift": round(b - a, 3)})
     out.sort(key=lambda x: -abs(x["shift"]))
+    return out
+
+
+CALL_HORIZONS = ("EOD", "3d", "1w", "1mo")
+CALL_HORIZON_LABEL = {"EOD": "same day", "3d": "3 days", "1w": "1 week", "1mo": "1 month"}
+
+
+def gather_calls(rows: list[dict[str, Any]]) -> dict[str, Any]:
+    """The scoreboard for EXPECTED-vs-actual over the WHOLE corpus.
+
+    Tab 5's anchors are the biggest movers, i.e. chosen ON the outcome — a hit rate over
+    those 18 would be meaningless. This is the same question asked of all 476 tweets, so
+    the tab can show the honest denominator next to the exploratory one.
+
+    Scoring rule = the page's rule #1: a call is right when the named instrument BEAT
+    the S&P 500 in the predicted direction (return - spy_return has the predicted sign).
+    Exact ties are unscoreable and dropped, not awarded — counting them as wins is the
+    tie-break artifact the README documents.
+    """
+    from collections import Counter
+    dirs: Counter[str] = Counter()
+    per = {h: [0, 0] for h in CALL_HORIZONS}
+    n_spy = 0
+    for r in rows:
+        for i in r.get("instruments", []):
+            d = i.get("predicted", "?")
+            dirs[d] += 1
+            n_spy += int(i["ticker"] == "SPY")
+            for h in CALL_HORIZONS:
+                ret, spy = (i.get("returns") or {}).get(h), (r.get("spy_returns") or {}).get(h)
+                if ret is None or spy is None or d not in ("up", "down") or ret == spy:
+                    continue
+                per[h][0] += int((ret - spy > 0) == (d == "up"))
+                per[h][1] += 1
+    n = sum(dirs.values())
+    return {
+        "n_tweets": len(rows), "n_calls": n,
+        "n_up": dirs["up"], "n_down": dirs["down"], "n_flat": dirs["neutral"],
+        # SPY legs are unscoreable BY CONSTRUCTION under a beat-the-market rule: the
+        # yardstick cannot beat itself, so ret == spy and the leg drops out above. Worth
+        # surfacing rather than burying — it is the model's single most-named instrument.
+        "n_spy": n_spy,
+        "up_share": dirs["up"] / max(n, 1),
+        "per_tweet": n / max(len(rows), 1),
+        "rates": [{"h": h, "label": CALL_HORIZON_LABEL[h], "hit": v[0], "n": v[1],
+                   "rate": v[0] / max(v[1], 1)} for h, v in per.items() if v[1]],
+    }
+
+
+def gather_named_vs_ignored(bars: dict[str, list[Any]], rows: list[dict[str, Any]],
+                            rng: random.Random,
+                            windows: tuple[int, ...] = (1, 21)) -> list[dict[str, Any]]:
+    """Did NAMING an instrument mean anything? The control for the whole tab.
+
+    For every tweet: how far did the instruments the model named move away from the S&P
+    500, vs the PANEL instruments it never mentioned — same tweet, same window, same
+    yardstick. If the words of a tweet really pointed at an instrument, the named ones
+    should move more.
+
+    TWO traps this function exists to dodge, both of which make "named moves more" true
+    for reasons that have nothing to do with tweets:
+
+    1. Tab 5's anchors are chosen by the largest move of the model's OWN named basket, so
+       on THEM the gap is guaranteed by construction. Hence: whole corpus, never anchors.
+    2. The model names jumpy instruments (oil, the fear gauge, defence) and ignores placid
+       ones (staples, bonds). A gap could just be that ranking of volatility, restated.
+
+    So each tweet's named set is ALSO scored against a random OTHER tweet's date (a
+    date-permutation placebo, seeded). Same instruments, same rule, wrong day. Whatever
+    gap survives on the wrong day is the volatility ranking, not the tweet — and only the
+    excess of `real` over `placebo` could ever be tweet-specific information.
+    """
+    m = bars.get("SPY")
+    if not m:
+        return []
+    events = [(_t0(r), {i["ticker"] for i in r.get("instruments", [])}) for r in rows]
+    shuffled = [t for t, _ in events]
+    rng.shuffle(shuffled)
+    out = []
+    for w in windows:
+        acc = {"real": [0.0, 0, 0.0, 0], "placebo": [0.0, 0, 0.0, 0]}  # nsum,nn,isum,ni
+        n_tweets = 0
+        for (t0, names), fake_t0 in zip(events, shuffled, strict=True):
+            for arm, when in (("real", t0), ("placebo", fake_t0)):
+                j0 = s0_index(m, when)
+                if j0 is None or j0 + w >= len(m):
+                    continue
+                spy_beat = m[j0 + w].close / m[j0].open - 1.0
+                for tk in PANEL:
+                    a = bars.get(tk)
+                    if not a:
+                        continue
+                    i0 = s0_index(a, when)
+                    if i0 is None or i0 + w >= len(a) or a[i0 + w].date != m[j0 + w].date:
+                        continue
+                    beat = abs((a[i0 + w].close / a[i0].open - 1.0) - spy_beat)
+                    k = 0 if tk in names else 2
+                    acc[arm][k] += beat
+                    acc[arm][k + 1] += 1
+            n_tweets += 1
+        if not (acc["real"][1] and acc["real"][3] and acc["placebo"][1]):
+            continue
+        row: dict[str, Any] = {"w": w, "n_tweets": n_tweets}
+        for arm, v in acc.items():
+            row[arm] = {"named": v[0] / v[1], "ignored": v[2] / v[3],
+                        "n_named": v[1], "n_ignored": v[3],
+                        "gap": v[0] / v[1] - v[2] / v[3]}
+        out.append(row)
     return out
 
 
@@ -409,12 +573,13 @@ stroke-linejoin:round;stroke-linecap:round}
 .chart .tip{fill:var(--ink);font-family:var(--mono);font-size:10px}
 .axis{display:flex;justify-content:space-between;font-size:.72rem;color:var(--ink3);margin-top:6px}
 .vd{font-family:var(--mono);font-size:.85rem;letter-spacing:.02em;font-weight:700}
-.vd.down{color:var(--down)}.vd.flat{color:var(--flat)}
+.vd.down{color:var(--down)}.vd.flat{color:var(--flat)}.vd.up{color:var(--up)}
 .kv{display:grid;grid-template-columns:190px 1fr;gap:10px;padding:7px 0;
 border-bottom:1px solid var(--line);align-items:baseline}
 .kv .k{color:var(--ink3);font-size:.7rem;text-transform:uppercase;letter-spacing:.04em}
 .kv b{font-weight:600;font-size:.9rem}
 .nm{color:var(--ink3);font-weight:400;font-size:.78rem}
+.said{background:var(--accent);color:var(--bg);border-radius:3px;padding:1px 5px;font-size:.62rem;font-weight:700;letter-spacing:.03em;text-transform:uppercase;white-space:nowrap}
 @media(max-width:620px){.kv{grid-template-columns:1fr}}
 .spark .zero{stroke:var(--line);stroke-width:1;stroke-dasharray:2 3}
 .spark .line{fill:none;stroke-width:2}.spark .line.up{stroke:var(--up)}.spark .line.down{stroke:var(--down)}
@@ -435,24 +600,39 @@ tabs.forEach(t=>t.addEventListener('click',()=>{
 const sel=document.getElementById('anchor'), back=document.getElementById('back'),
       fwd=document.getElementById('fwd');
 let PTS=[], GX=k=>k, GY=e=>e;      // current window points + scales, shared with hover()
-const ACTIVE=new Set();            // empty = show every asset in the panel
 function fmt(v){return (v>=0?'+':'')+(v*100).toFixed(2)+'%';}
+
+// The ONE measurement the whole tab is built on: how much did `tk` beat the S&P 500 by,
+// from the first open after the post to the close `k` sessions later. Pure lookup +
+// exact arithmetic on stored prices — no fit, no interpolation, no negated returns.
+function beatAt(anc,tk,k){
+  const a=anc.assets[tk]; if(!a) return null;
+  const i=k+anc.span; if(i<0||i>=a.pa.length) return null;
+  return (a.pa[i]/a.open_a-1)-(a.pb[i]/a.open_b-1);
+}
+// Same, backwards: the run-up over the X sessions ENDING at the last close before the post.
+function runupAt(anc,tk,X){
+  const a=anc.assets[tk]; if(!a) return null;
+  const i=anc.span-X; if(i<0||i>=a.pa.length) return null;
+  return (a.prev_a/a.pa[i]-1)-(a.prev_b/a.pb[i]-1);
+}
 function draw(){
-  const anc=SERIES[+sel.value], X=+back.value, Y=+fwd.value, S=anc.span;
+  const anc=SERIES[+sel.value], X=+back.value, Y=+fwd.value;
   const asel=document.getElementById('asset');
   const avail=Object.keys(anc.assets);
   if(asel.dataset.anchor!==sel.value){
     asel.dataset.anchor=sel.value;
     asel.innerHTML=avail.map(t=>`<option value="${t}">${t} — ${anc.names[t]||t}</option>`).join('');
+    // Open on the company the tweet NAMES if it named one (an Intel post opens on INTC),
+    // else on an instrument the model named — those are the tab's question. Never default
+    // to SPY: every number here is measured vs SPY, so SPY plots as a flat zero and reads
+    // as a broken chart.
+    const legs=(anc.pred?anc.pred.legs:[]).map(l=>l.ticker).filter(t=>anc.assets[t]&&t!=='SPY');
+    asel.value=(anc.mentioned||[])[0]||legs[0]||avail.find(t=>t!=='SPY')||avail[0];
   }
   const tk=avail.includes(asel.value)?asel.value:avail[0];
-  const a=anc.assets[tk];
-  // idx: offset k -> array index. Prices are plain arrays; dates are shared per anchor.
-  const ix=k=>k+S;
-  const at=k=>{const i=ix(k); return (i<0||i>=a.pa.length)?null:
-    ((a.pa[i]/a.open_a-1)-(a.pb[i]/a.open_b-1));};
-  const runupAt=X=>{const i=ix(-X); return (i<0)?null:
-    ((a.prev_a/a.pa[i]-1)-(a.prev_b/a.pb[i]-1));};
+  const at=k=>beatAt(anc,tk,k);
+  renderCall(anc, Y);
   renderPanel(anc, X, Y);
 
   document.getElementById('backv').textContent=X;
@@ -463,9 +643,8 @@ function draw(){
   document.getElementById('atext').textContent='“'+anc.text+'”';
   document.getElementById('as0').textContent='posted '+anc.ts.slice(0,16).replace('T',' ')+
     ' UTC · first market open after it: '+anc.s0+' · type: '+anc.cohort.toLowerCase();
-  renderPred(anc);
 
-  const eFwd=at(Y), runup=runupAt(X);
+  const eFwd=at(Y), runup=runupAt(anc,tk,X);
   const pre=document.getElementById('pre'), post=document.getElementById('post');
   pre.textContent=runup===null?'n/a':fmt(runup);
   pre.className='big '+(runup>0?'up':'down');
@@ -480,7 +659,7 @@ function draw(){
   }else{v.textContent='NO CLEAR PATTERN at this window';v.className='vd flat';}
 
   PTS=[];
-  for(let k=-X;k<=Y;k++){const e=at(k); if(e!==null) PTS.push({k, d:anc.dates[ix(k)], e});}
+  for(let k=-X;k<=Y;k++){const e=at(k); if(e!==null) PTS.push({k, d:anc.dates[k+anc.span], e});}
   const W=720,H=220,L=48,R=8,T=10,B=30;
   const lo=Math.min(...PTS.map(p=>p.e),0),hi=Math.max(...PTS.map(p=>p.e),0),rg=(hi-lo)||1;
   GX=k=>L+((k+X)/(X+Y))*(W-L-R);
@@ -506,38 +685,201 @@ function draw(){
     `<rect class="tipbg" rx="3"/><text class="tip"></text></g>`;
 }
 
-// The panel: EVERY asset, with the model's EXPECTED direction where it named one.
-// Assets the model did not name show "—": it made no call, which is itself the point.
+// Does NAMING an instrument mean anything? Built once at load: the model's picks scored
+// on the real tweet day, and the SAME picks scored on a random other day. Two numbers that
+// match = the picks knew nothing about the tweet.
+const NVI=(()=>{
+  if(!CALLS.nvi||!CALLS.nvi.length) return '';
+  const pp=v=>(v>=0?'+':'')+(v*100).toFixed(2)+'pp';
+  const pc=v=>(v*100).toFixed(2)+'%';
+  // NB "he posted nothing" would be false — he posts on most sessions, and the wrong day
+  // is simply ANOTHER tweet's date. The claim is about pairing, not about a quiet day.
+  const rows=CALLS.nvi.map(r=>[['real','the day this tweet was posted'],
+                               ['placebo','a different tweet’s day, picked at random']]
+    .map(([arm,lbl],i)=>`<tr class="${arm==='real'?'hero':''}">`+
+      `<th>${r.w} session${r.w===1?'':'s'}<span class="nm"> ${lbl}</span></th>`+
+      `<td>${pc(r[arm].named)}</td><td>${pc(r[arm].ignored)}</td>`+
+      `<td class="flat">${pp(r[arm].gap)}</td></tr>`).join('')).join('');
+  return `<h3>The same question asked of all ${CALLS.n_tweets} tweets — and then asked again `+
+    `on the wrong day</h3>`+
+    `<p class="note">For every tweet in the corpus we measured how far the instruments it
+      named drifted from the S&amp;P 500, against the ones it ignored. Then we did something
+      that decides it: we kept each tweet's picks but scored them on <b>a different tweet's
+      day, chosen at random</b> — same instruments, same rule, a day this tweet had nothing
+      to do with. If naming meant anything, the picks should do <i>worse</i> on the wrong
+      day.</p>`+
+    `<div class="scroll"><table><thead><tr><th>window</th><th>the ones<br>it NAMED</th>`+
+    `<th>the ones<br>it IGNORED</th><th>gap</th></tr></thead><tbody>${rows}</tbody></table></div>`+
+    `<p class="note"><b>The gap is the same on the wrong day.</b> Move the model's picks to a
+      date it never saw and they keep their entire advantage — so the advantage was never
+      about the tweet. It is just <i>which</i> instruments it likes to name: oil, the fear
+      gauge and defence stocks jump around more than consumer staples and government bonds
+      <b>on every day of the year</b>, tweet or no tweet. Naming the jumpy ones is not a
+      prediction. <b>This is the same illusion as the whole tab, in two rows.</b></p>`;
+})();
+const ARROW=d=>d==='up'?'▲ UP':d==='down'?'▼ DOWN':'– flat';
+const DCLS=d=>d==='up'?'up':d==='down'?'down':'flat';
+// Did the call come true? The page's rule #1: beating the S&P 500 in the named
+// direction. An exact tie is unscoreable — awarding it is the tie-break artifact.
+function scoreLeg(d,beat){
+  if(beat===null||beat===0||(d!=='up'&&d!=='down')) return null;
+  return (beat>0)===(d==='up');
+}
+
+// THE CENTREPIECE. Before it saw a single price, the model read this tweet and named a
+// handful of instruments with a direction for each. This card puts that call next to
+// what the market actually did — re-scored live at whatever window the slider is on.
+function renderCall(anc, Y){
+  const box=document.getElementById('pred'); if(!box) return;
+  const p=anc.pred;
+  if(!p){
+    box.innerHTML=`<div class="card"><h2>The call</h2><p class="note">This tweet was never
+      put to the model — it did not pass the filter that decides which posts are even
+      about markets. There is no prediction to check.</p></div>`;
+    return;
+  }
+  const legs=p.legs.map(l=>{
+    const beat=beatAt(anc,l.ticker,Y);
+    return {...l, beat, ok:scoreLeg(l.predicted,beat)};
+  });
+  const scored=legs.filter(l=>l.ok!==null);
+  const hits=scored.filter(l=>l.ok).length;
+  const rows=legs.map(l=>{
+    // SPY is the yardstick every other number is measured against, so "SPY beats the
+    // market" is 0.00% by definition, not a miss. Say so instead of printing a fake DOWN.
+    const spy=l.ticker==='SPY';
+    const act=l.beat===null?'no price':spy?'0.00% — it IS the market'
+      :l.beat===0?'– flat 0.00%':ARROW(l.beat>0?'up':'down')+' '+fmt(l.beat);
+    return `<tr class="hero"><th>${l.ticker}<span class="nm"> ${l.name}</span></th>`+
+    `<td class="${DCLS(l.predicted)}">${ARROW(l.predicted)}</td>`+
+    `<td class="${l.beat===null||spy||l.beat===0?'flat':l.beat>0?'up':'down'}">${act}</td>`+
+    `<td class="${l.ok===true?'up':l.ok===false?'down':'flat'}">`+
+    `${l.ok===true?'✓ RIGHT':l.ok===false?'✗ WRONG':spy?'can\\'t be scored':'—'}</td></tr>`;
+  }).join('');
+  // Verdict wording is derived from the count, never stored: change Y and it changes.
+  const v=!scored.length?['no scoreable call at this window','flat']
+    :hits===scored.length?['it got every call right here','up']
+    :hits===0?['it got every call wrong here','down']
+    :['it got some right and some wrong here','flat'];
+  const R=CALLS.rates.map(r=>
+    `<div class="tile"><div class="k">all ${CALLS.n_tweets} tweets<br>after ${r.label}</div>`+
+    `<div class="big ${Math.abs(r.rate-0.5)<0.03?'flat':r.rate>0.5?'up':'down'}">`+
+    `${(r.rate*100).toFixed(1)}%</div>`+
+    `<div class="k" style="text-transform:none">${r.hit} of ${r.n} calls right</div></div>`).join('');
+  box.innerHTML=
+    `<div class="card" style="border-left:3px solid var(--accent)">`+
+    `<h2>The call — what it expected, and what actually happened</h2>`+
+    `<p class="note">Reading <b>only the words of the tweet</b>, before seeing any price,
+      the model said this post was about <b>${p.scenario||'—'}</b>${p.summary?' — “'+p.summary+'”':''}.
+      Then it named the ${legs.length} instrument${legs.length===1?'':'s'} below and, for each
+      one, which way it would go.${p.hypo_short?' Its reasoning: “'+p.hypo_short+'”':''}</p>`+
+    `<div class="scroll"><table><thead><tr><th>the instrument it named</th>`+
+    `<th>it EXPECTED</th><th>what actually happened by T+${Y}<br>(vs the S&amp;P 500)</th>`+
+    `<th>was it right?</th></tr></thead><tbody>${rows}</tbody></table></div>`+
+    `<div class="tiles"><div class="tile"><div class="k">this tweet, ${Y} session${Y===1?'':'s'} later</div>`+
+    `<div class="big ${v[1]}">${scored.length?hits+' of '+scored.length:'—'}</div>`+
+    `<div class="k" style="text-transform:none">calls that came true</div></div></div>`+
+    `<div class="k">what that means</div><div class="vd ${v[1]}">${v[0].toUpperCase()}</div>`+
+    `<p class="note">Drag the <b>lookforward</b> slider and watch this flip. A call that is
+      "right" at 4 sessions and "wrong" at 5 was never a prediction — it's a price wandering
+      across zero. <b>One tweet proves nothing either way</b>, which is exactly why the row
+      of numbers below it exists.</p>`+
+    `<h3>The same question asked of every tweet — not just this one</h3>`+
+    `<p class="note">These 18 tweets were picked <i>because</i> they had the biggest moves,
+      so their score is rigged by construction. Here is the honest denominator: every call
+      the model made on all <b>${CALLS.n_tweets}</b> tweets in the corpus
+      (<b>${CALLS.n_calls}</b> calls, about ${CALLS.per_tweet.toFixed(1)} per tweet), scored
+      the same way. <b>50% is a coin flip.</b></p>`+
+    `<div class="tiles">${R}</div>`+
+    `<p class="note">Every horizon sits on the coin flip. That is the finding, and it is the
+      point of this tab. Two tells in <i>what</i> it predicts explain why:<br><br>
+      <b>1 · It nearly always says up.</b> ${(CALLS.up_share*100).toFixed(0)}% of its
+      ${CALLS.n_calls} calls are “UP” (${CALLS.n_up} up vs ${CALLS.n_down} down). It is not
+      weighing each tweet and arriving at a direction — it mostly says up, and the market
+      drifts up on its own anyway.<br>
+      <b>2 · Its favourite pick is the market itself.</b> ${CALLS.n_spy} of those calls name
+      the S&amp;P 500 — and “the S&amp;P 500 will beat the S&amp;P 500” cannot be right or
+      wrong, so those ${CALLS.n_spy} drop out of the scores above. Naming the whole market is
+      not a prediction about a tweet; it is a way of not making one.<br><br>
+      So expect the table above to read “expected UP, went DOWN” about half the time.
+      <b>That is not a broken model — it is the honest result.</b> There is nothing in the
+      words of a tweet to predict from, and a model that reads the words can only produce a
+      coin flip from them.</p></div>`;
+}
+
+// The 20-asset panel. The instruments the model IGNORED are not filler — they are the
+// control. If the words of a tweet really pointed at a specific instrument, the named
+// one should move more than the ones it never mentioned. Both columns are measured at
+// the same window, on the same day, so the comparison is apples to apples.
 function renderPanel(anc, X, Y){
   const box=document.getElementById('panel'); if(!box) return;
-  const S=anc.span;
-  const exp={}; (anc.pred?anc.pred.legs:[]).forEach(l=>{exp[l.ticker]={d:l.predicted,hit:l.hit};});
-  const show=ACTIVE.size?[...ACTIVE]:Object.keys(anc.assets);
-  const rows=show.filter(tk=>anc.assets[tk]).map(tk=>{
-    const a=anc.assets[tk], ib=(-X)+S, fi=Y+S;
-    const runup=(ib>=0)?((a.prev_a/a.pa[ib]-1)-(a.prev_b/a.pb[ib]-1)):null;
-    const post =(fi<a.pa.length)?((a.pa[fi]/a.open_a-1)-(a.pb[fi]/a.open_b-1)):null;
-    const e=exp[tk];
-    return {tk, name:anc.names[tk]||tk, runup, post, exp:e?e.d:null, hit:e?e.hit:null};
-  }).filter(r=>r.post!==null).sort((p,q)=>Math.abs(q.post)-Math.abs(p.post));
-  const arr=d=>d==='up'?'▲ UP':d==='down'?'▼ DOWN':'– flat';
+  const exp={}; (anc.pred?anc.pred.legs:[]).forEach(l=>{exp[l.ticker]=l.predicted;});
+  const ment=new Set(anc.mentioned||[]);
+  const rows=Object.keys(anc.assets).map(tk=>{
+    const d=exp[tk]||null, beat=beatAt(anc,tk,Y);
+    return {tk, name:anc.names[tk]||tk, runup:runupAt(anc,tk,X), beat, exp:d,
+            ok:scoreLeg(d,beat), said:ment.has(tk), fixed:PANEL.includes(tk)};
+  }).filter(r=>r.beat!==null).sort((p,q)=>Math.abs(q.beat)-Math.abs(p.beat));
+  const avg=rs=>rs.length?rs.reduce((s,r)=>s+Math.abs(r.beat),0)/rs.length:null;
+  // The named/ignored tiles compare over the FIXED panel only. A tweet's own company is
+  // added to the table per-tweet, so counting it here would let the control set change
+  // with the tweet — and a control that moves with the treatment is not a control.
+  const named=rows.filter(r=>r.exp&&r.fixed), rest=rows.filter(r=>!r.exp&&r.fixed);
+  const an=avg(named), ar=avg(rest);
+  const said=rows.filter(r=>r.said);
+  // Where the model's picks landed once every asset is ranked by how much it actually
+  // moved. Picks that carried information would cluster at the top.
+  const ranks=named.map(r=>rows.indexOf(r)+1).sort((a,b)=>a-b);
+  const tr=r=>`<tr class="${r.exp||r.said?'hero':''}"><th>${rows.indexOf(r)+1}. ${r.tk}`+
+    `${r.said?' <span class="said">named in the tweet</span>':''}`+
+    `<span class="nm"> ${r.name}</span></th>`+
+    `<td class="${r.exp?DCLS(r.exp):'flat'}">${r.exp?ARROW(r.exp):'not named'}</td>`+
+    `<td class="${r.runup===null?'flat':r.runup>0?'up':'down'}">`+
+    `${r.runup===null?'—':fmt(r.runup)}</td>`+
+    `<td class="${r.beat>0?'up':'down'}">${fmt(r.beat)}</td>`+
+    `<td class="${r.ok===true?'up':r.ok===false?'down':'flat'}">`+
+    `${r.ok===true?'✓ RIGHT':r.ok===false?'✗ WRONG':'—'}</td></tr>`;
   box.innerHTML=
-    `<div class="card"><h2>Every asset — expected vs actual</h2>`+
-    `<div class="scroll"><table><thead><tr><th>asset</th><th>EXPECTED</th>`+
-    `<th>run-up T−${X}</th><th>after T+${Y}</th><th>verdict</th></tr></thead><tbody>`+
-    rows.map(r=>`<tr class="${r.exp?'hero':''}"><th>${r.tk}<span class="nm"> ${r.name}</span></th>`+
-      `<td class="${r.exp==='up'?'up':r.exp==='down'?'down':'flat'}">${r.exp?arr(r.exp):'— not named'}</td>`+
-      `<td class="${r.runup>0?'up':'down'}">${r.runup===null?'—':fmt(r.runup)}</td>`+
-      `<td class="${r.post>0?'up':'down'}">${fmt(r.post)}</td>`+
-      `<td class="${r.hit===true?'up':r.hit===false?'down':'flat'}">`+
-      `${r.hit===true?'✓ HIT':r.hit===false?'✗ MISS':'—'}</td></tr>`).join('')+
-    `</tbody></table></div>`+
-    `<p class="note"><b>EXPECTED</b> is filled only for instruments the 70B actually
-     named for this tweet (highlighted). The rest it made no call on — it watches 2-4
-     assets, not the whole market. <b>Exploratory:</b> ${Object.keys(anc.assets).length}
-     assets x ${SERIES.length} tweets is ~${Object.keys(anc.assets).length*SERIES.length}
-     combinations to eyeball — with that many, something <i>always</i> looks like a pattern.
-     The table below shows what happens when you check those patterns properly.</p></div>`;
+    `<div class="card"><h2>The ${rows.length} instruments it could have named</h2>`+
+    `<p class="note">The same <b>${PANEL.length} index and sector funds for every tweet</b>,
+      fixed in advance — picking which assets to show per tweet is exactly how you'd
+      manufacture a story.${said.length?` On top of those, this tweet names a company by
+      name, so <b>${said.map(r=>r.tk).join(', ')}</b> ${said.length===1?'is':'are'} added
+      and marked. The fixed ${PANEL.length} never change, so the comparison below still
+      holds.`:''} Ranked by how far each moved away from the S&amp;P 500 by
+      <b>T+${Y}</b>.</p>`+
+    `<div class="tiles">`+
+    `<div class="tile"><div class="k">the ${named.length} it NAMED<br>typical move</div>`+
+    `<div class="big">${an===null?'—':(an*100).toFixed(2)+'%'}</div></div>`+
+    `<div class="tile"><div class="k">the ${rest.length} it IGNORED<br>typical move</div>`+
+    `<div class="big">${ar===null?'—':(ar*100).toFixed(2)+'%'}</div></div>`+
+    `<div class="tile"><div class="k">where its picks<br>rank on the day</div>`+
+    `<div class="big">${ranks.length?ranks.join(', '):'—'}</div>`+
+    `<div class="k" style="text-transform:none">out of ${rows.length}</div></div></div>`+
+    `<p class="note">(These three numbers are for <b>this tweet only</b>, at T+${Y}.)</p>`+
+    `<p class="note">If the tweet's words genuinely pointed at an instrument, the named ones
+      should move <b>more</b> than the ignored ones, and rank near the top. Often they do —
+      but <b>do not read anything into it here</b>: these ${SERIES.length} tweets were chosen
+      <i>because</i> the model's own named instruments moved the most. On this page "named
+      moves more" is true by construction. It measures how we picked the tweets, not the
+      model. The only way to know is to ask it of every tweet:</p>`+
+    NVI+
+    `<div class="scroll"><table><thead><tr><th>rank · instrument</th><th>it EXPECTED</th>`+
+    `<th>run-up T−${X}</th><th>after T+${Y}</th><th>right?</th></tr></thead><tbody>`+
+    // Render EVERY row, not just the fixed panel: `named`/`rest` are the control split
+    // for the tiles above and are PANEL-only, so building the table from them dropped
+    // the tweet's own company — INTC would be the chart's default asset and absent from
+    // the table under it. Interesting rows (named by the model, or named by the tweet)
+    // sort to the top; the rest keep their measured rank.
+    rows.filter(r=>r.said||r.exp).map(tr).join('')+
+    rows.filter(r=>!r.said&&!r.exp).map(tr).join('')+`</tbody></table></div>`+
+    `<p class="note"><b>Exploratory — read nothing into a single row.</b>
+      ${rows.length} instruments x ${SERIES.length} tweets is about
+      ${rows.length*SERIES.length} comparisons, and with that many, something
+      <i>always</i> looks like a pattern. Nothing here is a test; it is a place to form a
+      hunch. <b>Tabs 4 and 6 are where hunches get checked</b> — with the questions written
+      down in advance and the score adjusted for how many were asked. Everything found here
+      died there.</p></div>`;
 }
 
 // Hover: read the MEASURED point nearest the cursor. No smoothing, no synthesis.
@@ -568,7 +910,7 @@ if(sel) draw();
 
 def render(intel: dict[str, Any], oil: dict[str, Any], verdict: dict[str, Any],
            series: list[dict[str, Any]], intraday: dict[str, Any] | None,
-           breakdown: list[dict[str, Any]], stamp: str) -> str:
+           breakdown: list[dict[str, Any]], calls: dict[str, Any], stamp: str) -> str:
     hdr = "".join(f"<th>{w}d</th>" for w in WINDOWS)
 
     # ---- Tab 1: reverse causality
@@ -582,8 +924,15 @@ def render(intel: dict[str, Any], oil: dict[str, Any], verdict: dict[str, Any],
     hero_ts = intel["hero"]["ts"] if intel["hero"] else "?"
     post_tds = "".join(f'<td class="{_cls(intel["post"].get(w))}">{_pct(intel["post"].get(w))}</td>'
                        for w in WINDOWS)
-    mentions = "".join(f'<div class="tweet"><b>{escape(m["ts"])}</b> — {escape(m["text"])}</div>'
-                       for m in intel["mentions"])
+    mentions = "".join(
+        f'<tr class="{"hero" if m is intel["hero"] else ""}">'
+        f'<th>{escape(m["ts"][:10])}</th>'
+        f'<td class="{_cls(m["prior21"])}">{_pct(m["prior21"])}</td>'
+        f'<td class="{_cls(m["post21"])}">{_pct(m["post21"])}</td>'
+        f'<td class="note">{escape(m["text"][:110])}</td></tr>'
+        for m in intel["mentions"])
+    n_rose = sum(1 for m in intel["mentions"]
+                 if (m["post21"] or 0) > 0.02 and (m["prior21"] or 0) < 0.10)
     t1 = f"""
 <div class="myth"><b>THE HYPOTHESIS:</b> "Trump tweeted about Intel and the stock
 ran for months." Every broker has heard it. It is the single most-cited example of
@@ -599,14 +948,30 @@ that has <b>already happened</b>, and claiming credit for it.</p></div>
 <div class="scroll"><table><thead><tr><th>abnormal return</th>{hdr}</tr></thead>
 <tbody><tr><th>INTC post-tweet</th>{post_tds}</tr></tbody></table></div>
 {_spark(intel["post"]) if intel["post"] else ""}</div>
-<div class="myth verdict"><b>VERDICT — REVERSE CAUSALITY.</b> Intel had already
-<b>doubled (+105% in 21 sessions)</b> before the post. In the 21 sessions after it:
-<b>−2.4%</b>. The stock moved, <i>then</i> he tweeted. He reflects news rather than
-generating it — and memory encodes the correlation as a sequence.</div>
+<div class="myth verdict"><b>VERDICT — THIS TWEET IS REVERSE CAUSALITY.</b> Intel had
+already <b>doubled (+105% in 21 sessions)</b> before the post. In the 21 sessions after
+it: <b>−2.4%</b>. The stock moved, <i>then</i> he tweeted — and memory encodes the
+correlation as a sequence.</div>
 <div class="card"><h3>Every Intel-the-company mention in the corpus
-({len(intel["mentions"])} unique of {intel["n_corpus"]:,} posts)</h3>{mentions}
-<p class="note">{len(intel["mentions"])} mentions in sixteen months. The legend rests
-on a sample this small — and one of them is nostalgia about "Intel Inside."</p></div>"""
+({len(intel["mentions"])} unique of {intel["n_corpus"]:,} posts)</h3>
+<p class="note">The famous tweet is the <span class="nm">highlighted</span> row. But it
+is not the whole story, and we are not going to show you only the row that suits us —
+so here is <b>every</b> mention, with what Intel did in the 21 trading days before and
+after each one. Both columns are measured against the S&amp;P 500.</p>
+<div class="scroll"><table><thead><tr><th>date</th><th>INTC in the<br>21 days BEFORE</th>
+<th>INTC in the<br>21 days AFTER</th><th>the post</th></tr></thead>
+<tbody>{mentions}</tbody></table></div>
+<p class="note"><b>Read this honestly.</b> For the famous post the order is unmistakable:
+a double first, a tweet second, nothing after. But <b>{n_rose} of these
+{len(intel["mentions"])}</b> posts land the other way round — Intel was <i>falling</i>
+when he demanded the CEO resign, and rose afterwards. Those posts are also the ones where
+he was announcing something real: a president calling for a CEO's head, or the US
+government taking a 10% stake. <b>That is news, and news moves prices.</b><br><br>
+So the honest claim is narrower than "his tweets never matter": <i>this</i> famous tweet
+described a move that had already happened. Eight mentions cannot settle the general
+question either way — eight is an anecdote, and picking the flattering ones out of eight
+is how the myth got built in the first place. <b>The registered test in tab 4 is what
+settles it, and it finds nothing.</b></p></div>"""
 
     # ---- Tab 2: mean reversion
     rows2 = (_path_row("top-5 'strongest' tweets", oil["mean_top5"], "the anecdotes", True)
@@ -669,7 +1034,7 @@ generator, visible in one table.</i></div>"""
 result. For each type we asked three questions about its matching assets over 1, 3 and
 5 days: <b>did the price move in the direction expected? how big was the move? was
 there unusual trading?</b><br><br>
-Two rules keep this honest. We wrote down <b>all 72 questions before looking at a
+Two rules keep this honest. We wrote down <b>all {verdict["n_cells"]} questions before looking at a
 single answer</b> — otherwise you can ask a hundred things and report the three that
 worked. And every answer is compared against <b>the same asset on random days</b>, so
 "oil moved" only counts if it moved <i>more than oil normally does</i>.</p>
@@ -682,9 +1047,9 @@ worked. And every answer is compared against <b>the same asset on random days</b
 <div class="card"><h2>The six that came closest — and still failed</h2>
 <div class="scroll"><table><thead><tr><th>tweet type / asset / days</th><th>how many<br>tweets</th>
 <th>after these<br>tweets</th><th>on random<br>days</th><th>chance it&#39;s<br>luck</th>
-<th>...after testing<br>72 things</th></tr></thead><tbody>{vrows}</tbody></table></div>
-<p class="note">The last column is the one that matters. Ask 72 questions and a few will
-look impressive by chance alone — like flipping 72 coins and celebrating the one that
+<th>...after testing<br>{verdict["n_cells"]} things</th></tr></thead><tbody>{vrows}</tbody></table></div>
+<p class="note">The last column is the one that matters. Ask {verdict["n_cells"]} questions and a few will
+look impressive by chance alone — like flipping {verdict["n_cells"]} coins and celebrating the one that
 came up heads five times. That column adjusts for how many questions we asked. Nothing
 survives it.</p></div>
 <div class="myth verdict"><b>THE ANSWER: {verdict["n_survive"]} out of
@@ -701,9 +1066,16 @@ but it deliberately <b>quotes no accuracy number and no confidence score</b>, be
 nothing we measured earned one. Research output. Not investment advice.</p></div>"""
 
     # ---- "when are we right?" — the honest answer: nowhere that replicates.
+    # The keys are internal column names; the page is written for a reader with no finance
+    # background, so they never reach the screen.
+    dim_label = {"cohort": "what it's about", "session": "when he posted",
+                 "intensity": "how loud it is"}
+    phrase = {"premarket": "before the bell", "regular": "market open",
+              "afterhours": "after the bell", "weekend": "weekend"}
     bd_rows = "".join(
         f'<tr class="{"hero" if abs(b["shift"]) >= 0.3 else ""}">'
-        f'<th>{escape(b["dim"])}<span class="nm"> {escape(str(b["group"]))}</span></th>'
+        f'<th>{escape(dim_label.get(b["dim"], b["dim"]))}'
+        f'<span class="nm"> {escape(phrase.get(str(b["group"]), str(b["group"])))}</span></th>'
         f'<td>{b["train"]:.3f}<span class="nm"> n={b["n_train"]}</span></td>'
         f'<td>{b["test"]:.3f}<span class="nm"> n={b["n_test"]}</span></td>'
         f'<td class="{_cls(b["shift"])}">{b["shift"]:+.3f}</td></tr>' for b in breakdown)
@@ -719,21 +1091,29 @@ the later tweets. None of them do.</p>
 <th>change</th></tr></thead><tbody>{bd_rows}</tbody></table></div>
 <div class="myth verdict" style="margin-top:14px"><b>ANSWER: nowhere that holds.</b>
 Every pattern flips when you check it on tweets the model never saw — weekend posts go
-from the <b>worst</b> group (30% right) to the <b>best</b> (76% right). Learn “avoid weekends” from train and test punishes you;
-learn “weekends are 76%” from test and the next batch punishes you. This is the same
-result the second-stage meta-model reported as Val AUC 0.593 → <b>Test 0.431</b>,
-shown as a table instead of a number. These groups aren't real patterns — they're random
-wobble, and random wobble never repeats.</div></div>"""
+from the <b>worst</b> group (30% right) to the <b>best</b> (76% right). Learn “avoid weekends”
+from the earlier tweets and the later ones punish you; learn “weekends are 76%” from the
+later ones and the next batch punishes you. We also tried the obvious next move — a second
+model whose only job was to spot when the first one could be trusted. It looked promising
+while it was being built and then scored <b>worse than a coin flip</b> on tweets it had
+never seen. These groups aren't real patterns — they're random wobble, and random wobble
+never repeats.</div></div>"""
 
     # ---- Tab 5: dynamic time-window analyzer (reads MEASURED series only)
     opts = "".join(f'<option value="{i}">{escape(s["s0"])} · {escape(s["cohort"])} — '
                    f'{escape(s["label"])}</option>' for i, s in enumerate(series))
     t5 = f"""
-<div class="myth verdict"><b>HOW TO READ THIS:</b> pick a tweet, then drag the two
-sliders to choose how far <b>back</b> and how far <b>forward</b> you want to look.<br><br>
-Every number is a <b>real measured price</b> from that exact day — the slider looks it
-up, it never estimates or draws a smooth curve. Drag the left slider out and watch what
-the price was doing <i>before</i> he posted. That's usually the whole story.</div>
+<div class="myth verdict"><b>WHAT THIS TAB DOES:</b> a machine reads one of his tweets —
+<b>just the words, no prices</b> — and says which assets it will move and in which
+direction. Then we check it against what the market actually did. <b>Expected vs
+reality, side by side.</b><br><br>
+Pick a tweet, then drag the two sliders to choose how far <b>back</b> and how far
+<b>forward</b> to look. Every number is a <b>real measured price</b> from that exact
+day — the slider looks it up, it never estimates or draws a smooth curve.</div>
+<div class="myth"><b>THIS TAB IS A LOOKING-GLASS, NOT A TEST.</b> {len(PANEL)} instruments
+across {len(series)} tweets is hundreds of comparisons, and at that number something always
+looks like a pattern. Nothing here is evidence — it is where you form a hunch.
+<b>Tabs 4 and 6 are where hunches get checked properly.</b></div>
 <div class="card"><div class="ctl">
   <div><label>1 · anchor tweet</label>
     <select id="anchor">{opts}</select>
@@ -752,6 +1132,7 @@ the price was doing <i>before</i> he posted. That's usually the whole story.</di
     market open after the tweet</b> — the earliest point anyone could actually have
     acted on it.</p></div>
 </div></div>
+<div id="pred"></div>
 <div class="card"><h2>Event trace <span id="tkr" class="note"></span></h2>
 <svg class="chart" id="svg" viewBox="0 0 720 220"></svg>
 <div class="axis"><span id="lstart">T − 21 sessions</span>
@@ -769,7 +1150,6 @@ it is before, right of it is after.</p>
 price had already moved a lot <b>before</b> the tweet, and barely moved after, the
 tweet didn't cause it. It's not a saved conclusion; change the sliders and it changes.</p></div>
 <div id="panel"></div>
-<div id="pred"></div>
 {bd_card}"""
 
     # ---- Tab 6: intraday shock study
@@ -875,9 +1255,9 @@ rose 3% counts as <b>zero</b>.</b></div>
 their own. So for every result we ask: how often would we see this <i>by pure chance</i>?
 We answer it by measuring the same thing on <b>random days with no tweet</b>. If the
 tweet days look like the random days, there's nothing there.</b></div>
-<div class="kv"><span class="k">3 · “ask 72 questions…”</span><b>…and a few will look
-amazing by luck alone — like flipping 72 coins and bragging about the one that hit five
-heads. So we wrote every question down <b>before</b> looking at any answer, and every
+<div class="kv"><span class="k">3 · “ask lots of questions…”</span><b>…and a few will look
+amazing by luck alone — like flipping dozens of coins and bragging about the one that hit
+five heads. So we wrote every question down <b>before</b> looking at any answer, and every
 result is adjusted for how many questions we asked.</b></div>
 <p class="note">That's it. Everything below is those three ideas applied to real
 prices.</p></div>
@@ -885,7 +1265,9 @@ prices.</p></div>
 <p class="foot">Research output. Not investment advice. Reproduce:
 <code>make dashboard</code>. Full method:
 <code>experiments/event_study/REPORT.md</code>.</p>
-</div><script>const SERIES={json.dumps(series, separators=(',', ':'))};</script>
+</div><script>const SERIES={json.dumps(series, separators=(',', ':'))},
+CALLS={json.dumps(calls, separators=(',', ':'))},
+PANEL={json.dumps(list(PANEL), separators=(',', ':'))};</script>
 <script>{_JS}</script></body></html>"""
 
 
@@ -967,16 +1349,28 @@ def main() -> None:
     series = gather_panel_series(bars, _anchors(intel, rows))
     intraday = gather_intraday()
     breakdown = gather_breakdown(rows)
+    calls = gather_calls(rows)
+    calls["nvi"] = gather_named_vs_ignored(bars, rows, rng)
     stamp = datetime.now(timezone.utc).replace(microsecond=0).isoformat()
     OUT.parent.mkdir(parents=True, exist_ok=True)
-    OUT.write_text(render(intel, oil, verdict, series, intraday, breakdown, stamp),
+    OUT.write_text(render(intel, oil, verdict, series, intraday, breakdown, calls, stamp),
                    encoding="utf-8")
     n_assets = len(series[0]["assets"]) if series else 0
     n_off = len(series[0]["dates"]) if series else 0
+    named = sum(len((s.get("pred") or {}).get("legs", [])) for s in series)
     print(f"[dashboard] Intel mentions={len(intel['mentions'])} "
           f"oil tweet-days={oil['n_tweet_days']} cells={verdict['n_cells']} "
           f"survive={verdict['n_survive']} analyzer-anchors={len(series)} "
-          f"x {n_assets} assets x {n_off} offsets")
+          f"x {n_assets} assets x {n_off} offsets · named legs={named}")
+    print(f"[dashboard] calls={calls['n_calls']} over {calls['n_tweets']} tweets · "
+          f"up-share={calls['up_share']:.0%} · beat-SPY hit rate "
+          + " ".join(f"{r['h']}={r['rate']:.3f}(n={r['n']})" for r in calls["rates"]))
+    for r in calls["nvi"]:
+        print(f"[dashboard] named-vs-ignored {r['w']}d (whole corpus, NOT anchors): "
+              f"real named={r['real']['named'] * 100:.2f}% ignored={r['real']['ignored'] * 100:.2f}% "
+              f"gap={r['real']['gap'] * 100:+.2f}pp | placebo(wrong day) "
+              f"named={r['placebo']['named'] * 100:.2f}% ignored={r['placebo']['ignored'] * 100:.2f}% "
+              f"gap={r['placebo']['gap'] * 100:+.2f}pp")
     print(f"[dashboard] -> {OUT}  ({OUT.stat().st_size / 1024:.1f} KB, self-contained)")
 
 

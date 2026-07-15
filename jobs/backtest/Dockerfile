@@ -9,6 +9,10 @@ COPY pyproject.toml uv.lock ./
 RUN uv sync --frozen --no-dev
 
 COPY . .
+
+# Manifest traceability: no git in the image, so the sha is baked in at build time.
+ARG CODE_REV=unknown
+ENV CODE_REV=${CODE_REV}
 ENV PYTHONPATH=/app \
     PATH="/app/.venv/bin:$PATH"
 

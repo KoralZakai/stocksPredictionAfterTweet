@@ -31,6 +31,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import shutil
 import subprocess
 import sys
@@ -57,6 +58,11 @@ DISCLAIMER = "Research output. Not investment advice."
 
 
 def _git_sha() -> str:
+    # In the container there is no git and no .git dir; deploy.sh bakes the sha in
+    # as CODE_REV at build time so the manifest is still traceable to a revision.
+    env_rev = os.environ.get("CODE_REV", "").strip()
+    if env_rev:
+        return env_rev
     try:
         out = subprocess.run(["git", "rev-parse", "--short", "HEAD"],
                              capture_output=True, text=True, check=True)

@@ -13,6 +13,7 @@
 #   ./deploy/nebius/deploy.sh image                      # build + push BOTH images
 #   ./deploy/nebius/deploy.sh job                        # run backtest-and-validate ($0)
 #   ./deploy/nebius/deploy.sh endpoint                   # stand up /predict
+#   ./deploy/nebius/deploy.sh dump                       # cat the bucket manifest to a job log
 #   ./deploy/nebius/deploy.sh verify                     # curl /health
 #
 # Docs: https://docs.nebius.com/serverless/jobs/manage
@@ -66,7 +67,9 @@ require() {
 cmd_image() {
   require NB_IMAGE
   info "build + push $IMG_JOB and $IMG_API (linux/amd64 — Nebius runs x86)"
-  run docker build --platform linux/amd64 -f "$ROOT/jobs/backtest/Dockerfile" -t "$IMG_JOB" "$ROOT"
+  # The image has no git, so bake the sha in: without it every manifest says rev=unknown.
+  local rev; rev="$(git -C "$ROOT" rev-parse --short HEAD 2>/dev/null || echo unknown)"
+  run docker build --platform linux/amd64 --build-arg "CODE_REV=$rev" -f "$ROOT/jobs/backtest/Dockerfile" -t "$IMG_JOB" "$ROOT"
   run docker push "$IMG_JOB"
   run docker build --platform linux/amd64 -f "$ROOT/serving/Dockerfile" -t "$IMG_API" "$ROOT"
   run docker push "$IMG_API"
@@ -144,6 +147,36 @@ cmd_endpoint() {
     --subnet-id "$NB_SUBNET_ID"
 }
 
+# --- dump: read the bucket back ----------------------------------------------
+# The Job writes to the bucket, but there is no CLI object-list and no S3 keys, so
+# the artifacts are write-only until something mounts them. This mounts read-only
+# and prints one file into the job log, which IS readable. Proof the write landed.
+#
+# No `sh -c`: --args is one space-split string, so a shell one-liner with a `;`
+# arrives as `sh -c ls` with the rest as positional junk. Pick the command instead:
+#   ./deploy.sh dump                          -> cat the manifest
+#   DUMP_CMD=ls DUMP_ARGS="-la /app/runs/real" ./deploy.sh dump   -> list the bucket
+DUMP_CMD="${DUMP_CMD:-cat}"
+DUMP_ARGS="${DUMP_ARGS:-$MANIFEST_IN_BUCKET}"
+
+cmd_dump() {
+  require NB_PROJECT_ID NB_SUBNET_ID NB_BUCKET_ID
+  [ -n "${IMG_JOB// }" ] || die "NB_IMAGE (or NB_IMAGE_JOB) is unset."
+  info "dump: $DUMP_CMD $DUMP_ARGS ($DATA mounted read-only) -> job log"
+  run nebius ai job create \
+    --parent-id "$NB_PROJECT_ID" \
+    --name "dump-bucket-${RUN_ID}" \
+    --image "$IMG_JOB" \
+    --container-command "$DUMP_CMD" \
+    --args "$DUMP_ARGS" \
+    --volume "${NB_BUCKET_ID}:${DATA}:ro" \
+    --platform "$NB_PLATFORM" \
+    --preset "$NB_PRESET" \
+    --timeout 10m \
+    --subnet-id "$NB_SUBNET_ID"
+  info "read it with: nebius ai job get --id <id>   /   job logs"
+}
+
 # --- verify -------------------------------------------------------------------
 cmd_verify() {
   [ -n "${ENDPOINT_URL:-}" ] || die "set ENDPOINT_URL=https://... (from: nebius ai endpoint get ...)"
@@ -160,7 +193,8 @@ case "${1:-}" in
   image)    cmd_image ;;
   job)      cmd_job ;;
   endpoint) cmd_endpoint ;;
+  dump)     cmd_dump ;;
   verify)   cmd_verify ;;
   all)      cmd_image; cmd_job; cmd_endpoint ;;
-  *) die "usage: $0 {image|job|endpoint|verify|all}   (DRY_RUN=1 to preview)" ;;
+  *) die "usage: $0 {image|job|endpoint|dump|verify|all}   (DRY_RUN=1 to preview)" ;;
 esac
