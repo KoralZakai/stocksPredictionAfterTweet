@@ -123,7 +123,7 @@ survive**.
 ## The results
 
 Every number below is explorable in the interactive dashboard —
-[**Myth-Busting Quantitative Terminal**](https://koralzakai.github.io/stocksPredictionAfterTweet/dashboard.html)
+[**Myth-Busting Quantitative Terminal**](https://koralzakai.github.io/stocksPredictionAfterTweet/reports/dashboard.html)
 — including the wrong-day control and the per-tweet reasoning behind each call.
 
 | test | result |
