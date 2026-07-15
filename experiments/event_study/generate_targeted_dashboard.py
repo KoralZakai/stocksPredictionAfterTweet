@@ -176,7 +176,7 @@ def gather_window_series(bars: dict[str, list[Any]], anchors: list[dict[str, str
             if mk is None:
                 continue
             # k == 0 is the entry anchor: the first OPEN after the post (leak-free).
-            series.append({"k": k,
+            series.append({"k": k, "d": a[j].date,
                            "pa": round(a[j].open if k == 0 else a[j].close, 4),
                            "pb": round(m[mk].open if k == 0 else m[mk].close, 4)})
         out.append({**anc, "s0": a[i0].date, "series": series,
@@ -276,12 +276,21 @@ select{background:var(--surface2);color:var(--ink);border:1px solid var(--line);
 border-radius:6px;padding:8px}
 input[type=range]{accent-color:var(--accent);cursor:pointer}
 .rl{display:flex;justify-content:space-between;font-size:.78rem;color:var(--ink2);margin-bottom:2px}
-.chart{width:100%;height:200px;background:var(--bg);border:1px solid var(--line);border-radius:6px}
+.chart{width:100%;height:auto;background:var(--bg);border:1px solid var(--line);
+border-radius:6px;display:block;cursor:crosshair}
 .chart .zoneL{fill:var(--down);opacity:.06}.chart .zoneR{fill:var(--up);opacity:.06}
-.chart .zero{stroke:var(--line);stroke-dasharray:3 3}
+.chart .zero{stroke:var(--ink3);stroke-dasharray:3 3}
+.chart .grid{stroke:var(--line);stroke-dasharray:2 4}
 .chart .ev{stroke:var(--accent);stroke-width:1.5;stroke-dasharray:4 3}
-.chart .trace{fill:none;stroke:var(--ink);stroke-width:2}
+.chart .trace{fill:none;stroke:var(--ink);stroke-width:2;
+stroke-linejoin:round;stroke-linecap:round}
 .chart .evdot{fill:var(--accent)}
+.chart .ax{fill:var(--ink3);font-family:var(--mono);font-size:10px}
+.chart .ay{text-anchor:end}.chart .evt{fill:var(--accent)}
+.chart .xh{stroke:var(--ink3);stroke-width:1;stroke-dasharray:2 2}
+.chart .xhd{fill:var(--accent);stroke:var(--bg);stroke-width:1.5}
+.chart .tipbg{fill:var(--surface2);stroke:var(--line)}
+.chart .tip{fill:var(--ink);font-family:var(--mono);font-size:10px}
 .axis{display:flex;justify-content:space-between;font-size:.72rem;color:var(--ink3);margin-top:6px}
 .vd{font-family:var(--mono);font-size:.85rem;letter-spacing:.02em;font-weight:700}
 .vd.down{color:var(--down)}.vd.flat{color:var(--flat)}
@@ -303,6 +312,7 @@ tabs.forEach(t=>t.addEventListener('click',()=>{
 // not model, fit, or interpolate anything. at(k) is a lookup, by design.
 const sel=document.getElementById('anchor'), back=document.getElementById('back'),
       fwd=document.getElementById('fwd');
+let PTS=[], GX=k=>k, GY=e=>e;      // current window points + scales, shared with hover()
 function fmt(v){return (v>=0?'+':'')+(v*100).toFixed(2)+'%';}
 function draw(){
   const a=SERIES[+sel.value], X=+back.value, Y=+fwd.value;
@@ -336,19 +346,56 @@ function draw(){
   }else{v.textContent='NO CLEAR PATTERN at this window';v.className='vd flat';}
 
   // Path: the ACTUAL measured series, clipped to the chosen window.
-  const pts=a.series.filter(s=>s.k>=-X&&s.k<=Y).map(s=>({k:s.k,e:at(s.k)}));
-  const W=720,H=200,lo=Math.min(...pts.map(p=>p.e),0),hi=Math.max(...pts.map(p=>p.e),0),
-        rg=(hi-lo)||1, x=k=>((k+X)/(X+Y))*W, y=e=>H-8-((e-lo)/rg)*(H-16);
-  const d=pts.map((p,i)=>(i?'L':'M')+x(p.k).toFixed(1)+','+y(p.e).toFixed(1)).join(' ');
+  PTS=a.series.filter(s=>s.k>=-X&&s.k<=Y).map(s=>({k:s.k,d:s.d,e:at(s.k)}));
+  const W=720,H=220,L=48,R=8,T=10,B=30;                 // margins leave room for axes
+  const lo=Math.min(...PTS.map(p=>p.e),0),hi=Math.max(...PTS.map(p=>p.e),0),rg=(hi-lo)||1;
+  GX=k=>L+((k+X)/(X+Y))*(W-L-R);
+  GY=e=>T+(1-(e-lo)/rg)*(H-T-B);
+  const d=PTS.map((p,i)=>(i?'L':'M')+GX(p.k).toFixed(1)+','+GY(p.e).toFixed(1)).join(' ');
+  // y ticks: bottom, zero, top — labelled in %.
+  const ticks=[lo,0,hi].filter((v,i,s)=>s.indexOf(v)===i);
+  const grid=ticks.map(v=>`<line x1="${L}" y1="${GY(v).toFixed(1)}" x2="${W-R}" `+
+    `y2="${GY(v).toFixed(1)}" class="${v===0?'zero':'grid'}"/>`+
+    `<text x="${L-6}" y="${(GY(v)+3.5).toFixed(1)}" class="ax ay">${(v*100).toFixed(0)}%</text>`).join('');
+  // x ticks: the real dates at the window edges and at the event.
+  const first=PTS[0], last=PTS[PTS.length-1], ev=PTS.find(p=>p.k===0);
+  const xt=[[first,'start'],[ev,'mid'],[last,'end']].filter(t=>t[0]).map(([p,pos])=>
+    `<text x="${GX(p.k).toFixed(1)}" y="${H-10}" class="ax ${pos==='mid'?'evt':''}" `+
+    `text-anchor="${pos==='start'?'start':pos==='end'?'end':'middle'}">${p.d}</text>`).join('');
   document.getElementById('svg').innerHTML=
-    `<rect x="0" y="0" width="${x(0)}" height="${H}" class="zoneL"/>`+
-    `<rect x="${x(0)}" y="0" width="${W-x(0)}" height="${H}" class="zoneR"/>`+
-    `<line x1="0" y1="${y(0).toFixed(1)}" x2="${W}" y2="${y(0).toFixed(1)}" class="zero"/>`+
-    `<line x1="${x(0)}" y1="0" x2="${x(0)}" y2="${H}" class="ev"/>`+
+    `<rect x="${L}" y="${T}" width="${(GX(0)-L).toFixed(1)}" height="${H-T-B}" class="zoneL"/>`+
+    `<rect x="${GX(0).toFixed(1)}" y="${T}" width="${(W-R-GX(0)).toFixed(1)}" height="${H-T-B}" class="zoneR"/>`+
+    grid+
+    `<line x1="${GX(0).toFixed(1)}" y1="${T}" x2="${GX(0).toFixed(1)}" y2="${H-B}" class="ev"/>`+
     `<path d="${d}" class="trace"/>`+
-    `<circle cx="${x(0)}" cy="${y(0).toFixed(1)}" r="4" class="evdot"/>`;
+    `<circle cx="${GX(0).toFixed(1)}" cy="${GY(0).toFixed(1)}" r="4" class="evdot"/>`+
+    xt+
+    `<g id="cross" style="display:none"><line class="xh"/><circle class="xhd" r="3.5"/>`+
+    `<rect class="tipbg" rx="3"/><text class="tip"></text></g>`;
+}
+
+// Hover: read the MEASURED point nearest the cursor. No smoothing, no synthesis.
+function hover(ev){
+  const svg=document.getElementById('svg'); if(!PTS.length) return;
+  const r=svg.getBoundingClientRect(), vx=(ev.clientX-r.left)/r.width*720;
+  let best=PTS[0]; for(const p of PTS){ if(Math.abs(GX(p.k)-vx)<Math.abs(GX(best.k)-vx)) best=p; }
+  const g=svg.querySelector('#cross'); if(!g) return;
+  g.style.display='';
+  const px=GX(best.k), py=GY(best.e);
+  g.querySelector('.xh').setAttribute('x1',px); g.querySelector('.xh').setAttribute('x2',px);
+  g.querySelector('.xh').setAttribute('y1',10); g.querySelector('.xh').setAttribute('y2',190);
+  g.querySelector('.xhd').setAttribute('cx',px); g.querySelector('.xhd').setAttribute('cy',py);
+  const t=g.querySelector('.tip'), bg=g.querySelector('.tipbg');
+  const lbl=best.d+'  ·  '+fmt(best.e)+'  ·  '+(best.k===0?'T₀':(best.k>0?'T+':'T')+best.k);
+  t.textContent=lbl;
+  const w=lbl.length*5.6+10, tx=Math.min(Math.max(px-w/2,50),712-w), ty=py<50?py+22:py-12;
+  t.setAttribute('x',tx+5); t.setAttribute('y',ty);
+  bg.setAttribute('x',tx); bg.setAttribute('y',ty-11); bg.setAttribute('width',w); bg.setAttribute('height',15);
 }
 [sel,back,fwd].forEach(el=>el&&el.addEventListener('input',draw));
+const _svg=document.getElementById('svg');
+if(_svg){ _svg.addEventListener('mousemove',hover);
+  _svg.addEventListener('mouseleave',()=>{const g=_svg.querySelector('#cross'); if(g) g.style.display='none';}); }
 if(sel) draw();
 """
 
@@ -499,9 +546,12 @@ appear <i>before</i> the post.</div>
     the two differ for high-beta names — by design, both are labelled.</p></div>
 </div></div>
 <div class="card"><h2>Event trace <span id="tkr" class="note"></span></h2>
-<svg class="chart" id="svg" viewBox="0 0 720 200" preserveAspectRatio="none"></svg>
+<svg class="chart" id="svg" viewBox="0 0 720 220"></svg>
 <div class="axis"><span id="lstart">T − 21 sessions</span>
-<span style="color:var(--accent)">T₀ — the post</span><span id="lend">T + 21 sessions</span></div>
+<span style="color:var(--accent)">T₀ — first session after the post</span>
+<span id="lend">T + 21 sessions</span></div>
+<p class="note">Hover the trace for the exact date and measured value at any session.
+Y-axis is cumulative excess return vs SPY; the gold line is the entry anchor.</p>
 <div class="tiles">
   <div class="tile"><div class="k">run-up INTO the post (T−X)</div><div class="big" id="pre">—</div></div>
   <div class="tile"><div class="k">move AFTER the post (T+Y)</div><div class="big" id="post">—</div></div>
