@@ -38,6 +38,7 @@ from alpha.benchmark import daily_returns, _session_anchor, session_phase
 from alpha.classify import prompt_template_hash
 from alpha.profiles import PROFILES, Profile, active_profile
 from alpha.route import route_decision
+from serving.observe import log_prediction
 from alpha.schema import MarketContext, Quote, RealizedAlpha
 from market import select_provider
 from market.provider import Provider
@@ -242,6 +243,21 @@ def create_app(*, manifest_path: str | None = None,
     shipped = manifest.get("shipped_horizons") or []
     app = FastAPI(title=f"tweet-alpha /predict [{prof.name}]")
 
+    def _observe(req: PredictIn, routed: Any, served_decision: str) -> None:
+        """Append what we served to the prediction log — the Job's input (jobs/feedback.py).
+
+        Logs `routed`, not the response body: the no-validated-edge response deliberately
+        carries NO instruments (it is refusing to name anything), but the replication set
+        needs the instruments the model actually named in order to score them later. The
+        served contract is unchanged; the log is a strict superset of it.
+        """
+        log_prediction(
+            tweet_text=req.tweet_text, t0_utc=req.t0_utc, author=req.author,
+            response={"scenario": routed.scenario, "reasoning": routed.reasoning,
+                      "decision": routed.decision,
+                      "instruments": [asdict(i) for i in routed.instruments]},
+            manifest=manifest, profile=prof.name, served_decision=served_decision)
+
     @app.post("/predict")
     def predict(req: PredictIn) -> dict[str, Any]:
         t0 = _parse_t0(req.t0_utc)
@@ -261,6 +277,7 @@ def create_app(*, manifest_path: str | None = None,
             out = _abstain(manifest, NO_VALIDATED_EDGE)
             out["scenario"] = routed.scenario
             out["reasoning"] = routed.reasoning
+            _observe(req, routed, out["decision"])
             return out
 
         horizon = shipped[0]
@@ -280,6 +297,10 @@ def create_app(*, manifest_path: str | None = None,
         # ---- MARKET PLANE: after the fact, nullable, never feeds back ----
         mc = market.context(routed.instruments, t0) if routed.instruments else None
         resp["market_context"] = asdict(mc) if mc else None
+        # Log AFTER the market plane, but log `routed` — never `mc`. The market context is
+        # a post-hoc convenience for the caller and must not leak into the record of what
+        # was decided from text alone (the one-way firewall, app docstring).
+        _observe(req, routed, resp["decision"])
         return resp
 
     @app.get("/market/{ticker}")
