@@ -80,9 +80,9 @@ border-bottom:1px solid var(--line);align-items:baseline}
 <header><h1>Myth-Busting Quantitative Terminal</h1>
 <p class="sub">Three high-conviction broker hypotheses about Trump's tweets, each
 run against the control that kills it.</p>
-<p class="stamp">generated 2026-07-15T15:39:09+00:00 · every figure computed at build time from
+<p class="stamp">generated 2026-07-15T17:12:16+00:00 · every figure computed at build time from
 data/real/bars.csv + corpus_v3.csv + the registered study — nothing hardcoded</p></header>
-<nav class="tabs" role="tablist"><button class="tab" role="tab" data-p="t1" aria-selected="true">1 · Reverse Causality</button><button class="tab" role="tab" data-p="t2" aria-selected="false">2 · Mean Reversion</button><button class="tab" role="tab" data-p="t3" aria-selected="false">3 · Selection Bias</button><button class="tab" role="tab" data-p="t4" aria-selected="false">4 · The Verdict</button><button class="tab" role="tab" data-p="t5" aria-selected="false">5 · Dynamic Analyzer</button></nav><section class="panel on" id="t1">
+<nav class="tabs" role="tablist"><button class="tab" role="tab" data-p="t1" aria-selected="true">1 · Reverse Causality</button><button class="tab" role="tab" data-p="t2" aria-selected="false">2 · Mean Reversion</button><button class="tab" role="tab" data-p="t3" aria-selected="false">3 · Selection Bias</button><button class="tab" role="tab" data-p="t4" aria-selected="false">4 · The Verdict</button><button class="tab" role="tab" data-p="t5" aria-selected="false">5 · Dynamic Analyzer</button><button class="tab" role="tab" data-p="t6" aria-selected="false">6 · Intraday Shock</button></nav><section class="panel on" id="t1">
 <div class="myth"><b>THE HYPOTHESIS:</b> "Trump tweeted about Intel and the stock
 ran for months." Every broker has heard it. It is the single most-cited example of
 tweet-driven alpha.</div>
@@ -194,7 +194,50 @@ Y-axis is cumulative excess return vs SPY; the gold line is the entry anchor.</p
 <p class="note">The verdict is computed from the two measured numbers on screen
 (run-up &gt; 10% while the post-move is under a third of it ⇒ the move preceded the
 post). It is not a stored conclusion.</p></div>
-<div id="pred"></div></section>
+<div id="pred"></div></section><section class="panel " id="t6">
+<div class="myth"><b>THE HYPOTHESIS:</b> a geopolitical shock ("Iran", "Hormuz",
+"strike") should move oil and the fear gauge <b>within the hour</b>. Daily bars are
+too slow to see it — go intraday and the "Heavy Hitters" will separate from the noise.</div>
+<div class="card"><h2>Design</h2>
+<p class="note"><b>Within-event control:</b> each tweet's own 60-minute PRE-window is
+its control, which cancels the market-hours selection bias that killed our earlier 1h
+result. <b>Cohort control:</b> NOISE posts on the same asset — "GEO moves oil" only
+counts if it moves oil more than a random in-session post does. Excess is measured vs
+SPY on <b>public yfinance hourly bars</b> (no private feed), σ is backward-only, and
+the registry was written before scoring.</p>
+<div class="tiles">
+<div class="tile"><div class="k">in-session events</div><div class="big">2371</div></div>
+<div class="tile"><div class="k">cells registered</div><div class="big">30</div></div>
+<div class="tile"><div class="k">survive BH</div><div class="big up">0</div></div>
+<div class="tile"><div class="k">min p_bh</div><div class="big">0.56</div></div>
+</div></div>
+<div class="card"><h2>The eight closest cells — all fail</h2>
+<div class="scroll"><table><thead><tr><th>cohort / asset</th><th>metric</th><th>n</th>
+<th>cohort</th><th>NOISE control</th><th>diff</th><th>MDE</th><th>p_raw</th><th>p_bh</th>
+</tr></thead><tbody><tr><th>GEOPOLITIC<span class="nm"> USO</span></th><td>abs_excess</td><td>228</td><td>+0.0070</td><td class="flat">+0.0053</td><td class="up">+0.0017</td><td class="flat">0.0025</td><td>0.025</td><td class="down">0.558</td></tr><tr><th>GEOPOLITIC<span class="nm"> XLE</span></th><td>abs_excess</td><td>228</td><td>+0.0036</td><td class="flat">+0.0030</td><td class="up">+0.0006</td><td class="flat">0.0011</td><td>0.051</td><td class="down">0.558</td></tr><tr><th>GEOPOLITIC<span class="nm"> VIXY</span></th><td>vol_ratio</td><td>228</td><td>+1.3023</td><td class="flat">+1.5686</td><td class="down">-0.2663</td><td class="flat">0.0037</td><td>0.077</td><td class="down">0.558</td></tr><tr><th>MACRO<span class="nm"> TLT</span></th><td>post_excess</td><td>123</td><td>-0.0005</td><td class="flat">+0.0002</td><td class="down">-0.0007</td><td class="flat">0.0013</td><td>0.103</td><td class="down">0.558</td></tr><tr><th>MACRO<span class="nm"> GLD</span></th><td>vol_ratio</td><td>105</td><td>+1.1494</td><td class="flat">+1.3491</td><td class="down">-0.1998</td><td class="flat">0.0015</td><td>0.126</td><td class="down">0.558</td></tr><tr><th>MACRO<span class="nm"> TLT</span></th><td>abs_excess</td><td>123</td><td>+0.0030</td><td class="flat">+0.0026</td><td class="up">+0.0005</td><td class="flat">0.0013</td><td>0.130</td><td class="down">0.558</td></tr><tr><th>GEOPOLITIC<span class="nm"> ITA</span></th><td>vol_ratio</td><td>226</td><td>+1.4038</td><td class="flat">+1.2081</td><td class="up">+0.1957</td><td class="flat">0.0008</td><td>0.143</td><td class="down">0.558</td></tr><tr><th>MACRO<span class="nm"> UUP</span></th><td>post_excess</td><td>123</td><td>-0.0003</td><td class="flat">+0.0003</td><td class="down">-0.0006</td><td class="flat">0.0013</td><td>0.162</td><td class="down">0.558</td></tr></tbody></table></div>
+<p class="note">Read the <b>MDE</b> column: at n=228 we could have detected a 0.25%
+mean move on oil. The measured difference is +0.17% and does not survive correction.
+This is a null <i>with teeth</i> — not "we couldn't see it", but "it isn't there at a
+size we would have seen."</p></div>
+<div class="myth"><b>THE NEAR-MISS — the most dangerous artifact we caught.</b> The
+first run reported <b>9 cells surviving BH at p=0.0018</b>: "GEO tweets spike oil
+volume 1.79× vs 1.41×". It was entirely <b>duplicate counting</b>. He posts in bursts,
+and every tweet inside one hour resolves to the <i>same</i> hourly bar — two posts a
+minute apart both scored gold at z=−11.16. Collapsing to one observation per
+(asset, bar) took 10,245 rows down to 5,552 and the survivors from <b>9 → 0</b>. We
+found it only because the Heavy Hitter list looked absurd.</div>
+<div class="card"><h2>"Heavy Hitters" (|z| ≥ 2.0) — read the tweets</h2>
+<div class="scroll"><table><thead><tr><th>shock</th><th>asset</th><th>cohort</th>
+<th>tweet</th></tr></thead><tbody><tr><th>-11.16σ</th><td>GLD</td><td class="down">NOISE</td><td class="note">The renovated Palm Room!</td></tr><tr><th>+10.02σ</th><td>USO</td><td class="down">NOISE</td><td class="note">Governor Gavin Newscum should immediately go to Northern California an</td></tr><tr><th>+8.26σ</th><td>XLE</td><td class="flat">GEOPOLITIC</td><td class="note">This morning, on my Orders, U.S. Military Forces conducted a SECOND Ki</td></tr><tr><th>-8.25σ</th><td>GLD</td><td class="flat">GEOPOLITIC</td><td class="note">Iran has officially responded to our Obliteration of their Nuclear Fac</td></tr><tr><th>+8.23σ</th><td>VIXY</td><td class="down">NOISE</td><td class="note">Everybody watch Sean Hannity tonight at 9 P.M. Bibi Netanyahu will be </td></tr><tr><th>-8.05σ</th><td>XLE</td><td class="down">NOISE</td><td class="note">I am thrilled to report that the U.S. Space Command headquarters will </td></tr></tbody></table></div>
+<p class="note">The biggest "shocks" are <b>NOISE</b> posts — a renovated Palm Room, a
+Hannity plug. These are large market moves that happen to have a tweet in the same
+hour, which is guaranteed when someone posts in 28.5% of all sessions. The Heavy
+Hitters are the saturation problem in miniature.</p></div>
+<div class="myth verdict"><b>VERDICT — 0 of 30
+CELLS SURVIVE.</b> Geopolitical posts do not move oil, gold, defence or the fear gauge
+more than a random in-session post — not in price, not in volume, within the hour. The
+category taxonomy does not isolate impact. This was our best-powered test
+(MDE ~0.1–0.3% vs 1.35% daily), and it is the strongest null in the study.</div></section>
 <p class="foot">Research output. Not investment advice. Reproduce:
 <code>make dashboard</code>. Full method:
 <code>experiments/event_study/REPORT.md</code>.</p>

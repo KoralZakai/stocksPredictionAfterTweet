@@ -34,6 +34,7 @@ from config.membership import name_of
 from experiments.event_study.engine import load_bars, s0_index, study_event
 
 OUT = Path("reports/dashboard.html")
+HERE = Path(__file__).resolve().parent
 RESULTS = Path("reports/nebius_backtest_results.json")
 STUDY = Path("experiments/event_study/study_results.json")
 CORPUS = Path("data/real/corpus_v3.csv")
@@ -188,6 +189,21 @@ def gather_window_series(bars: dict[str, list[Any]], anchors: list[dict[str, str
                     "prev_b": round(m[prev_mk].close, 4),
                     "open_a": round(a[i0].open, 4), "open_b": round(m[k0].open, 4)})
     return out
+
+
+def gather_intraday() -> dict[str, Any] | None:
+    """The Tab-6 intraday shock study, if it has been run."""
+    p = HERE / "intraday_results.json"
+    if not p.exists():
+        return None
+    r = json.loads(p.read_text())
+    cells = [c for c in r["cells"] if "p_raw" in c]
+    cells.sort(key=lambda c: c["p_raw"])
+    return {"n_events": r["n_events"], "sigma": r["sigma_threshold"],
+            "n_cells": len(cells),
+            "n_survive": sum(1 for c in cells if c.get("survives_bh")),
+            "min_p_bh": min((c["p_bh"] for c in cells), default=1.0),
+            "closest": cells[:8], "hitters": r["heavy_hitters"][:6]}
 
 
 def gather_verdict() -> dict[str, Any]:
@@ -448,7 +464,7 @@ if(sel) draw();
 
 
 def render(intel: dict[str, Any], oil: dict[str, Any], verdict: dict[str, Any],
-           series: list[dict[str, Any]], stamp: str) -> str:
+           series: list[dict[str, Any]], intraday: dict[str, Any] | None, stamp: str) -> str:
     hdr = "".join(f"<th>{w}d</th>" for w in WINDOWS)
 
     # ---- Tab 1: reverse causality
@@ -609,15 +625,76 @@ Y-axis is cumulative excess return vs SPY; the gold line is the entry anchor.</p
 post). It is not a stored conclusion.</p></div>
 <div id="pred"></div>"""
 
+    # ---- Tab 6: intraday shock study
+    if intraday:
+        irows = "".join(
+            f'<tr><th>{escape(c["cohort"])}<span class="nm"> {escape(str(c["asset"]))}</span></th>'
+            f'<td>{escape(str(c["metric"]))}</td><td>{c["n"]}</td>'
+            f'<td>{c["cohort_mean"]:+.4f}</td><td class="flat">{c["control_mean"]:+.4f}</td>'
+            f'<td class="{_cls(c["diff"])}">{c["diff"]:+.4f}</td><td class="flat">{c["mde"]:.4f}</td>'
+            f'<td>{c["p_raw"]:.3f}</td><td class="down">{c["p_bh"]:.3f}</td></tr>'
+            for c in intraday["closest"])
+        hrows = "".join(
+            f'<tr><th>{h["z"]:+.2f}σ</th><td>{escape(h["asset"])}</td>'
+            f'<td class="{"down" if h["cohort"] == "NOISE" else "flat"}">{escape(h["cohort"])}</td>'
+            f'<td class="note">{escape(h["text"][:70])}</td></tr>' for h in intraday["hitters"])
+        t6 = f"""
+<div class="myth"><b>THE HYPOTHESIS:</b> a geopolitical shock ("Iran", "Hormuz",
+"strike") should move oil and the fear gauge <b>within the hour</b>. Daily bars are
+too slow to see it — go intraday and the "Heavy Hitters" will separate from the noise.</div>
+<div class="card"><h2>Design</h2>
+<p class="note"><b>Within-event control:</b> each tweet's own 60-minute PRE-window is
+its control, which cancels the market-hours selection bias that killed our earlier 1h
+result. <b>Cohort control:</b> NOISE posts on the same asset — "GEO moves oil" only
+counts if it moves oil more than a random in-session post does. Excess is measured vs
+SPY on <b>public yfinance hourly bars</b> (no private feed), σ is backward-only, and
+the registry was written before scoring.</p>
+<div class="tiles">
+<div class="tile"><div class="k">in-session events</div><div class="big">{intraday["n_events"]}</div></div>
+<div class="tile"><div class="k">cells registered</div><div class="big">{intraday["n_cells"]}</div></div>
+<div class="tile"><div class="k">survive BH</div><div class="big up">{intraday["n_survive"]}</div></div>
+<div class="tile"><div class="k">min p_bh</div><div class="big">{intraday["min_p_bh"]:.2f}</div></div>
+</div></div>
+<div class="card"><h2>The eight closest cells — all fail</h2>
+<div class="scroll"><table><thead><tr><th>cohort / asset</th><th>metric</th><th>n</th>
+<th>cohort</th><th>NOISE control</th><th>diff</th><th>MDE</th><th>p_raw</th><th>p_bh</th>
+</tr></thead><tbody>{irows}</tbody></table></div>
+<p class="note">Read the <b>MDE</b> column: at n=228 we could have detected a 0.25%
+mean move on oil. The measured difference is +0.17% and does not survive correction.
+This is a null <i>with teeth</i> — not "we couldn't see it", but "it isn't there at a
+size we would have seen."</p></div>
+<div class="myth"><b>THE NEAR-MISS — the most dangerous artifact we caught.</b> The
+first run reported <b>9 cells surviving BH at p=0.0018</b>: "GEO tweets spike oil
+volume 1.79× vs 1.41×". It was entirely <b>duplicate counting</b>. He posts in bursts,
+and every tweet inside one hour resolves to the <i>same</i> hourly bar — two posts a
+minute apart both scored gold at z=−11.16. Collapsing to one observation per
+(asset, bar) took 10,245 rows down to 5,552 and the survivors from <b>9 → 0</b>. We
+found it only because the Heavy Hitter list looked absurd.</div>
+<div class="card"><h2>"Heavy Hitters" (|z| ≥ {intraday["sigma"]}) — read the tweets</h2>
+<div class="scroll"><table><thead><tr><th>shock</th><th>asset</th><th>cohort</th>
+<th>tweet</th></tr></thead><tbody>{hrows}</tbody></table></div>
+<p class="note">The biggest "shocks" are <b>NOISE</b> posts — a renovated Palm Room, a
+Hannity plug. These are large market moves that happen to have a tweet in the same
+hour, which is guaranteed when someone posts in 28.5% of all sessions. The Heavy
+Hitters are the saturation problem in miniature.</p></div>
+<div class="myth verdict"><b>VERDICT — {intraday["n_survive"]} of {intraday["n_cells"]}
+CELLS SURVIVE.</b> Geopolitical posts do not move oil, gold, defence or the fear gauge
+more than a random in-session post — not in price, not in volume, within the hour. The
+category taxonomy does not isolate impact. This was our best-powered test
+(MDE ~0.1–0.3% vs 1.35% daily), and it is the strongest null in the study.</div>"""
+    else:
+        t6 = ('<div class="myth">Intraday study not yet run — '
+              '<code>python experiments/event_study/run_intraday.py</code></div>')
+
     tabs = [("t1", "1 · Reverse Causality"), ("t2", "2 · Mean Reversion"),
             ("t3", "3 · Selection Bias"), ("t4", "4 · The Verdict"),
-            ("t5", "5 · Dynamic Analyzer")]
+            ("t5", "5 · Dynamic Analyzer"), ("t6", "6 · Intraday Shock")]
     tabbar = "".join(
         f'<button class="tab" role="tab" data-p="{i}" aria-selected="{str(n == 0).lower()}">'
         f'{escape(label)}</button>' for n, (i, label) in enumerate(tabs))
     panels = "".join(f'<section class="panel {"on" if n == 0 else ""}" id="{i}">{c}</section>'
                      for n, (i, c) in enumerate([("t1", t1), ("t2", t2), ("t3", t3),
-                                                 ("t4", t4), ("t5", t5)]))
+                                                 ("t4", t4), ("t5", t5), ("t6", t6)]))
     return f"""<!doctype html><html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Myth-Busting Quantitative Terminal — Trump tweets vs. the market</title>
@@ -685,9 +762,10 @@ def main() -> None:
     verdict = gather_verdict()
     rows = json.loads(RESULTS.read_text())
     series = gather_window_series(bars, _anchors(intel, oil, rows))
+    intraday = gather_intraday()
     stamp = datetime.now(timezone.utc).replace(microsecond=0).isoformat()
     OUT.parent.mkdir(parents=True, exist_ok=True)
-    OUT.write_text(render(intel, oil, verdict, series, stamp), encoding="utf-8")
+    OUT.write_text(render(intel, oil, verdict, series, intraday, stamp), encoding="utf-8")
     print(f"[dashboard] Intel mentions={len(intel['mentions'])} "
           f"oil tweet-days={oil['n_tweet_days']} cells={verdict['n_cells']} "
           f"survive={verdict['n_survive']} analyzer-anchors={len(series)} "

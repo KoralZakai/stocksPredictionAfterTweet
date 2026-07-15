@@ -1,0 +1,883 @@
+{
+  "seed": 20260715,
+  "n_perm": 2000,
+  "sigma_threshold": 2.0,
+  "n_events": 2371,
+  "n_by_cohort": {
+    "NOISE": 507,
+    "MACRO": 105,
+    "GEOPOLITIC": 226,
+    "CORPORATE": 2
+  },
+  "cells": [
+    {
+      "cohort": "CORPORATE",
+      "asset": "ITA",
+      "metric": "post_excess",
+      "n": 9,
+      "skipped": "n<10",
+      "mde": 0.00225
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "ITA",
+      "metric": "abs_excess",
+      "n": 9,
+      "skipped": "n<10",
+      "mde": 0.00225
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "ITA",
+      "metric": "vol_ratio",
+      "n": 9,
+      "skipped": "n<10",
+      "mde": 0.00225
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "SMH",
+      "metric": "post_excess",
+      "n": 4,
+      "skipped": "n<10",
+      "mde": 0.00378
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "SMH",
+      "metric": "abs_excess",
+      "n": 4,
+      "skipped": "n<10",
+      "mde": 0.00378
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "SMH",
+      "metric": "vol_ratio",
+      "n": 4,
+      "skipped": "n<10",
+      "mde": 0.00378
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "XLF",
+      "metric": "post_excess",
+      "n": 2,
+      "skipped": "n<10",
+      "mde": 0.00322
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "XLF",
+      "metric": "abs_excess",
+      "n": 2,
+      "skipped": "n<10",
+      "mde": 0.00322
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "XLF",
+      "metric": "vol_ratio",
+      "n": 2,
+      "skipped": "n<10",
+      "mde": 0.00322
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "XLK",
+      "metric": "post_excess",
+      "n": 6,
+      "skipped": "n<10",
+      "mde": 0.00167
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "XLK",
+      "metric": "abs_excess",
+      "n": 6,
+      "skipped": "n<10",
+      "mde": 0.00167
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "XLK",
+      "metric": "vol_ratio",
+      "n": 6,
+      "skipped": "n<10",
+      "mde": 0.00167
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "XLY",
+      "metric": "post_excess",
+      "n": 13,
+      "skipped": "n<10",
+      "mde": 0.00197
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "XLY",
+      "metric": "abs_excess",
+      "n": 13,
+      "skipped": "n<10",
+      "mde": 0.00197
+    },
+    {
+      "cohort": "CORPORATE",
+      "asset": "XLY",
+      "metric": "vol_ratio",
+      "n": 13,
+      "skipped": "n<10",
+      "mde": 0.00197
+    },
+    {
+      "cohort": "GEOPOLITIC",
+      "asset": "GLD",
+      "metric": "post_excess",
+      "n": 228,
+      "n_control": 428,
+      "cohort_mean": -0.00078,
+      "control_mean": -0.00037,
+      "diff": -0.00041,
+      "mde": 0.00185,
+      "p_raw": 0.5942,
+      "p_bh": 0.7562,
+      "survives_bh": false
+    },
+    {
+      "cohort": "GEOPOLITIC",
+      "asset": "GLD",
+      "metric": "abs_excess",
+      "n": 228,
+      "n_control": 428,
+      "cohort_mean": 0.00415,
+      "control_mean": 0.00369,
+      "diff": 0.00046,
+      "mde": 0.00185,
+      "p_raw": 0.4828,
+      "p_bh": 0.7562,
+      "survives_bh": false
+    },
+    {
+      "cohort": "GEOPOLITIC",
+      "asset": "GLD",
+      "metric": "vol_ratio",
+      "n": 228,
+      "n_control": 428,
+      "cohort_mean": 1.21756,
+      "control_mean": 1.34913,
+      "diff": -0.13157,
+      "mde": 0.00185,
+      "p_raw": 0.1934,
+      "p_bh": 0.5802,
+      "survives_bh": false
+    },
+    {
+      "cohort": "GEOPOLITIC",
+      "asset": "ITA",
+      "metric": "post_excess",
+      "n": 226,
+      "n_control": 473,
+      "cohort_mean": -2e-05,
+      "control_mean": 0.00018,
+      "diff": -0.0002,
+      "mde": 0.00082,
+      "p_raw": 0.5182,
+      "p_bh": 0.7562,
+      "survives_bh": false
+    },
+    {
+      "cohort": "GEOPOLITIC",
+      "asset": "ITA",
+      "metric": "abs_excess",
+      "n": 226,
+      "n_control": 473,
+      "cohort_mean": 0.00273,
+      "control_mean": 0.00246,
+      "diff": 0.00026,
+      "mde": 0.00082,
+      "p_raw": 0.2764,
+      "p_bh": 0.6909,
+      "survives_bh": false
+    },
+    {
+      "cohort": "GEOPOLITIC",
+      "asset": "ITA",
+      "metric": "vol_ratio",
+      "n": 226,
+      "n_control": 473,
+      "cohort_mean": 1.40376,
+      "control_mean": 1.2081,
+      "diff": 0.19566,
+      "mde": 0.00082,
+      "p_raw": 0.1434,
+      "p_bh": 0.5581,
+      "survives_bh": false
+    },
+    {
+      "cohort": "GEOPOLITIC",
+      "asset": "USO",
+      "metric": "post_excess",
+      "n": 228,
+      "n_control": 476,
+      "cohort_mean": 8e-05,
+      "control_mean": 6e-05,
+      "diff": 3e-05,
+      "mde": 0.00246,
+      "p_raw": 0.982,
+      "p_bh": 0.982,
+      "survives_bh": false
+    },
+    {
+      "cohort": "GEOPOLITIC",
+      "asset": "USO",
+      "metric": "abs_excess",
+      "n": 228,
+      "n_control": 476,
+      "cohort_mean": 0.00705,
+      "control_mean": 0.00535,
+      "diff": 0.0017,
+      "mde": 0.00246,
+      "p_raw": 0.0245,
+      "p_bh": 0.5581,
+      "survives_bh": false
+    },
+    {
+      "cohort": "GEOPOLITIC",
+      "asset": "USO",
+      "metric": "vol_ratio",
+      "n": 228,
+      "n_control": 476,
+      "cohort_mean": 1.45252,
+      "control_mean": 1.47038,
+      "diff": -0.01786,
+      "mde": 0.00246,
+      "p_raw": 0.8976,
+      "p_bh": 0.945,
+      "survives_bh": false
+    },
+    {
+      "cohort": "GEOPOLITIC",
+      "asset": "VIXY",
+      "metric": "post_excess",
+      "n": 228,
+      "n_control": 428,
+      "cohort_mean": -0.00097,
+      "control_mean": 0.00089,
+      "diff": -0.00186,
+      "mde": 0.00374,
+      "p_raw": 0.2364,
+      "p_bh": 0.6447,
+      "survives_bh": false
+    },
+    {
+      "cohort": "GEOPOLITIC",
+      "asset": "VIXY",
+      "metric": "abs_excess",
+      "n": 228,
+      "n_control": 428,
+      "cohort_mean": 0.0115,
+      "control_mean": 0.01078,
+      "diff": 0.00071,
+      "mde": 0.00374,
+      "p_raw": 0.5872,
+      "p_bh": 0.7562,
+      "survives_bh": false
+    },
+    {
+      "cohort": "GEOPOLITIC",
+      "asset": "VIXY",
+      "metric": "vol_ratio",
+      "n": 228,
+      "n_control": 428,
+      "cohort_mean": 1.30229,
+      "control_mean": 1.56864,
+      "diff": -0.26635,
+      "mde": 0.00374,
+      "p_raw": 0.0775,
+      "p_bh": 0.5581,
+      "survives_bh": false
+    },
+    {
+      "cohort": "GEOPOLITIC",
+      "asset": "XLE",
+      "metric": "post_excess",
+      "n": 228,
+      "n_control": 476,
+      "cohort_mean": 0.00023,
+      "control_mean": 0.00015,
+      "diff": 8e-05,
+      "mde": 0.00106,
+      "p_raw": 0.8366,
+      "p_bh": 0.9295,
+      "survives_bh": false
+    },
+    {
+      "cohort": "GEOPOLITIC",
+      "asset": "XLE",
+      "metric": "abs_excess",
+      "n": 228,
+      "n_control": 476,
+      "cohort_mean": 0.0036,
+      "control_mean": 0.00301,
+      "diff": 0.0006,
+      "mde": 0.00106,
+      "p_raw": 0.051,
+      "p_bh": 0.5581,
+      "survives_bh": false
+    },
+    {
+      "cohort": "GEOPOLITIC",
+      "asset": "XLE",
+      "metric": "vol_ratio",
+      "n": 228,
+      "n_control": 476,
+      "cohort_mean": 1.21436,
+      "control_mean": 1.17007,
+      "diff": 0.04429,
+      "mde": 0.00106,
+      "p_raw": 0.5937,
+      "p_bh": 0.7562,
+      "survives_bh": false
+    },
+    {
+      "cohort": "MACRO",
+      "asset": "GLD",
+      "metric": "post_excess",
+      "n": 105,
+      "n_control": 428,
+      "cohort_mean": 8e-05,
+      "control_mean": -0.00037,
+      "diff": 0.00045,
+      "mde": 0.00151,
+      "p_raw": 0.6207,
+      "p_bh": 0.7562,
+      "survives_bh": false
+    },
+    {
+      "cohort": "MACRO",
+      "asset": "GLD",
+      "metric": "abs_excess",
+      "n": 105,
+      "n_control": 428,
+      "cohort_mean": 0.00336,
+      "control_mean": 0.00369,
+      "diff": -0.00033,
+      "mde": 0.00151,
+      "p_raw": 0.7036,
+      "p_bh": 0.8119,
+      "survives_bh": false
+    },
+    {
+      "cohort": "MACRO",
+      "asset": "GLD",
+      "metric": "vol_ratio",
+      "n": 105,
+      "n_control": 428,
+      "cohort_mean": 1.14936,
+      "control_mean": 1.34913,
+      "diff": -0.19976,
+      "mde": 0.00151,
+      "p_raw": 0.1264,
+      "p_bh": 0.5581,
+      "survives_bh": false
+    },
+    {
+      "cohort": "MACRO",
+      "asset": "TLT",
+      "metric": "post_excess",
+      "n": 123,
+      "n_control": 505,
+      "cohort_mean": -0.00051,
+      "control_mean": 0.00018,
+      "diff": -0.00069,
+      "mde": 0.00129,
+      "p_raw": 0.1029,
+      "p_bh": 0.5581,
+      "survives_bh": false
+    },
+    {
+      "cohort": "MACRO",
+      "asset": "TLT",
+      "metric": "abs_excess",
+      "n": 123,
+      "n_control": 505,
+      "cohort_mean": 0.00302,
+      "control_mean": 0.00255,
+      "diff": 0.00047,
+      "mde": 0.00129,
+      "p_raw": 0.1299,
+      "p_bh": 0.5581,
+      "survives_bh": false
+    },
+    {
+      "cohort": "MACRO",
+      "asset": "TLT",
+      "metric": "vol_ratio",
+      "n": 123,
+      "n_control": 505,
+      "cohort_mean": 1.13639,
+      "control_mean": 1.20711,
+      "diff": -0.07072,
+      "mde": 0.00129,
+      "p_raw": 0.4463,
+      "p_bh": 0.7562,
+      "survives_bh": false
+    },
+    {
+      "cohort": "MACRO",
+      "asset": "UUP",
+      "metric": "post_excess",
+      "n": 123,
+      "n_control": 508,
+      "cohort_mean": -0.00035,
+      "control_mean": 0.00025,
+      "diff": -0.00061,
+      "mde": 0.00125,
+      "p_raw": 0.1619,
+      "p_bh": 0.5581,
+      "survives_bh": false
+    },
+    {
+      "cohort": "MACRO",
+      "asset": "UUP",
+      "metric": "abs_excess",
+      "n": 123,
+      "n_control": 508,
+      "cohort_mean": 0.00298,
+      "control_mean": 0.00253,
+      "diff": 0.00045,
+      "mde": 0.00125,
+      "p_raw": 0.1674,
+      "p_bh": 0.5581,
+      "survives_bh": false
+    },
+    {
+      "cohort": "MACRO",
+      "asset": "UUP",
+      "metric": "vol_ratio",
+      "n": 123,
+      "n_control": 508,
+      "cohort_mean": 1.65456,
+      "control_mean": 1.68313,
+      "diff": -0.02857,
+      "mde": 0.00125,
+      "p_raw": 0.9135,
+      "p_bh": 0.945,
+      "survives_bh": false
+    },
+    {
+      "cohort": "MACRO",
+      "asset": "VIXY",
+      "metric": "post_excess",
+      "n": 105,
+      "n_control": 428,
+      "cohort_mean": -0.00126,
+      "control_mean": 0.00089,
+      "diff": -0.00214,
+      "mde": 0.0063,
+      "p_raw": 0.3113,
+      "p_bh": 0.6947,
+      "survives_bh": false
+    },
+    {
+      "cohort": "MACRO",
+      "asset": "VIXY",
+      "metric": "abs_excess",
+      "n": 105,
+      "n_control": 428,
+      "cohort_mean": 0.01232,
+      "control_mean": 0.01078,
+      "diff": 0.00153,
+      "mde": 0.0063,
+      "p_raw": 0.3813,
+      "p_bh": 0.715,
+      "survives_bh": false
+    },
+    {
+      "cohort": "MACRO",
+      "asset": "VIXY",
+      "metric": "vol_ratio",
+      "n": 105,
+      "n_control": 428,
+      "cohort_mean": 1.35276,
+      "control_mean": 1.56864,
+      "diff": -0.21588,
+      "mde": 0.0063,
+      "p_raw": 0.3473,
+      "p_bh": 0.6947,
+      "survives_bh": false
+    },
+    {
+      "cohort": "MACRO",
+      "asset": "XLF",
+      "metric": "post_excess",
+      "n": 123,
+      "n_control": 507,
+      "cohort_mean": 6e-05,
+      "control_mean": -7e-05,
+      "diff": 0.00014,
+      "mde": 0.00063,
+      "p_raw": 0.5747,
+      "p_bh": 0.7562,
+      "survives_bh": false
+    },
+    {
+      "cohort": "MACRO",
+      "asset": "XLF",
+      "metric": "abs_excess",
+      "n": 123,
+      "n_control": 507,
+      "cohort_mean": 0.00169,
+      "control_mean": 0.0016,
+      "diff": 8e-05,
+      "mde": 0.00063,
+      "p_raw": 0.6302,
+      "p_bh": 0.7562,
+      "survives_bh": false
+    },
+    {
+      "cohort": "MACRO",
+      "asset": "XLF",
+      "metric": "vol_ratio",
+      "n": 123,
+      "n_control": 507,
+      "cohort_mean": 1.08918,
+      "control_mean": 1.17668,
+      "diff": -0.08749,
+      "mde": 0.00063,
+      "p_raw": 0.3418,
+      "p_bh": 0.6947,
+      "survives_bh": false
+    },
+    {
+      "cohort": "NOISE",
+      "asset": "GLD",
+      "metric": "post_excess",
+      "n": 428,
+      "skipped": "control cohort",
+      "mde": 0.00116
+    },
+    {
+      "cohort": "NOISE",
+      "asset": "GLD",
+      "metric": "abs_excess",
+      "n": 428,
+      "skipped": "control cohort",
+      "mde": 0.00116
+    },
+    {
+      "cohort": "NOISE",
+      "asset": "GLD",
+      "metric": "vol_ratio",
+      "n": 428,
+      "skipped": "control cohort",
+      "mde": 0.00116
+    },
+    {
+      "cohort": "NOISE",
+      "asset": "ITA",
+      "metric": "post_excess",
+      "n": 473,
+      "skipped": "control cohort",
+      "mde": 0.00048
+    },
+    {
+      "cohort": "NOISE",
+      "asset": "ITA",
+      "metric": "abs_excess",
+      "n": 473,
+      "skipped": "control cohort",
+      "mde": 0.00048
+    },
+    {
+      "cohort": "NOISE",
+      "asset": "ITA",
+      "metric": "vol_ratio",
+      "n": 473,
+      "skipped": "control cohort",
+      "mde": 0.00048
+    },
+    {
+      "cohort": "NOISE",
+      "asset": "TLT",
+      "metric": "post_excess",
+      "n": 505,
+      "skipped": "control cohort",
+      "mde": 0.00048
+    },
+    {
+      "cohort": "NOISE",
+      "asset": "TLT",
+      "metric": "abs_excess",
+      "n": 505,
+      "skipped": "control cohort",
+      "mde": 0.00048
+    },
+    {
+      "cohort": "NOISE",
+      "asset": "TLT",
+      "metric": "vol_ratio",
+      "n": 505,
+      "skipped": "control cohort",
+      "mde": 0.00048
+    },
+    {
+      "cohort": "NOISE",
+      "asset": "USO",
+      "metric": "post_excess",
+      "n": 476,
+      "skipped": "control cohort",
+      "mde": 0.00128
+    },
+    {
+      "cohort": "NOISE",
+      "asset": "USO",
+      "metric": "abs_excess",
+      "n": 476,
+      "skipped": "control cohort",
+      "mde": 0.00128
+    },
+    {
+      "cohort": "NOISE",
+      "asset": "USO",
+      "metric": "vol_ratio",
+      "n": 476,
+      "skipped": "control cohort",
+      "mde": 0.00128
+    },
+    {
+      "cohort": "NOISE",
+      "asset": "UUP",
+      "metric": "post_excess",
+      "n": 508,
+      "skipped": "control cohort",
+      "mde": 0.0005
+    },
+    {
+      "cohort": "NOISE",
+      "asset": "UUP",
+      "metric": "abs_excess",
+      "n": 508,
+      "skipped": "control cohort",
+      "mde": 0.0005
+    },
+    {
+      "cohort": "NOISE",
+      "asset": "UUP",
+      "metric": "vol_ratio",
+      "n": 508,
+      "skipped": "control cohort",
+      "mde": 0.0005
+    },
+    {
+      "cohort": "NOISE",
+      "asset": "VIXY",
+      "metric": "post_excess",
+      "n": 428,
+      "skipped": "control cohort",
+      "mde": 0.00249
+    },
+    {
+      "cohort": "NOISE",
+      "asset": "VIXY",
+      "metric": "abs_excess",
+      "n": 428,
+      "skipped": "control cohort",
+      "mde": 0.00249
+    },
+    {
+      "cohort": "NOISE",
+      "asset": "VIXY",
+      "metric": "vol_ratio",
+      "n": 428,
+      "skipped": "control cohort",
+      "mde": 0.00249
+    },
+    {
+      "cohort": "NOISE",
+      "asset": "XLE",
+      "metric": "post_excess",
+      "n": 476,
+      "skipped": "control cohort",
+      "mde": 0.00057
+    },
+    {
+      "cohort": "NOISE",
+      "asset": "XLE",
+      "metric": "abs_excess",
+      "n": 476,
+      "skipped": "control cohort",
+      "mde": 0.00057
+    },
+    {
+      "cohort": "NOISE",
+      "asset": "XLE",
+      "metric": "vol_ratio",
+      "n": 476,
+      "skipped": "control cohort",
+      "mde": 0.00057
+    },
+    {
+      "cohort": "NOISE",
+      "asset": "XLF",
+      "metric": "post_excess",
+      "n": 507,
+      "skipped": "control cohort",
+      "mde": 0.00031
+    },
+    {
+      "cohort": "NOISE",
+      "asset": "XLF",
+      "metric": "abs_excess",
+      "n": 507,
+      "skipped": "control cohort",
+      "mde": 0.00031
+    },
+    {
+      "cohort": "NOISE",
+      "asset": "XLF",
+      "metric": "vol_ratio",
+      "n": 507,
+      "skipped": "control cohort",
+      "mde": 0.00031
+    }
+  ],
+  "heavy_hitters": [
+    {
+      "cohort": "NOISE",
+      "asset": "GLD",
+      "t0": "2025-12-26T20:43:14+00:00",
+      "z": -11.1631,
+      "post_excess": -0.043569,
+      "vol_ratio": 10.6931,
+      "text": "The renovated Palm Room!"
+    },
+    {
+      "cohort": "NOISE",
+      "asset": "USO",
+      "t0": "2025-01-09T19:36:48+00:00",
+      "z": 10.0211,
+      "post_excess": 0.059353,
+      "vol_ratio": 3.5675,
+      "text": "Governor Gavin Newscum should immediately go to Northern California and open up the water main, and let the water flow into his dry, starving, burning State, in"
+    },
+    {
+      "cohort": "GEOPOLITIC",
+      "asset": "XLE",
+      "t0": "2025-09-15T19:57:14+00:00",
+      "z": 8.2645,
+      "post_excess": 0.012978,
+      "vol_ratio": 4.615,
+      "text": "This morning, on my Orders, U.S. Military Forces conducted a SECOND Kinetic Strike against positively identified, extraordinarily violent drug trafficking carte"
+    },
+    {
+      "cohort": "GEOPOLITIC",
+      "asset": "GLD",
+      "t0": "2025-06-23T19:52:00+00:00",
+      "z": -8.2454,
+      "post_excess": -0.028787,
+      "vol_ratio": 1.96,
+      "text": "Iran has officially responded to our Obliteration of their Nuclear Facilities with a very weak response, which we expected, and have very effectively countered."
+    },
+    {
+      "cohort": "NOISE",
+      "asset": "VIXY",
+      "t0": "2026-03-02T20:52:30+00:00",
+      "z": 8.2262,
+      "post_excess": 0.174228,
+      "vol_ratio": 4.1355,
+      "text": "Everybody watch Sean Hannity tonight at 9 P.M. Bibi Netanyahu will be interviewed! PRESIDENT DONALD J. TRUMP"
+    },
+    {
+      "cohort": "NOISE",
+      "asset": "XLE",
+      "t0": "2025-09-02T19:34:21+00:00",
+      "z": -8.0468,
+      "post_excess": -0.02372,
+      "vol_ratio": 4.2168,
+      "text": "I am thrilled to report that the U.S. Space Command headquarters will move to the beautiful locale of a place called Huntsville, Alabama \u2014 forever to be known, "
+    },
+    {
+      "cohort": "GEOPOLITIC",
+      "asset": "GLD",
+      "t0": "2026-05-05T19:30:47+00:00",
+      "z": 8.0189,
+      "post_excess": 0.024786,
+      "vol_ratio": 6.8539,
+      "text": "Jon Husted is doing an incredible job as Senator for the Great State of Ohio! He served as your Lieutenant Governor for seven years prior to becoming a very dis"
+    },
+    {
+      "cohort": "NOISE",
+      "asset": "GLD",
+      "t0": "2026-06-10T13:30:00+00:00",
+      "z": -7.8679,
+      "post_excess": -0.023232,
+      "vol_ratio": 4.029,
+      "text": "Wow! CITI was ranked Number 1 in topping M&A Advisory Market by Value in Q1. Congratulations to Jane F and ALL of her great people. They\u2019ve worked really hard! "
+    },
+    {
+      "cohort": "GEOPOLITIC",
+      "asset": "XLE",
+      "t0": "2026-05-05T19:30:47+00:00",
+      "z": -7.7214,
+      "post_excess": -0.046104,
+      "vol_ratio": 9.7684,
+      "text": "Jon Husted is doing an incredible job as Senator for the Great State of Ohio! He served as your Lieutenant Governor for seven years prior to becoming a very dis"
+    },
+    {
+      "cohort": "NOISE",
+      "asset": "TLT",
+      "t0": "2026-02-12T15:30:00+00:00",
+      "z": 7.0608,
+      "post_excess": 0.015858,
+      "vol_ratio": 1.333,
+      "text": "I am pleased to announce the nomination of Katie Lane to serve as Judge on the United States District Court for the District of Montana. Katie brings fantastic "
+    },
+    {
+      "cohort": "GEOPOLITIC",
+      "asset": "USO",
+      "t0": "2026-02-27T20:47:00+00:00",
+      "z": 7.0243,
+      "post_excess": 0.069697,
+      "vol_ratio": 10.5053,
+      "text": "THE UNITED STATES OF AMERICA WILL NEVER ALLOW A RADICAL LEFT, WOKE COMPANY TO DICTATE HOW OUR GREAT MILITARY FIGHTS AND WINS WARS! That decision belongs to YOUR"
+    },
+    {
+      "cohort": "NOISE",
+      "asset": "VIXY",
+      "t0": "2026-02-12T15:30:00+00:00",
+      "z": 7.0219,
+      "post_excess": 0.075437,
+      "vol_ratio": 2.3745,
+      "text": "I am pleased to announce the nomination of Katie Lane to serve as Judge on the United States District Court for the District of Montana. Katie brings fantastic "
+    },
+    {
+      "cohort": "NOISE",
+      "asset": "GLD",
+      "t0": "2025-06-11T17:01:00+00:00",
+      "z": 6.7814,
+      "post_excess": 0.012551,
+      "vol_ratio": 1.3527,
+      "text": "Thank God @realDonaldTrump acted quickly to send in more law enforcement officials to Los Angeles - he saved us.\nThe riots would have gone on for days with hund"
+    },
+    {
+      "cohort": "NOISE",
+      "asset": "ITA",
+      "t0": "2025-04-21T19:58:10+00:00",
+      "z": -6.7567,
+      "post_excess": -0.025145,
+      "vol_ratio": 4.6833,
+      "text": "Melania and I will be going to the funeral of Pope Francis, in Rome. We look forward to being there!"
+    },
+    {
+      "cohort": "GEOPOLITIC",
+      "asset": "ITA",
+      "t0": "2025-06-10T13:45:00+00:00",
+      "z": -6.6395,
+      "post_excess": -0.009065,
+      "vol_ratio": 1.7964,
+      "text": "If I didn\u2019t \u201cSEND IN THE TROOPS\u201d to Los Angeles the last three nights, that once beautiful and great City would be burning to the ground right now, much like 25"
+    }
+  ]
+}

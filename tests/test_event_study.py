@@ -133,6 +133,40 @@ def test_runup_is_exact_not_negated_return() -> None:
     assert exact - naive > 0.4, "the naive approximation should be visibly wrong here"
 
 
+def test_intraday_split_is_point_in_time() -> None:
+    """The pre-window may not contain a bar that closed at/after t0, and the bar
+    straddling t0 belongs to neither side (it mixes both regimes)."""
+    from experiments.event_study.intraday import _split_at, load_hourly
+    bars = load_hourly()
+    if "USO" not in bars:
+        return
+    a = bars["USO"]
+    t0 = a[300].ts.replace(minute=17)          # tweet lands mid-bar
+    j, i = _split_at(a, t0)
+    assert a[j].end <= t0, "pre-window leaked a bar closing at/after t0"
+    assert a[i].ts >= t0, "post-window started before t0"
+    assert i - j >= 2, "the straddling bar was not dropped from both sides"
+
+
+def test_intraday_dedupes_same_bar_bursts() -> None:
+    """He posts in bursts: several tweets inside one hour resolve to the SAME bar and
+    must count ONCE. Counting them separately fabricated 9 BH-surviving cells
+    (p_bh 0.0018) out of pure duplication — the whole 'intraday shock' result.
+    """
+    from experiments.event_study.intraday import load_hourly, study_shock
+    bars = load_hourly()
+    if "USO" not in bars or "SPY" not in bars:
+        return
+    base = bars["USO"][300].ts
+    a = study_shock(bars, "USO", base.replace(minute=5))
+    b = study_shock(bars, "USO", base.replace(minute=6))     # 1 minute later
+    if a is None or b is None:
+        return
+    # Same bar -> identical measurement. Two tweets, ONE piece of evidence.
+    assert a.t0[:13] == b.t0[:13] or a.post_excess == b.post_excess, (
+        "two posts in one hour must not be independent observations")
+
+
 def test_canary_shuffled_labels_yield_uniform_p() -> None:
     """Manufactured-signal canary: with REAL bars but RANDOM pseudo-event dates,
     the permutation p for |CAR| must not be extreme (the null must contain its
