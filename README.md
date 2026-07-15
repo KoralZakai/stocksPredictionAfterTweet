@@ -284,7 +284,7 @@ they can never be mixed, because the Endpoint verifies the manifest's
 | Manifest | `reports/validation_manifest.json` | `reports/validation_manifest_macro_v1.json` |
 | Universe | indices + sector ETFs + commodities | Mode A **+ TLT, UUP, FXI, GLD** (XLE was already in) |
 | Prompt | frozen, hash `1eb55beb…` | whitelist-only, hash `f03db279…` |
-| Status | **null** (EOD 50.7%, n=67, p=0.50; `shipped_horizons: []`) | **unvalidated** — do not quote its numbers as a result |
+| Status | **null** (EOD 52.2%, n=67, p=0.40; `shipped_horizons: []`) | **unvalidated** — do not quote its numbers as a result |
 
 **Switching the deployed container** (Mode A is the default; you must opt in to B):
 ```bash
@@ -351,14 +351,18 @@ volume over 1/3/5 sessions, permutation nulls, one BH pass over all 63 cells.
 SURRENDER" → USO −13.2% — but the population effect is zero. Three exhibits
 explain *why the anecdotes feel true*:
 
-**A. The Intel case is reverse causality.** The most-cited example — *"he tweeted
-about Intel and it rose for a long time"* — runs backwards. Of **3 unique**
+**A. The famous Intel tweet is reverse causality.** The most-cited example — *"he
+tweeted about Intel and it rose for a long time"* — runs backwards. Of **8 unique**
 Intel-company mentions in 8,317 posts, the famous one reads *"**Intel Stock
 continues to rise**… I am responsible"*. INTC in the **21 sessions before** that
 post: **+114.7%** (SPY +9.4%) — an excess of **+105.3%**. In the 21 sessions
-**after**: **−2.4%**. It had already doubled; he posted about it and claimed
-credit. He *reflects* news rather than generating it — and memory encodes the
-correlation as a sequence.
+**after**: **−2.4%**. It had already doubled; he posted about it and claimed credit.
+The timing is the whole illusion: the post lands mid-trend, so tweet-then-more-movement
+reads as causation while the trend predates the post. (Honesty note: 4 of the 8
+mentions run the other way — INTC was *falling* when he demanded the CEO resign, then
+rose +18.1%; those posts carried real news, a president announcing a US equity stake.
+Eight mentions settle nothing either way — the registered 0-of-63 above is what
+settles it. See the "intel" artifact section for how our own regex once hid those 4.)
 
 **B. "Fear then recovery" is mean reversion.** Oil's dip-and-rebound arc after
 Iran tweets (−5.3% → +12.7% @42d) appears just as strongly — **stronger** (−3.1% →
@@ -375,8 +379,17 @@ causality. The study also caught its own would-be artifact: a degenerate
 permutation null initially flagged 22/72 cells before dedup + with-replacement
 sampling corrected it to 0.
 
-An interactive walkthrough of all three exhibits:
-[`reports/dashboard.html`](reports/dashboard.html) (`make dashboard`).
+An interactive walkthrough of all three exhibits — **live**:
+[koralzakai.github.io/stocksPredictionAfterTweet/dashboard.html](https://koralzakai.github.io/stocksPredictionAfterTweet/dashboard.html)
+(source: [`reports/dashboard.html`](reports/dashboard.html), rebuild with `make dashboard`).
+
+The reverse direction also got its own measurement — the **mirror test**
+([`experiments/event_study/mirror_test.py`](experiments/event_study/mirror_test.py)):
+does his posting *follow* the market? Tweet-level, it looks spectacular (p<0.001) and is
+fake (burst duplicates — our artifact #3's eighth attempt); deduped to episodes it dies
+(p=0.17); what remains is suggestive only — posting **intensity** tracks the size of the
+move behind it (rank corr +0.23, raw p=0.033, n=65; would fail our own BH bar). Reported
+as exploratory, never as a survivor.
 
 ## Future work: sector-relative alpha & single-stock benchmarking
 
