@@ -1,20 +1,27 @@
-# I Built a Machine to Prove Trump's Tweets Move Markets. It Kept Proving Me Wrong — Seven Times.
+# Everyone Knows Trump's Tweets Move Markets. I Measured It: the Connection Is Real — the Direction Isn't.
 
-*#NebiusServerlessChallenge — code: https://github.com/KoralZakai/stocksPredictionAfterTweet
-— interactive dashboard: [Myth-Busting Quantitative Terminal](https://raw.githack.com/KoralZakai/stocksPredictionAfterTweet/nebius-serverless-submission/reports/dashboard.html)*
+*#NebiusServerlessChallenge*
+
+**Live dashboard:** [Myth-Busting Quantitative Terminal](https://raw.githack.com/KoralZakai/stocksPredictionAfterTweet/nebius-serverless-submission/reports/dashboard.html)
+· **Live endpoint:** [`/predict` on Nebius Serverless](https://port8080-xaqg3twr3yhr61q.tunnel.applications.eu-north1.nebius.cloud/docs)
+· **Code:** [github.com/KoralZakai/stocksPredictionAfterTweet](https://github.com/KoralZakai/stocksPredictionAfterTweet)
 
 Everyone on a trading desk knows the story. *He tweeted about Intel, and the stock ran for
 months.* *He posts about Iran, oil spikes.* The anecdotes are vivid, specific, and everybody
 has one.
 
-I spent this project trying to measure that. The answer is **no** — political tweets carry
-no measurable short-term directional signal for the assets they name. That result isn't
-interesting on its own; a coin flip is a coin flip. What's interesting is **how many times
-my own pipeline nearly told me otherwise**, and what it took to catch it.
+I spent this project measuring it — 78,130 posts, 62 tickers, one 70B model reading the
+text of every tweet. And the anecdotes are not hallucinations: **the connection between his
+feed and the market is real, and you can see it in the data.** It just runs in the opposite
+direction from the one traders bet on. He tweeted about Tesla **thirteen times** while it
+fell 26%. Intel had already gained **+105%** when he posted the famous "Intel Stock
+continues to rise." The market moves, *then* he posts. Forward — the direction you could
+trade — the signal is a coin flip, and I can show that with pre-registered tests rather
+than vibes: **0 of 63 cells survive correction.**
 
-Seven times I built something that produced a beautiful, publishable, *completely false*
-finding. Every one of them looked exactly like the discovery the anecdotes promise. This
-post is about those seven, because they are the actual engineering content.
+Getting to that answer honestly was the hard part. Seven times this pipeline produced a
+beautiful, publishable, *completely false* positive — each one looking exactly like the
+discovery the anecdotes promise. Those seven are the engineering content of this post.
 
 ---
 
@@ -121,6 +128,36 @@ survive**.
 
 ---
 
+## Which way does the arrow point?
+
+The last thing I built asks the connection question directly, on the same committed data.
+Not "do his tweets predict prices?" — that's dead — but "does the market predict his
+*tweets*?" Three measurements, in the order they survived (`experiments/event_study/mirror_test.py`,
+seeded, offline):
+
+1. **Tweet level.** How big was the abnormal move a mentioned company had *behind* it,
+   vs random days? **9.7% vs 6.7%, p<0.001.** A finding! — and it's **fake**. It's the
+   burst artifact again: ten of those "observations" are ten tweets about the *same*
+   Tesla fall. My own artifact #3, back for an eighth attempt.
+2. **Episode level** (one observation per company × 21-session window): the gap shrinks
+   to 8.1% vs 7.1%, **p=0.17. Dead.** He does not systematically pick movers.
+3. **Intensity.** But *how many times* he posts about a company tracks the size of the
+   move behind it: episodes he mentions once sit on ~**4%** moves; episodes he posts
+   about three or more times sit on ~**8.4%** (rank correlation +0.23, raw p=0.033,
+   n=65). He doesn't tweet about more companies when markets move — he tweets **more
+   times about the same one**.
+
+Honest label: that last result is **exploratory** — one test, raw p, and if I apply the
+same multiple-comparison correction to the mirror script's own three tests that killed the
+forward signal, p≈0.10 and it fails too. I'm reporting it as suggestive, not as a survivor;
+holding my favourite direction to the same bar as the one I rejected is the whole point of
+this project. What *doesn't* need a p-value is the case-level record above: the market
+moved first, in every famous anecdote I could check.
+
+So the honest summary of the connection: **his feed is a mirror of the market, not a
+lever on it** — and the mirror hypothesis deserves its own pre-registered study, which
+the repo is set up to run.
+
 ## The results
 
 **➡ Live dashboard: [Myth-Busting Quantitative Terminal](https://raw.githack.com/KoralZakai/stocksPredictionAfterTweet/nebius-serverless-submission/reports/dashboard.html)**
@@ -145,9 +182,9 @@ day**: **+0.40pp real vs +0.38pp wrong-day**. The entire advantage survives on a
 tweet had nothing to do with. It isn't knowledge — it's that oil and the fear gauge are
 jumpier than staples and bonds *every day of the year*.
 
-**Why the anecdotes feel true:** reverse causality (Intel had already doubled), mean reversion
-(big oil moves recover the same with no tweet), and saturation (he posts on 83% of sessions,
-so every big move has a coincident tweet to blame).
+**Why the anecdotes survive contact with all of this:** reverse causality (the mirror,
+above), mean reversion (big oil moves recover the same with no tweet), and saturation (he
+posts on 83% of sessions, so every big move has a coincident tweet available to blame).
 
 ## Closing the loop, honestly
 
@@ -165,7 +202,9 @@ You cannot wait your way to a finding.
 
 An endpoint that **abstains on every tweet** — because nothing survived correction, and a
 calibrated refusal is the correct output. It quotes no accuracy and no confidence score,
-because nothing I measured earned one.
+because nothing I measured earned one. Try it:
+[`/predict`](https://port8080-xaqg3twr3yhr61q.tunnel.applications.eu-north1.nebius.cloud/docs)
+— send any tweet and it will tell you, with its reasoning, why it will not call it.
 
 Serverless fits research better than I expected: every stage is deterministic, containerized,
 hash-stamped, independently re-runnable, CPU-only, and scales to zero. But the real lesson is
