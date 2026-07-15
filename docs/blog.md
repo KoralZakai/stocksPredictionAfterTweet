@@ -122,6 +122,10 @@ survive**.
 
 ## The results
 
+Every number below is explorable in the interactive dashboard —
+[**Myth-Busting Quantitative Terminal**](https://koralzakai.github.io/stocksPredictionAfterTweet/dashboard.html)
+— including the wrong-day control and the per-tweet reasoning behind each call.
+
 | test | result |
 |---|---|
 | EOD directional (tweet-level) | **0.522**, n=67, p=0.40 → `shipped_horizons: []` |

@@ -37,7 +37,7 @@ DATA=/app/runs/real
 MANIFEST_IN_BUCKET="$DATA/validation_manifest.json"
 
 # CPU-only. Overridden from .env. These are the values the shipped deployment
-# actually ran on (aijob-e00j2dskdm71qp3b3k / aiendpoint-e00fs92qgq1h4wzb2s).
+# actually ran on (aijob-e00j2dskdm71qp3b3k / aiendpoint-e00h3hwfjb1aek3rz5).
 NB_PLATFORM="${NB_PLATFORM:-cpu-d3}"
 NB_PRESET="${NB_PRESET:-4vcpu-16gb}"
 NB_TIMEOUT="${NB_TIMEOUT:-1h}"
