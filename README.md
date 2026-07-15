@@ -269,14 +269,34 @@ volume over 1/3/5 sessions, permutation nulls, one BH pass over all 72 cells.
 
 **Result: 0 of 72 cells survive** (min p_bh = 0.83). The famous moves are real
 *individually* — our data surfaces "no deal with Iran except UNCONDITIONAL
-SURRENDER" → USO −13.2% — but the population effect is zero, and the study
-explains why the anecdotes feel true: **the calendar is saturated.** Trump posts
-geo/macro content on ~83% of trading sessions, so every large market move has a
-same-day tweet (our top-4 case studies include an +8% Intel day whose tweet was
-about *Comey*). At daily resolution there is no counterfactual; only intraday
-data could isolate causality. The study also caught its own would-be artifact: a
-degenerate permutation null initially flagged 22/72 cells before
-dedup + with-replacement sampling corrected it to 0.
+SURRENDER" → USO −13.2% — but the population effect is zero. Three exhibits
+explain *why the anecdotes feel true*:
+
+**A. The Intel case is reverse causality.** The most-cited example — *"he tweeted
+about Intel and it rose for a long time"* — runs backwards. Of 4 Intel-company
+mentions in 8,317 posts, the famous one reads *"**Intel Stock continues to rise**…
+I am responsible"*. INTC in the **21 days before** that tweet: **+105.2%** (SPY
++12.6%). In the 21 days **after**: **−2.4%**. It had already doubled; he posted
+about it and claimed credit. He *reflects* news rather than generating it — and
+memory encodes the correlation as a sequence.
+
+**B. "Fear then recovery" is mean reversion.** Oil's dip-and-rebound arc after
+Iran tweets (−5.3% → +12.7% @42d) appears just as strongly — **stronger** (−3.1% →
+**+16.7%**) — on big oil moves with **no tweet at all**. It's what volatility does.
+
+**C. Saturation manufactures the anecdotes.** Trump posts geo/macro content on
+~83% of trading sessions, so every large move has a same-day tweet to blame.
+Sorting oil events by size surfaced *"The **Iran National Soccer Team** is welcome
+to The World Cup"* (USO +17% @42d) and *"The Radical Left Democrats…"* (+45%
+@42d) among the "strongest oil tweets."
+
+At daily resolution there is no counterfactual; only intraday data could isolate
+causality. The study also caught its own would-be artifact: a degenerate
+permutation null initially flagged 22/72 cells before dedup + with-replacement
+sampling corrected it to 0.
+
+An interactive walkthrough of all three exhibits:
+[`reports/dashboard.html`](reports/dashboard.html) (`make dashboard`).
 
 ## Future work: sector-relative alpha & single-stock benchmarking
 

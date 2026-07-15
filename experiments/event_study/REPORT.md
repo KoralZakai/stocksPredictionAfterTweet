@@ -56,6 +56,58 @@ nothing to do with Intel. When someone posts every day, every big market move
 has a same-day tweet. **The anecdotes are survivorship + coincidence-by-
 saturation; the population effect, measured against an honest null, is zero.**
 
+## Exhibit A: the Intel tweet is REVERSE CAUSALITY
+
+The most-cited anecdote — *"he tweeted about Intel and the stock rose for a long
+time"* — is the sequence run backwards. There are exactly **4 Intel-the-company
+mentions** in 8,317 posts (2025-01-01 → 2026-07-06). The famous one:
+
+> `2026-04-29` — *"**Intel Stock continues to rise.** I'm very proud of that Company
+> in that **I am responsible** for making the United S…"*
+
+**INTC before that tweet:**
+
+| window before | INTC | SPY | INTC excess |
+|---|---|---|---|
+| prior 5d | +29.5% | +0.1% | **+29.4%** |
+| prior 21d | **+105.2%** | +12.6% | **+92.6%** |
+| prior 42d | +85.3% | +4.0% | +81.3% |
+
+**INTC after it:** 1d **−3.0%**, 21d **−2.4%**.
+
+Intel had already **doubled** — then he tweeted about it, claiming credit — then
+nothing. He is a *reflector* of news, not a generator of it: he posts about
+winners after they win, and memory encodes the correlation as a sequence. (The one
+Intel tweet followed by a rise, `2026-01-08` +7.6% 1d, reports a CEO meeting and a
+product launch — the news was the news; n=1.)
+
+## Exhibit B: the "fear then recovery" arc is mean reversion, not Trump
+
+USO abnormal-return paths, Iran/Hormuz/oil tweets vs controls:
+
+| | 1d | 3d | 5d | 10d | 21d | 42d |
+|---|---|---|---|---|---|---|
+| top-5 "strongest" tweets | −5.34% | −3.99% | +0.01% | +4.03% | +8.03% | +12.71% |
+| all 64 tweet-days | −0.21% | +0.36% | +0.50% | +2.48% | +5.39% | +4.52% |
+| random days (n=120) | −0.11% | +0.09% | +0.21% | +0.33% | +1.87% | +5.07% |
+| **big move, NO tweet (n=4)** | **−3.06%** | −0.61% | +4.39% | +8.40% | +11.85% | **+16.72%** |
+
+The dip-then-recovery shape is **real** — and it recovers *harder* on big-move days
+with no tweet at all. It is what volatility does. All 64 tweet-days are
+indistinguishable from random days. (Control n=4 is small; it agrees with the
+64-vs-random comparison, which is flat.)
+
+## Exhibit C: the anecdote list builds itself from coincidence
+
+Sorting oil events by biggest mover surfaced, among the "top 5 strongest oil tweets":
+
+- *"The **Iran National Soccer Team** is welcome to The World Cup…"* → USO **+17.1%** @42d
+- *"The **Radical Left Democrats**, a Party that has completely lost its…"* → USO **+45.4%** @42d
+
+Neither is about oil. With posts on 83% of sessions, sorting on the outcome
+manufactures a greatest-hits reel out of pure coincidence. This is the anecdote
+generator, visible in one table.
+
 ## What would actually answer this
 Intraday resolution (minutes around t0, not daily bars) with tweets outside
 market hours as natural controls — the only design that restores a

@@ -5,7 +5,7 @@
 PY := ./.venv/Scripts/python.exe
 export PYTHONPATH := .
 
-.PHONY: smoke smoke-live manifest test lint serve help
+.PHONY: smoke smoke-live manifest test lint serve dashboard study help
 
 help:
 	@echo "smoke       - regenerate dataset + manifest from cached teacher outputs (offline, \$$0)"
@@ -34,3 +34,11 @@ lint:
 
 serve:
 	./.venv/Scripts/uvicorn.exe serving.app:app --host 0.0.0.0 --port 8080
+
+# Pre-registered event study (offline, seeded): registry -> permutation nulls -> BH.
+study:
+	$(PY) experiments/event_study/run_study.py
+
+# The Myth-Busting Quantitative Terminal -> reports/dashboard.html (self-contained).
+dashboard:
+	$(PY) experiments/event_study/generate_targeted_dashboard.py
