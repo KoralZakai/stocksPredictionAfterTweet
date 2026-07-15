@@ -146,56 +146,55 @@ def gather_oil(bars: dict[str, list[Any]], rng: random.Random) -> dict[str, Any]
 # The SAME panel is drawn for every anchor. Fixed up front on purpose: choosing which
 # assets to show per tweet is how you cherry-pick a story. If an asset is irrelevant to
 # a post, its flat line IS the information.
-PANEL: tuple[str, ...] = ("SPY", "QQQ", "USO", "VIXY", "GLD", "XLE", "XLK", "ITA",
-                          "TLT", "FXI", "SMH", "XLF")
-
-
-def _one_series(bars: dict[str, list[Any]], ticker: str, t0: datetime,
-                md: dict[str, int], span: int) -> dict[str, Any] | None:
-    """Raw prices at every offset -span..+span around the anchor, for one asset."""
-    a, m = bars.get(ticker), bars.get("SPY")
-    if not a or not m:
-        return None
-    i0 = s0_index(a, t0)
-    if i0 is None or i0 - span < 0 or i0 + span >= len(a) or a[i0].date not in md:
-        return None
-    prev_mk = md.get(a[i0 - 1].date)
-    if prev_mk is None:
-        return None
-    series = []
-    for k in range(-span, span + 1):
-        j, mk = i0 + k, md.get(a[i0 + k].date)
-        if mk is None:
-            continue
-        series.append({"k": k, "d": a[j].date,
-                       "pa": round(a[j].open if k == 0 else a[j].close, 2),
-                       "pb": round(m[mk].open if k == 0 else m[mk].close, 2)})
-    return {"series": series, "s0": a[i0].date,
-            "prev_a": round(a[i0 - 1].close, 4), "prev_b": round(m[prev_mk].close, 4),
-            "open_a": round(a[i0].open, 4), "open_b": round(m[md[a[i0].date]].open, 4)}
+PANEL: tuple[str, ...] = ("SPY", "QQQ", "DIA", "USO", "VIXY", "GLD", "TLT", "UUP",
+                          "FXI", "XLE", "XLK", "XLF", "XLI", "XLV", "XLY", "XLP",
+                          "XLB", "ITA", "SMH", "DBC")
 
 
 def gather_panel_series(bars: dict[str, list[Any]], anchors: list[dict[str, Any]],
                         span: int = 42) -> list[dict[str, Any]]:
-    """Every anchor x the FULL fixed panel, so the reader sees what moved and what
-    did not. Same assets for every tweet — no per-event selection."""
+    """Every anchor x the full panel. Session dates are shared across US equities, so
+    they are stored ONCE per anchor and each asset keeps only two price arrays — that
+    compaction is what lets the page carry 20 assets instead of 12."""
     m = bars.get("SPY")
     if not m:
         return []
-    md = {b.date: j for j, b in enumerate(m)}
     out = []
     for anc in anchors:
         t0 = datetime.fromisoformat(anc["ts"]).replace(tzinfo=timezone.utc)
-        assets = {}
+        spy_i0 = s0_index(m, t0)
+        if spy_i0 is None or spy_i0 - span < 0 or spy_i0 + span >= len(m):
+            continue
+        dates = [m[spy_i0 + k].date for k in range(-span, span + 1)]
+        assets: dict[str, Any] = {}
         for tk in PANEL:
-            s = _one_series(bars, tk, t0, md, span)
-            if s:
-                assets[tk] = s
+            a = bars.get(tk)
+            if not a:
+                continue
+            i0 = s0_index(a, t0)
+            if i0 is None or i0 - span < 0 or i0 + span >= len(a):
+                continue
+            by = {b.date: b for b in a}
+            pa, pb, ok = [], [], True
+            for off, d in enumerate(dates):
+                ba, bm = by.get(d), (m[spy_i0 - span + off] if d == dates[off] else None)
+                if ba is None or bm is None:
+                    ok = False
+                    break
+                at_anchor = (off == span)
+                pa.append(round(ba.open if at_anchor else ba.close, 2))
+                pb.append(round(bm.open if at_anchor else bm.close, 2))
+            if not ok or len(pa) != len(dates):
+                continue
+            prev = by.get(dates[span - 1])
+            assets[tk] = {"pa": pa, "pb": pb,
+                          "prev_a": round(prev.close, 4) if prev else pa[span - 1],
+                          "prev_b": round(m[spy_i0 - 1].close, 4),
+                          "open_a": pa[span], "open_b": pb[span]}
         if not assets:
             continue
-        s0 = next(iter(assets.values()))["s0"]
-        out.append({**anc, "s0": s0, "assets": assets,
-                    "names": {t: name_of(t) for t in assets}})
+        out.append({**anc, "s0": m[spy_i0].date, "dates": dates, "span": span,
+                    "assets": assets, "names": {t: name_of(t) for t in assets}})
     return out
 
 
@@ -245,6 +244,41 @@ def gather_window_series(bars: dict[str, list[Any]], anchors: list[dict[str, str
                     "prev_a": round(a[i0 - 1].close, 4),
                     "prev_b": round(m[prev_mk].close, 4),
                     "open_a": round(a[i0].open, 4), "open_b": round(m[k0].open, 4)})
+    return out
+
+
+def gather_breakdown(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    """"When are we right?" — EOD hit-rate per subgroup on TRAIN vs TEST.
+
+    This is the honest answer to the question, and the answer is: nowhere. Every
+    subgroup pattern reverses out of sample (weekend posts go 0.304 -> 0.765). It is
+    the same finding the meta-model reported as Val AUC 0.593 -> Test 0.431, shown
+    as a table instead of a number.
+    """
+    from collections import defaultdict
+
+    from scripts.nebius_macro_backtest import _assign_splits, _tweet_hit
+    _assign_splits(rows)
+    agg: dict[tuple[str, str], dict[str, list[int]]] = defaultdict(
+        lambda: {"train": [0, 0], "test": [0, 0]})
+    for r in rows:
+        h, sp = _tweet_hit(r, "EOD"), r.get("split")
+        if h is None or sp not in ("train", "test"):
+            continue
+        for dim, val in (("cohort", _cohort_of(r.get("text", ""), r.get("scenario", ""))),
+                         ("session", r.get("phase", "?")),
+                         ("intensity", f"intensity {r.get('intensity')}")):
+            agg[(dim, val)][sp][0] += h
+            agg[(dim, val)][sp][1] += 1
+    out = []
+    for (dim, val), v in agg.items():
+        tr, te = v["train"], v["test"]
+        if tr[1] < 8 or te[1] < 5:
+            continue
+        a, b = tr[0] / tr[1], te[0] / te[1]
+        out.append({"dim": dim, "group": val, "train": round(a, 3), "n_train": tr[1],
+                    "test": round(b, 3), "n_test": te[1], "shift": round(b - a, 3)})
+    out.sort(key=lambda x: -abs(x["shift"]))
     return out
 
 
@@ -394,23 +428,26 @@ tabs.forEach(t=>t.addEventListener('click',()=>{
 const sel=document.getElementById('anchor'), back=document.getElementById('back'),
       fwd=document.getElementById('fwd');
 let PTS=[], GX=k=>k, GY=e=>e;      // current window points + scales, shared with hover()
+const ACTIVE=new Set();            // empty = show every asset in the panel
 function fmt(v){return (v>=0?'+':'')+(v*100).toFixed(2)+'%';}
 function draw(){
-  const anc=SERIES[+sel.value], X=+back.value, Y=+fwd.value;
+  const anc=SERIES[+sel.value], X=+back.value, Y=+fwd.value, S=anc.span;
   const asel=document.getElementById('asset');
-  if(asel && !anc.assets[asel.value]){                 // keep selection valid
-    asel.innerHTML=Object.keys(anc.assets).map(t=>
-      `<option value="${t}">${t} — ${anc.names[t]||t}</option>`).join('');
+  const avail=Object.keys(anc.assets);
+  if(asel.dataset.anchor!==sel.value){
+    asel.dataset.anchor=sel.value;
+    asel.innerHTML=avail.map(t=>`<option value="${t}">${t} — ${anc.names[t]||t}</option>`).join('');
   }
-  const tk=(asel&&asel.value in anc.assets)?asel.value:Object.keys(anc.assets)[0];
+  const tk=avail.includes(asel.value)?asel.value:avail[0];
   const a=anc.assets[tk];
-  const px=k=>a.series.find(s=>s.k===k)||null;
-  // Chart index: excess vs SPY relative to the entry anchor (open of s0).
-  const at=k=>{const p=px(k); return p?((p.pa/a.open_a-1)-(p.pb/a.open_b-1)):null;};
-  // Run-up INTO the post: close(-X) -> last close BEFORE the post. Exact forward
-  // return — NOT -at(-X), which is only a small-move approximation.
-  const runupAt=X=>{const p=px(-X); return p?((a.prev_a/p.pa-1)-(a.prev_b/p.pb-1)):null;};
-  renderPanel(anc, X, Y, tk);
+  // idx: offset k -> array index. Prices are plain arrays; dates are shared per anchor.
+  const ix=k=>k+S;
+  const at=k=>{const i=ix(k); return (i<0||i>=a.pa.length)?null:
+    ((a.pa[i]/a.open_a-1)-(a.pb[i]/a.open_b-1));};
+  const runupAt=X=>{const i=ix(-X); return (i<0)?null:
+    ((a.prev_a/a.pa[i]-1)-(a.prev_b/a.pb[i]-1));};
+  renderPanel(anc, X, Y);
+
   document.getElementById('backv').textContent=X;
   document.getElementById('fwdv').textContent=Y;
   document.getElementById('lstart').textContent='T − '+X+' sessions';
@@ -428,7 +465,6 @@ function draw(){
   post.textContent=eFwd===null?'n/a':fmt(eFwd);
   post.className='big '+(eFwd>0?'up':'down');
 
-  // Verdict is DERIVED from the two measured numbers, not asserted.
   const v=document.getElementById('verdict');
   if(runup!==null&&eFwd!==null&&runup>0.10&&Math.abs(eFwd)<runup/3){
     v.textContent='REVERSE CAUSALITY — the move preceded the post';v.className='vd down';
@@ -436,19 +472,17 @@ function draw(){
     v.textContent='DIP THEN RECOVERY — compare against the no-tweet control (tab 2)';v.className='vd flat';
   }else{v.textContent='NO CLEAR PATTERN at this window';v.className='vd flat';}
 
-  // Path: the ACTUAL measured series, clipped to the chosen window.
-  PTS=a.series.filter(s=>s.k>=-X&&s.k<=Y).map(s=>({k:s.k,d:s.d,e:at(s.k)}));
-  const W=720,H=220,L=48,R=8,T=10,B=30;                 // margins leave room for axes
+  PTS=[];
+  for(let k=-X;k<=Y;k++){const e=at(k); if(e!==null) PTS.push({k, d:anc.dates[ix(k)], e});}
+  const W=720,H=220,L=48,R=8,T=10,B=30;
   const lo=Math.min(...PTS.map(p=>p.e),0),hi=Math.max(...PTS.map(p=>p.e),0),rg=(hi-lo)||1;
   GX=k=>L+((k+X)/(X+Y))*(W-L-R);
   GY=e=>T+(1-(e-lo)/rg)*(H-T-B);
   const d=PTS.map((p,i)=>(i?'L':'M')+GX(p.k).toFixed(1)+','+GY(p.e).toFixed(1)).join(' ');
-  // y ticks: bottom, zero, top — labelled in %.
-  const ticks=[lo,0,hi].filter((v,i,s)=>s.indexOf(v)===i);
+  const ticks=[lo,0,hi].filter((v,i,s2)=>s2.indexOf(v)===i);
   const grid=ticks.map(v=>`<line x1="${L}" y1="${GY(v).toFixed(1)}" x2="${W-R}" `+
     `y2="${GY(v).toFixed(1)}" class="${v===0?'zero':'grid'}"/>`+
     `<text x="${L-6}" y="${(GY(v)+3.5).toFixed(1)}" class="ax ay">${(v*100).toFixed(0)}%</text>`).join('');
-  // x ticks: the real dates at the window edges and at the event.
   const first=PTS[0], last=PTS[PTS.length-1], ev=PTS.find(p=>p.k===0);
   const xt=[[first,'start'],[ev,'mid'],[last,'end']].filter(t=>t[0]).map(([p,pos])=>
     `<text x="${GX(p.k).toFixed(1)}" y="${H-10}" class="ax ${pos==='mid'?'evt':''}" `+
@@ -465,68 +499,37 @@ function draw(){
     `<rect class="tipbg" rx="3"/><text class="tip"></text></g>`;
 }
 
-// The FULL PANEL: the same assets for every tweet, so nothing is cherry-picked. What
-// did NOT move is as informative as what did.
-function renderPanel(anc, X, Y, active){
+// The panel: EVERY asset, with the model's EXPECTED direction where it named one.
+// Assets the model did not name show "—": it made no call, which is itself the point.
+function renderPanel(anc, X, Y){
   const box=document.getElementById('panel'); if(!box) return;
-  const rows=Object.keys(anc.assets).map(tk=>{
-    const a=anc.assets[tk], px=k=>a.series.find(s=>s.k===k)||null;
-    const pb=px(-X), pf=px(Y);
-    const runup=pb?((a.prev_a/pb.pa-1)-(a.prev_b/pb.pb-1)):null;
-    const post =pf?((pf.pa/a.open_a-1)-(pf.pb/a.open_b-1)):null;
-    return {tk, name:anc.names[tk]||tk, runup, post};
+  const S=anc.span;
+  const exp={}; (anc.pred?anc.pred.legs:[]).forEach(l=>{exp[l.ticker]={d:l.predicted,hit:l.hit};});
+  const show=ACTIVE.size?[...ACTIVE]:Object.keys(anc.assets);
+  const rows=show.filter(tk=>anc.assets[tk]).map(tk=>{
+    const a=anc.assets[tk], ib=(-X)+S, fi=Y+S;
+    const runup=(ib>=0)?((a.prev_a/a.pa[ib]-1)-(a.prev_b/a.pb[ib]-1)):null;
+    const post =(fi<a.pa.length)?((a.pa[fi]/a.open_a-1)-(a.pb[fi]/a.open_b-1)):null;
+    const e=exp[tk];
+    return {tk, name:anc.names[tk]||tk, runup, post, exp:e?e.d:null, hit:e?e.hit:null};
   }).filter(r=>r.post!==null).sort((p,q)=>Math.abs(q.post)-Math.abs(p.post));
+  const arr=d=>d==='up'?'▲ UP':d==='down'?'▼ DOWN':'– flat';
   box.innerHTML=
-    `<div class="card"><h2>Every asset in the panel — same list for every tweet</h2>`+
-    `<div class="scroll"><table><thead><tr><th>asset</th>`+
-    `<th>run-up T−${X}</th><th>after T+${Y}</th></tr></thead><tbody>`+
-    rows.map(r=>`<tr class="${r.tk===active?'hero':''}"><th>${r.tk}`+
-      `<span class="nm"> ${r.name}</span></th>`+
+    `<div class="card"><h2>Every asset — expected vs actual</h2>`+
+    `<div class="scroll"><table><thead><tr><th>asset</th><th>EXPECTED</th>`+
+    `<th>run-up T−${X}</th><th>after T+${Y}</th><th>verdict</th></tr></thead><tbody>`+
+    rows.map(r=>`<tr class="${r.exp?'hero':''}"><th>${r.tk}<span class="nm"> ${r.name}</span></th>`+
+      `<td class="${r.exp==='up'?'up':r.exp==='down'?'down':'flat'}">${r.exp?arr(r.exp):'— not named'}</td>`+
       `<td class="${r.runup>0?'up':'down'}">${r.runup===null?'—':fmt(r.runup)}</td>`+
-      `<td class="${r.post>0?'up':'down'}">${fmt(r.post)}</td></tr>`).join('')+
+      `<td class="${r.post>0?'up':'down'}">${fmt(r.post)}</td>`+
+      `<td class="${r.hit===true?'up':r.hit===false?'down':'flat'}">`+
+      `${r.hit===true?'✓ HIT':r.hit===false?'✗ MISS':'—'}</td></tr>`).join('')+
     `</tbody></table></div>`+
-    `<p class="note"><b>Exploratory.</b> This panel is fixed — the same assets for
-     every anchor — so no story is built by choosing what to display. Reading 12 assets
-     across 15 tweets is ~180 comparisons: something will always look like a pattern.
-     Anything you spot here is a <i>hypothesis</i>; the registered studies (tabs 4 and 6)
-     are what test it, and they return 0/72 and 0/30.</p></div>`;
-}
-
-// The scorecard: plain-English tweet -> what the model EXPECTED -> what the market
-// ACTUALLY did, per named instrument. All cached from the registered run.
-function renderPred(a){
-  const box=document.getElementById('pred'); if(!box) return;
-  const p=a.pred;
-  if(!p){
-    box.innerHTML='<div class="myth"><b>NOT CLASSIFIED.</b> This post never entered '+
-      'the study — it did not pass the geopolitical/macro pre-filter, so the model was '+
-      'never asked for a prediction. That is itself the finding for the Intel case: the '+
-      'most-cited "tweet that moved a stock" is not market-relevant text at all.</div>';
-    return;
-  }
-  const arrow=d=>d==='up'?'▲ UP':d==='down'?'▼ DOWN':'– flat';
-  const rows=p.legs.map(l=>{
-    const ok=l.hit===true, miss=l.hit===false;
-    return `<tr><th>${l.ticker}<span class="nm"> ${l.name}</span></th>`+
-      `<td class="${l.predicted==='up'?'up':l.predicted==='down'?'down':'flat'}">${arrow(l.predicted)}</td>`+
-      `<td class="${l.actual>0?'up':'down'}">${l.actual==null?'n/a':fmt(l.actual)}</td>`+
-      `<td class="flat">${l.spy==null?'n/a':fmt(l.spy)}</td>`+
-      `<td class="${l.abn>0?'up':'down'}">${l.abn==null?'n/a':fmt(l.abn)}</td>`+
-      `<td class="${ok?'up':miss?'down':'flat'}">${ok?'✓ HIT':miss?'✗ MISS':'—'}</td></tr>`;}).join('');
-  const nh=p.legs.filter(l=>l.hit===true).length, ns=p.legs.filter(l=>l.hit!==null).length;
-  box.innerHTML=
-    `<div class="card"><h2>What the model expected — and what happened</h2>`+
-    `<div class="kv"><span class="k">in plain words, he said</span><b>${p.summary||'—'}</b></div>`+
-    `<div class="kv"><span class="k">theme · conviction</span><b>${p.scenario||'—'} · ${p.intensity??'—'}/10`+
-      ` <span class="nm">(split: ${p.split||'—'})</span></b></div>`+
-    `<div class="kv"><span class="k">so the market should…</span><b>${p.hypo_short||'—'}</b></div>`+
-    `<div class="kv"><span class="k">…and longer term</span><b>${p.hypo_long||'—'}</b></div>`+
-    `<div class="kv"><span class="k">why (economic link)</span><b>${p.macro_link||'—'}</b></div>`+
-    `<div class="scroll" style="margin-top:12px"><table><thead><tr><th>instrument</th>`+
-    `<th>EXPECTED</th><th>ACTUAL (EOD)</th><th>SPY</th><th>vs SPY</th><th>verdict</th></tr></thead>`+
-    `<tbody>${rows}</tbody></table></div>`+
-    `<p class="note">Scored on the entry session (EOD). "vs SPY" is the relative move —
-     the metric the study registers. Legs correct: <b>${nh} of ${ns}</b>.</p></div>`;
+    `<p class="note"><b>EXPECTED</b> is filled only for instruments the 70B actually
+     named for this tweet (highlighted). The rest it made no call on — it watches 2-4
+     assets, not the whole market. <b>Exploratory:</b> ${Object.keys(anc.assets).length}
+     assets x ${SERIES.length} tweets is ~${Object.keys(anc.assets).length*SERIES.length}
+     comparisons; something always looks like a pattern. See "when are we right?" below.</p></div>`;
 }
 
 // Hover: read the MEASURED point nearest the cursor. No smoothing, no synthesis.
@@ -556,7 +559,8 @@ if(sel) draw();
 
 
 def render(intel: dict[str, Any], oil: dict[str, Any], verdict: dict[str, Any],
-           series: list[dict[str, Any]], intraday: dict[str, Any] | None, stamp: str) -> str:
+           series: list[dict[str, Any]], intraday: dict[str, Any] | None,
+           breakdown: list[dict[str, Any]], stamp: str) -> str:
     hdr = "".join(f"<th>{w}d</th>" for w in WINDOWS)
 
     # ---- Tab 1: reverse causality
@@ -676,6 +680,27 @@ deployed <code>/predict</code> endpoint serves its classification with
 <code>horizon: null</code> and <code>cohort_base_rate: null</code> — it cites no
 accuracy, because none survived. Research output. Not investment advice.</p></div>"""
 
+    # ---- "when are we right?" — the honest answer: nowhere that replicates.
+    bd_rows = "".join(
+        f'<tr class="{"hero" if abs(b["shift"]) >= 0.3 else ""}">'
+        f'<th>{escape(b["dim"])}<span class="nm"> {escape(str(b["group"]))}</span></th>'
+        f'<td>{b["train"]:.3f}<span class="nm"> n={b["n_train"]}</span></td>'
+        f'<td>{b["test"]:.3f}<span class="nm"> n={b["n_test"]}</span></td>'
+        f'<td class="{_cls(b["shift"])}">{b["shift"]:+.3f}</td></tr>' for b in breakdown)
+    bd_card = f"""
+<div class="card"><h2>“When do we predict correctly?”</h2>
+<p class="note">EOD hit-rate per subgroup, measured on TRAIN and then on the held-out
+TEST split. If any subgroup were genuinely better, its train number would survive.</p>
+<div class="scroll"><table><thead><tr><th>subgroup</th><th>TRAIN</th><th>TEST</th>
+<th>shift</th></tr></thead><tbody>{bd_rows}</tbody></table></div>
+<div class="myth verdict" style="margin-top:14px"><b>ANSWER: nowhere that holds.</b>
+Every subgroup pattern reverses out of sample — weekend posts go from the WORST group
+(0.304) to the BEST (0.765). Learn “avoid weekends” from train and test punishes you;
+learn “weekends are 76%” from test and the next batch punishes you. This is the same
+result the second-stage meta-model reported as Val AUC 0.593 → <b>Test 0.431</b>,
+shown as a table instead of a number. The subgroups are noise, and noise does not
+replicate.</div></div>"""
+
     # ---- Tab 5: dynamic time-window analyzer (reads MEASURED series only)
     opts = "".join(f'<option value="{i}">{escape(s["s0"])} · {escape(s["cohort"])} — '
                    f'{escape(s["label"])}</option>' for i, s in enumerate(series))
@@ -718,7 +743,8 @@ Y-axis is cumulative excess return vs SPY; the gold line is the entry anchor.</p
 (run-up &gt; 10% while the post-move is under a third of it ⇒ the move preceded the
 post). It is not a stored conclusion.</p></div>
 <div id="panel"></div>
-<div id="pred"></div>"""
+<div id="pred"></div>
+{bd_card}"""
 
     # ---- Tab 6: intraday shock study
     if intraday:
@@ -884,11 +910,13 @@ def main() -> None:
     rows = json.loads(RESULTS.read_text())
     series = gather_panel_series(bars, _anchors(intel, rows))
     intraday = gather_intraday()
+    breakdown = gather_breakdown(rows)
     stamp = datetime.now(timezone.utc).replace(microsecond=0).isoformat()
     OUT.parent.mkdir(parents=True, exist_ok=True)
-    OUT.write_text(render(intel, oil, verdict, series, intraday, stamp), encoding="utf-8")
+    OUT.write_text(render(intel, oil, verdict, series, intraday, breakdown, stamp),
+                   encoding="utf-8")
     n_assets = len(series[0]["assets"]) if series else 0
-    n_off = len(next(iter(series[0]["assets"].values()))["series"]) if series else 0
+    n_off = len(series[0]["dates"]) if series else 0
     print(f"[dashboard] Intel mentions={len(intel['mentions'])} "
           f"oil tweet-days={oil['n_tweet_days']} cells={verdict['n_cells']} "
           f"survive={verdict['n_survive']} analyzer-anchors={len(series)} "
