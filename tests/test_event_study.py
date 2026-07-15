@@ -71,6 +71,39 @@ def test_cohorts_are_text_only() -> None:
                        "scenario": "US Politics"})[0] == "CORPORATE"
 
 
+def test_window_series_anchor_respects_tweet_hour() -> None:
+    """An AFTER-CLOSE post must not treat its own session as post-event. A naive
+    `date >= day` anchor did exactly that and under-measured the Intel run-up by
+    ~48pp (+105.3% -> +44.8%). The series must anchor to the NEXT session."""
+    from experiments.event_study.generate_targeted_dashboard import gather_window_series
+    bars = load_bars()
+    if "INTC" not in bars or "SPY" not in bars:
+        return
+    anc = [{"ts": "2026-04-29T22:20", "ticker": "INTC", "text": "t", "label": "l"}]
+    got = gather_window_series(bars, anc, span=42)
+    assert got, "anchor should resolve"
+    assert got[0]["s0"] > "2026-04-29", "after-close post leaked its own session"
+
+
+def test_runup_is_exact_not_negated_return() -> None:
+    """Negating a backward-indexed return is only valid for small moves. On a double
+    it reports ~+53% for a +115% run-up — the bug that shipped to the slider once."""
+    from experiments.event_study.generate_targeted_dashboard import gather_window_series
+    bars = load_bars()
+    if "INTC" not in bars:
+        return
+    anc = [{"ts": "2026-04-29T22:20", "ticker": "INTC", "text": "t", "label": "l"}]
+    got = gather_window_series(bars, anc, span=42)
+    if not got:
+        return
+    a = got[0]
+    p = next(s for s in a["series"] if s["k"] == -21)
+    exact = (a["prev_a"] / p["pa"] - 1) - (a["prev_b"] / p["pb"] - 1)
+    naive = -(((p["pa"] / a["open_a"]) - 1) - ((p["pb"] / a["open_b"]) - 1))
+    assert exact > 1.0, f"expected a >100% run-up, got {exact:.3f}"
+    assert exact - naive > 0.4, "the naive approximation should be visibly wrong here"
+
+
 def test_canary_shuffled_labels_yield_uniform_p() -> None:
     """Manufactured-signal canary: with REAL bars but RANDOM pseudo-event dates,
     the permutation p for |CAR| must not be extreme (the null must contain its

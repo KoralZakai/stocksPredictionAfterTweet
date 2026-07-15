@@ -65,15 +65,24 @@ mentions** in 8,317 posts (2025-01-01 → 2026-07-06). The famous one:
 > `2026-04-29` — *"**Intel Stock continues to rise.** I'm very proud of that Company
 > in that **I am responsible** for making the United S…"*
 
-**INTC before that tweet:**
+**INTC before that tweet** (windows end at the last close *before* the post; the
+tweet landed 22:20, after the close, so 04-29's session is pre-tweet information):
 
 | window before | INTC | SPY | INTC excess |
 |---|---|---|---|
-| prior 5d | +29.5% | +0.1% | **+29.4%** |
-| prior 21d | **+105.2%** | +12.6% | **+92.6%** |
-| prior 42d | +85.3% | +4.0% | +81.3% |
+| prior 5d | +41.9% | +0.4% | **+41.4%** |
+| prior 21d | **+114.7%** | +9.4% | **+105.3%** |
+| prior 42d | +108.2% | +4.0% | +104.3% |
 
-**INTC after it:** 1d **−3.0%**, 21d **−2.4%**.
+**INTC after it:** 1d **−3.0%**, 21d **−2.4%** (beta-adjusted CAR); **+8.2%** at 21d
+on raw excess-vs-SPY. Either measure: the post-tweet move is a rounding error next
+to the run-up.
+
+> *Correction (2026-07-15):* an earlier revision reported the 21d run-up as +92.6%.
+> That anchor used a naive date lookup which discarded the tweet's own session — for
+> an after-close post that session is pre-tweet information. Fixed to the shared
+> `s0_index` resolver (respects the tweet's hour). The corrected figure is **larger**;
+> the direction of the finding never changed.
 
 Intel had already **doubled** — then he tweeted about it, claiming credit — then
 nothing. He is a *reflector* of news, not a generator of it: he posts about

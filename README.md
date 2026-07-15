@@ -273,12 +273,13 @@ SURRENDER" → USO −13.2% — but the population effect is zero. Three exhibit
 explain *why the anecdotes feel true*:
 
 **A. The Intel case is reverse causality.** The most-cited example — *"he tweeted
-about Intel and it rose for a long time"* — runs backwards. Of 4 Intel-company
-mentions in 8,317 posts, the famous one reads *"**Intel Stock continues to rise**…
-I am responsible"*. INTC in the **21 days before** that tweet: **+105.2%** (SPY
-+12.6%). In the 21 days **after**: **−2.4%**. It had already doubled; he posted
-about it and claimed credit. He *reflects* news rather than generating it — and
-memory encodes the correlation as a sequence.
+about Intel and it rose for a long time"* — runs backwards. Of **3 unique**
+Intel-company mentions in 8,317 posts, the famous one reads *"**Intel Stock
+continues to rise**… I am responsible"*. INTC in the **21 sessions before** that
+post: **+114.7%** (SPY +9.4%) — an excess of **+105.3%**. In the 21 sessions
+**after**: **−2.4%**. It had already doubled; he posted about it and claimed
+credit. He *reflects* news rather than generating it — and memory encodes the
+correlation as a sequence.
 
 **B. "Fear then recovery" is mean reversion.** Oil's dip-and-rebound arc after
 Iran tweets (−5.3% → +12.7% @42d) appears just as strongly — **stronger** (−3.1% →

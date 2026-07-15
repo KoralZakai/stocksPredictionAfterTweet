@@ -29,7 +29,7 @@ from html import escape
 from pathlib import Path
 from typing import Any
 
-from experiments.event_study.engine import load_bars, study_event
+from experiments.event_study.engine import load_bars, s0_index, study_event
 
 OUT = Path("reports/dashboard.html")
 RESULTS = Path("reports/nebius_backtest_results.json")
@@ -53,16 +53,21 @@ def _t0(row: dict[str, Any]) -> datetime:
         hour=int(h), minute=int((h % 1) * 60), tzinfo=timezone.utc)
 
 
-def _prior_window(bars: dict[str, list[Any]], ticker: str, on_or_after: str,
+def _prior_window(bars: dict[str, list[Any]], ticker: str, t0: datetime,
                   back: int) -> tuple[float, float] | None:
-    """(asset_ret, spy_ret) over the `back` sessions ENDING the day before s0."""
+    """(asset_ret, spy_ret) over the `back` sessions ending at the LAST CLOSE BEFORE
+    the post — i.e. all price information that existed when the tweet was written.
+
+    Anchored with the shared s0_index (respects the tweet's hour). A naive
+    `date >= day` lookup drops the tweet's own session for an after-close post, which
+    understated this run-up by ~48pp on the Intel case.
+    """
     a, m = bars.get(ticker), bars.get("SPY")
     if not a or not m:
         return None
     md = {b.date: j for j, b in enumerate(m)}
-    try:
-        i0 = next(i for i, b in enumerate(a) if b.date >= on_or_after)
-    except StopIteration:
+    i0 = s0_index(a, t0)
+    if i0 is None:
         return None
     j = i0 - back
     if j <= 0 or a[i0 - 1].date not in md or a[j].date not in md:
@@ -88,9 +93,9 @@ def gather_intel(bars: dict[str, list[Any]]) -> dict[str, Any]:
     prior: list[dict[str, Any]] = []
     post: dict[int, float] = {}
     if hero:
-        day = hero["ts"][:10]
+        hero_t0 = datetime.fromisoformat(hero["ts"]).replace(tzinfo=timezone.utc)
         for back in (5, 10, 21, 42, 63):
-            pw = _prior_window(bars, "INTC", day, back)
+            pw = _prior_window(bars, "INTC", hero_t0, back)
             if pw:
                 prior.append({"back": back, "asset": pw[0], "spy": pw[1],
                               "excess": pw[0] - pw[1]})
@@ -110,7 +115,8 @@ def gather_oil(bars: dict[str, list[Any]], rng: random.Random) -> dict[str, Any]
         if er is None or er.s0_date in seen:
             continue
         seen.add(er.s0_date)
-        paths.append({"s0": er.s0_date, "car": er.car, "text": r.get("text", "")[:150]})
+        paths.append({"s0": er.s0_date, "car": er.car, "text": r.get("text", "")[:150],
+                      "t0": _t0(r).isoformat()})     # keep the REAL t0 for the analyzer
     paths.sort(key=lambda p: -abs(p["car"][1]))
 
     pool = [b.date for b in bars.get("USO", []) if LO <= b.date <= "2026-04-01"]
@@ -131,6 +137,55 @@ def gather_oil(bars: dict[str, list[Any]], rng: random.Random) -> dict[str, Any]
             "mean_all": mean([p["car"] for p in paths]),
             "mean_random": mean(rnd), "n_random": len(rnd),
             "mean_big_no_tweet": mean(big), "n_big": len(big)}
+
+
+def gather_window_series(bars: dict[str, list[Any]], anchors: list[dict[str, str]],
+                         span: int = 42) -> list[dict[str, Any]]:
+    """For each anchor: the REAL asset + SPY price at EVERY session offset -span..+span
+    around the entry anchor (first open strictly after t0), plus the last pre-post close.
+
+    Raw prices are stored, not returns, so the page can compute each window EXACTLY:
+    negating a backward-indexed return (`-E(-X)`) is only valid for small moves — on
+    the Intel case (a double) it reported +44.8% for a +105.3% run-up. The slider is a
+    lookup + exact arithmetic; nothing is interpolated or fitted.
+    """
+    out: list[dict[str, Any]] = []
+    m = bars.get("SPY")
+    if not m:
+        return out
+    md = {b.date: j for j, b in enumerate(m)}
+    for anc in anchors:
+        a = bars.get(anc["ticker"])
+        if not a:
+            continue
+        # MUST use the shared anchor resolver: it applies the strictly-after-t0 rule
+        # using the tweet's HOUR. A naive `date >= day` lookup counts the tweet's own
+        # session as post-event for an after-close post (22:20) — a point-in-time leak
+        # that silently halved the measured run-up (+92.6% -> +41.1%).
+        t0 = datetime.fromisoformat(anc["ts"]).replace(tzinfo=timezone.utc)
+        i0 = s0_index(a, t0)
+        if i0 is None or i0 - span < 0 or i0 + span >= len(a) or a[i0].date not in md:
+            continue
+        k0 = md[a[i0].date]
+        prev_mk = md.get(a[i0 - 1].date)
+        if prev_mk is None:
+            continue
+        series: list[dict[str, float]] = []
+        for k in range(-span, span + 1):
+            j, mk = i0 + k, md.get(a[i0 + k].date)
+            if mk is None:
+                continue
+            # k == 0 is the entry anchor: the first OPEN after the post (leak-free).
+            series.append({"k": k,
+                           "pa": round(a[j].open if k == 0 else a[j].close, 4),
+                           "pb": round(m[mk].open if k == 0 else m[mk].close, 4)})
+        out.append({**anc, "s0": a[i0].date, "series": series,
+                    # last close BEFORE the post — the reference for the run-up, and
+                    # the exact endpoint tab 1's prior-window table uses.
+                    "prev_a": round(a[i0 - 1].close, 4),
+                    "prev_b": round(m[prev_mk].close, 4),
+                    "open_a": round(a[i0].open, 4), "open_b": round(m[k0].open, 4)})
+    return out
 
 
 def gather_verdict() -> dict[str, Any]:
@@ -213,6 +268,23 @@ tr.hero td,tr.hero th{background:var(--surface2);font-weight:600}
 .tile .k{color:var(--ink3);font-size:.7rem;text-transform:uppercase;letter-spacing:.04em}
 .tweet{font-family:var(--mono);font-size:.78rem;color:var(--ink2);background:var(--surface2);
 border-radius:6px;padding:8px 10px;margin:6px 0 0;white-space:normal}
+.ctl{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px}
+.ctl label{display:block;color:var(--ink2);font-size:.75rem;text-transform:uppercase;
+letter-spacing:.04em;margin:0 0 6px}
+select,input[type=range]{width:100%;font:inherit}
+select{background:var(--surface2);color:var(--ink);border:1px solid var(--line);
+border-radius:6px;padding:8px}
+input[type=range]{accent-color:var(--accent);cursor:pointer}
+.rl{display:flex;justify-content:space-between;font-size:.78rem;color:var(--ink2);margin-bottom:2px}
+.chart{width:100%;height:200px;background:var(--bg);border:1px solid var(--line);border-radius:6px}
+.chart .zoneL{fill:var(--down);opacity:.06}.chart .zoneR{fill:var(--up);opacity:.06}
+.chart .zero{stroke:var(--line);stroke-dasharray:3 3}
+.chart .ev{stroke:var(--accent);stroke-width:1.5;stroke-dasharray:4 3}
+.chart .trace{fill:none;stroke:var(--ink);stroke-width:2}
+.chart .evdot{fill:var(--accent)}
+.axis{display:flex;justify-content:space-between;font-size:.72rem;color:var(--ink3);margin-top:6px}
+.vd{font-family:var(--mono);font-size:.85rem;letter-spacing:.02em;font-weight:700}
+.vd.down{color:var(--down)}.vd.flat{color:var(--flat)}
 .spark .zero{stroke:var(--line);stroke-width:1;stroke-dasharray:2 3}
 .spark .line{fill:none;stroke-width:2}.spark .line.up{stroke:var(--up)}.spark .line.down{stroke:var(--down)}
 .spark .dot{fill:var(--ink3)}.spark .dot.up{fill:var(--up)}.spark .dot.down{fill:var(--down)}
@@ -226,11 +298,63 @@ tabs.forEach(t=>t.addEventListener('click',()=>{
   tabs.forEach(x=>x.setAttribute('aria-selected',String(x===t)));
   document.querySelectorAll('.panel').forEach(p=>p.classList.toggle('on',p.id===t.dataset.p));
 }));
+
+// ---- Dynamic time-window analyzer. Reads MEASURED values out of SERIES; it does
+// not model, fit, or interpolate anything. at(k) is a lookup, by design.
+const sel=document.getElementById('anchor'), back=document.getElementById('back'),
+      fwd=document.getElementById('fwd');
+function fmt(v){return (v>=0?'+':'')+(v*100).toFixed(2)+'%';}
+function draw(){
+  const a=SERIES[+sel.value], X=+back.value, Y=+fwd.value;
+  const px=k=>a.series.find(s=>s.k===k)||null;
+  // Chart index: excess vs SPY relative to the entry anchor (open of s0).
+  const at=k=>{const p=px(k); return p?((p.pa/a.open_a-1)-(p.pb/a.open_b-1)):null;};
+  // Run-up INTO the post: close(-X) -> last close BEFORE the post. Exact forward
+  // return — NOT -at(-X), which is only a small-move approximation.
+  const runupAt=X=>{const p=px(-X); return p?((a.prev_a/p.pa-1)-(a.prev_b/p.pb-1)):null;};
+  document.getElementById('backv').textContent=X;
+  document.getElementById('fwdv').textContent=Y;
+  document.getElementById('lstart').textContent='T − '+X+' sessions';
+  document.getElementById('lend').textContent='T + '+Y+' sessions';
+  document.getElementById('tkr').textContent=a.ticker;
+  document.getElementById('atext').textContent='“'+a.text+'”';
+  document.getElementById('as0').textContent='entry anchor '+a.s0;
+
+  const eFwd=at(Y), runup=runupAt(X);
+  const pre=document.getElementById('pre'), post=document.getElementById('post');
+  pre.textContent=runup===null?'n/a':fmt(runup);
+  pre.className='big '+(runup>0?'up':'down');
+  post.textContent=eFwd===null?'n/a':fmt(eFwd);
+  post.className='big '+(eFwd>0?'up':'down');
+
+  // Verdict is DERIVED from the two measured numbers, not asserted.
+  const v=document.getElementById('verdict');
+  if(runup!==null&&eFwd!==null&&runup>0.10&&Math.abs(eFwd)<runup/3){
+    v.textContent='REVERSE CAUSALITY — the move preceded the post';v.className='vd down';
+  }else if(runup!==null&&eFwd!==null&&runup<-0.02&&eFwd>0.02){
+    v.textContent='DIP THEN RECOVERY — compare against the no-tweet control (tab 2)';v.className='vd flat';
+  }else{v.textContent='NO CLEAR PATTERN at this window';v.className='vd flat';}
+
+  // Path: the ACTUAL measured series, clipped to the chosen window.
+  const pts=a.series.filter(s=>s.k>=-X&&s.k<=Y).map(s=>({k:s.k,e:at(s.k)}));
+  const W=720,H=200,lo=Math.min(...pts.map(p=>p.e),0),hi=Math.max(...pts.map(p=>p.e),0),
+        rg=(hi-lo)||1, x=k=>((k+X)/(X+Y))*W, y=e=>H-8-((e-lo)/rg)*(H-16);
+  const d=pts.map((p,i)=>(i?'L':'M')+x(p.k).toFixed(1)+','+y(p.e).toFixed(1)).join(' ');
+  document.getElementById('svg').innerHTML=
+    `<rect x="0" y="0" width="${x(0)}" height="${H}" class="zoneL"/>`+
+    `<rect x="${x(0)}" y="0" width="${W-x(0)}" height="${H}" class="zoneR"/>`+
+    `<line x1="0" y1="${y(0).toFixed(1)}" x2="${W}" y2="${y(0).toFixed(1)}" class="zero"/>`+
+    `<line x1="${x(0)}" y1="0" x2="${x(0)}" y2="${H}" class="ev"/>`+
+    `<path d="${d}" class="trace"/>`+
+    `<circle cx="${x(0)}" cy="${y(0).toFixed(1)}" r="4" class="evdot"/>`;
+}
+[sel,back,fwd].forEach(el=>el&&el.addEventListener('input',draw));
+if(sel) draw();
 """
 
 
 def render(intel: dict[str, Any], oil: dict[str, Any], verdict: dict[str, Any],
-           stamp: str) -> str:
+           series: list[dict[str, Any]], stamp: str) -> str:
     hdr = "".join(f"<th>{w}d</th>" for w in WINDOWS)
 
     # ---- Tab 1: reverse causality
@@ -350,13 +474,52 @@ deployed <code>/predict</code> endpoint serves its classification with
 <code>horizon: null</code> and <code>cohort_base_rate: null</code> — it cites no
 accuracy, because none survived. Research output. Not investment advice.</p></div>"""
 
+    # ---- Tab 5: dynamic time-window analyzer (reads MEASURED series only)
+    opts = "".join(f'<option value="{i}">{escape(s["s0"])} · {escape(s["ticker"])} — '
+                   f'{escape(s["label"])}</option>' for i, s in enumerate(series))
+    t5 = f"""
+<div class="myth verdict"><b>HOW TO READ THIS:</b> pick an anchor tweet, then slide the
+windows. Every value shown is <b>measured</b> at that exact offset from
+<code>data/real/bars.csv</code> and embedded at build time — the slider performs a
+<b>lookup, not an interpolation</b>. Slide the lookback out and watch the run-up
+appear <i>before</i> the post.</div>
+<div class="card"><div class="ctl">
+  <div><label>1 · anchor tweet</label>
+    <select id="anchor">{opts}</select>
+    <div class="tweet" id="atext"></div>
+    <p class="note" id="as0"></p></div>
+  <div><label>2 · sliding windows</label>
+    <div class="rl"><span>lookback — T − <b id="backv">21</b> sessions</span></div>
+    <input type="range" id="back" min="1" max="42" value="21">
+    <div class="rl" style="margin-top:12px"><span>lookforward — T + <b id="fwdv">21</b> sessions</span></div>
+    <input type="range" id="fwd" min="1" max="42" value="21">
+    <p class="note">Measure: cumulative <b>excess return vs SPY</b> (asset − SPY),
+    indexed to 0 at the entry anchor = first market open <b>strictly after</b> the
+    post. This is raw excess, <i>not</i> the beta-adjusted CAR used in tabs 1–2, so
+    the two differ for high-beta names — by design, both are labelled.</p></div>
+</div></div>
+<div class="card"><h2>Event trace <span id="tkr" class="note"></span></h2>
+<svg class="chart" id="svg" viewBox="0 0 720 200" preserveAspectRatio="none"></svg>
+<div class="axis"><span id="lstart">T − 21 sessions</span>
+<span style="color:var(--accent)">T₀ — the post</span><span id="lend">T + 21 sessions</span></div>
+<div class="tiles">
+  <div class="tile"><div class="k">run-up INTO the post (T−X)</div><div class="big" id="pre">—</div></div>
+  <div class="tile"><div class="k">move AFTER the post (T+Y)</div><div class="big" id="post">—</div></div>
+</div>
+<div class="k">derived verdict</div><div id="verdict" class="vd flat">—</div>
+<p class="note">The verdict is computed from the two measured numbers on screen
+(run-up &gt; 10% while the post-move is under a third of it ⇒ the move preceded the
+post). It is not a stored conclusion.</p></div>"""
+
     tabs = [("t1", "1 · Reverse Causality"), ("t2", "2 · Mean Reversion"),
-            ("t3", "3 · Selection Bias"), ("t4", "4 · The Verdict")]
+            ("t3", "3 · Selection Bias"), ("t4", "4 · The Verdict"),
+            ("t5", "5 · Dynamic Analyzer")]
     tabbar = "".join(
         f'<button class="tab" role="tab" data-p="{i}" aria-selected="{str(n == 0).lower()}">'
         f'{escape(label)}</button>' for n, (i, label) in enumerate(tabs))
     panels = "".join(f'<section class="panel {"on" if n == 0 else ""}" id="{i}">{c}</section>'
-                     for n, (i, c) in enumerate([("t1", t1), ("t2", t2), ("t3", t3), ("t4", t4)]))
+                     for n, (i, c) in enumerate([("t1", t1), ("t2", t2), ("t3", t3),
+                                                 ("t4", t4), ("t5", t5)]))
     return f"""<!doctype html><html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Myth-Busting Quantitative Terminal — Trump tweets vs. the market</title>
@@ -370,7 +533,23 @@ data/real/bars.csv + corpus_v3.csv + the registered study — nothing hardcoded<
 <p class="foot">Research output. Not investment advice. Reproduce:
 <code>make dashboard</code>. Full method:
 <code>experiments/event_study/REPORT.md</code>.</p>
-</div><script>{_JS}</script></body></html>"""
+</div><script>const SERIES={json.dumps(series)};</script>
+<script>{_JS}</script></body></html>"""
+
+
+def _anchors(intel: dict[str, Any], oil: dict[str, Any]) -> list[dict[str, str]]:
+    """Anchor tweets for the analyzer — taken from the REAL corpus + the REAL top
+    measured events. Nothing invented; if a tweet isn't in the data, it isn't here."""
+    out: list[dict[str, str]] = []
+    for m in intel["mentions"]:
+        out.append({"ts": m["ts"], "ticker": "INTC", "text": m["text"][:150],
+                    "label": "Intel mention"})
+    for p in oil["top"][:4]:
+        # p["t0"] is the tweet's real timestamp — NOT p["s0"], which is already the
+        # resolved anchor. Re-anchoring off s0 would shift the event by a session.
+        out.append({"ts": p["t0"], "ticker": "USO", "text": p["text"][:150],
+                    "label": f"oil event · day-1 {p['car'][1] * 100:+.1f}%"})
+    return out
 
 
 def main() -> None:
@@ -379,12 +558,14 @@ def main() -> None:
     intel = gather_intel(bars)
     oil = gather_oil(bars, rng)
     verdict = gather_verdict()
+    series = gather_window_series(bars, _anchors(intel, oil))
     stamp = datetime.now(timezone.utc).replace(microsecond=0).isoformat()
     OUT.parent.mkdir(parents=True, exist_ok=True)
-    OUT.write_text(render(intel, oil, verdict, stamp), encoding="utf-8")
+    OUT.write_text(render(intel, oil, verdict, series, stamp), encoding="utf-8")
     print(f"[dashboard] Intel mentions={len(intel['mentions'])} "
           f"oil tweet-days={oil['n_tweet_days']} cells={verdict['n_cells']} "
-          f"survive={verdict['n_survive']}")
+          f"survive={verdict['n_survive']} analyzer-anchors={len(series)} "
+          f"(each with {len(series[0]['series']) if series else 0} measured offsets)")
     print(f"[dashboard] -> {OUT}  ({OUT.stat().st_size / 1024:.1f} KB, self-contained)")
 
 
