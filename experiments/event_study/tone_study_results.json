@@ -1,0 +1,50 @@
+{
+  "seed": 20260715,
+  "n_perm": 5000,
+  "n_episodes": 60,
+  "registry": [
+    "f1",
+    "f21",
+    "m21",
+    "D1"
+  ],
+  "cells": [
+    {
+      "cell": "f1",
+      "label": "F1  forward |move| t0..+1",
+      "n": 60,
+      "spearman": -0.0385,
+      "p_raw": 0.763,
+      "p_bh": 0.763,
+      "survives_bh": false
+    },
+    {
+      "cell": "f21",
+      "label": "F21 forward |move| t0..+21",
+      "n": 60,
+      "spearman": 0.0671,
+      "p_raw": 0.601,
+      "p_bh": 0.763,
+      "survives_bh": false
+    },
+    {
+      "cell": "m21",
+      "label": "M21 MIRROR |move| -21..t0",
+      "n": 60,
+      "spearman": 0.1029,
+      "p_raw": 0.439,
+      "p_bh": 0.763,
+      "survives_bh": false
+    },
+    {
+      "cell": "D1",
+      "label": "D1  angry vs calm tercile, |1d| gap",
+      "n": 40,
+      "gap_pp": -0.571,
+      "p_raw": 0.345,
+      "p_bh": 0.763,
+      "survives_bh": false
+    }
+  ],
+  "note": "Registered BEFORE scoring (module docstring). Tone weights are frozen in tone.py. A null here means anger does NOT earn a weight; M21-only signal means anger is a symptom of the move."
+}
