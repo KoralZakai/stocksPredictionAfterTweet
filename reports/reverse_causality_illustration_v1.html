@@ -1,0 +1,247 @@
+<meta charset="utf-8">
+<title>Do Trump's Posts Move Stocks? — AI Pipeline</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  :root{
+    --bg:#0A0E17; --panel:#121826; --line:#243146;
+    --fg:#E8EDF5; --mut:#8A97AD; --cy:#22D3EE; --grn:#34D399; --amb:#FBBF24;
+    --mono:ui-monospace,"SF Mono","Cascadia Code",Menlo,Consolas,monospace;
+    --sans:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0}
+  html,body{height:100%}
+  body{background:radial-gradient(760px 520px at 50% -8%,#0f2130,transparent 60%),var(--bg);
+    color:var(--fg);font-family:var(--sans);display:grid;place-items:center;overflow:hidden}
+  .stage{position:relative;width:min(94vw,94vh,700px);aspect-ratio:1/1;min-height:520px;
+    background:linear-gradient(180deg,#0c1420,#080c14);border:1px solid var(--line);border-radius:24px;
+    overflow:hidden;box-shadow:0 40px 120px -60px #000}
+  .bar{position:absolute;top:0;left:0;right:0;height:42px;display:flex;align-items:center;gap:9px;
+    padding:0 18px;border-bottom:1px solid var(--line);font-family:var(--mono);font-size:11px;
+    letter-spacing:.16em;text-transform:uppercase;color:var(--mut);z-index:5}
+  .bar .d{width:8px;height:8px;border-radius:50%;background:var(--cy);box-shadow:0 0 10px var(--cy)}
+  .bar .r{margin-left:auto;color:var(--cy)}
+
+  .scene{position:absolute;inset:42px 0 0 0;opacity:0;transition:opacity .55s;pointer-events:none}
+  .scene.on{opacity:1}
+  svg{width:100%;height:100%;display:block}
+  .prog{position:absolute;bottom:0;left:0;height:3px;background:var(--cy);width:0;z-index:6;box-shadow:0 0 12px var(--cy)}
+
+  /* generic reveal helper via class */
+  .rv{opacity:0;transition:opacity .5s,transform .5s;transform:translateY(8px)}
+  .rv.show{opacity:1;transform:none}
+  .node{opacity:.15;transition:opacity .55s}
+  .node.dim{opacity:.5}
+  .node.lit{opacity:1}
+  .edge{opacity:0;transition:opacity .5s}
+  .edge.show{opacity:1}
+  /* sparkline draw-on when parent .rv reveals */
+  .spark{stroke-dasharray:360;stroke-dashoffset:360;transition:stroke-dashoffset 1.4s ease .25s}
+  .rv.show .spark{stroke-dashoffset:0}
+  .pin{opacity:0;transition:opacity .45s .9s}
+  .rv.show .pin{opacity:1}
+</style>
+
+<div class="stage">
+  <div class="bar"><span class="d"></span> AI RESEARCH · POSTS × MARKETS <span class="r" id="counter"></span></div>
+
+  <!-- S1 hook -->
+  <section class="scene" id="s1" data-t="7000">
+    <svg viewBox="0 0 720 720">
+      <g text-anchor="middle" font-family="var(--sans)">
+        <text class="rv" id="h1a" x="360" y="290" fill="#FBBF24" font-size="50" font-weight="800">Can you make money</text>
+        <text class="rv" id="h1b" x="360" y="348" fill="#E8EDF5" font-size="50" font-weight="800">trading Trump's posts?</text>
+        <g class="rv" id="h1s"><path class="spark" d="M180 392 L230 388 L270 394 L310 384 L350 396 L400 380 L450 392 L500 378 L540 386" fill="none" stroke="#FBBF24" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></g>
+        <text class="rv" id="h1c" x="360" y="446" fill="#8A97AD" font-size="26">78,130 posts. One honest test.</text>
+      </g>
+    </svg>
+  </section>
+
+  <!-- S3 ARCHITECTURE (hero) — includes the classify funnel -->
+  <section class="scene" id="s3" data-t="14000">
+    <svg viewBox="0 0 720 720">
+      <text x="360" y="52" fill="#E8EDF5" font-size="30" font-weight="800" text-anchor="middle">The pipeline</text>
+      <defs><marker id="ah" markerWidth="9" markerHeight="9" refX="4.5" refY="8" orient="auto">
+        <path d="M0 0 L4.5 8 L9 0" fill="#3a4f64"/></marker></defs>
+      <!-- edges -->
+      <g stroke="#3a4f64" stroke-width="2.4" fill="none">
+        <path class="edge" id="e1" d="M360 182 V206" marker-end="url(#ah)"/>
+        <path class="edge" id="e2" d="M360 286 V310" marker-end="url(#ah)"/>
+        <path class="edge" id="e3" d="M360 390 V414" marker-end="url(#ah)"/>
+        <path class="edge" id="e4" d="M360 494 V518" marker-end="url(#ah)"/>
+        <path class="edge" id="e5a" d="M360 598 Q360 620 260 634" marker-end="url(#ah)"/>
+        <path class="edge" id="e5b" d="M360 598 Q360 620 470 634" marker-end="url(#ah)"/>
+      </g>
+      <!-- nodes -->
+      <g font-family="var(--sans)" text-anchor="middle">
+        <g class="node" id="n1"><rect x="80" y="110" width="560" height="72" rx="14" fill="#121826" stroke="#22D3EE" stroke-width="1.4"/>
+          <text x="360" y="146" fill="#E8EDF5" font-size="26" font-weight="700">78,130 posts → 8,317 market posts</text>
+          <text x="360" y="170" fill="#8A97AD" font-size="16">Truth Social + archive · filtered for market relevance</text></g>
+        <g class="node" id="n2"><rect x="80" y="214" width="560" height="72" rx="14" fill="#151330" stroke="#a78bfa" stroke-width="1.4"/>
+          <text x="360" y="250" fill="#a78bfa" font-size="26" font-weight="700">🧠 Llama-3.3-70B reads each one</text>
+          <text x="360" y="274" fill="#8A97AD" font-size="16">zero-shot · asset · direction · confidence</text></g>
+        <g class="node" id="n3"><rect x="80" y="318" width="560" height="72" rx="14" fill="#121826" stroke="#243146" stroke-width="1.4"/>
+          <text x="360" y="354" fill="#E8EDF5" font-size="26" font-weight="700">Serverless scoring Job</text>
+          <text x="360" y="378" fill="#8A97AD" font-size="16">walk-forward vs S&amp;P 500</text></g>
+        <g class="node" id="n4"><rect x="80" y="422" width="560" height="72" rx="14" fill="#1c1708" stroke="#FBBF24" stroke-width="1.4"/>
+          <text x="360" y="458" fill="#FBBF24" font-size="26" font-weight="700">Stress-tested, then locked</text>
+          <text x="360" y="482" fill="#8A97AD" font-size="18">null test · multiple-testing correction</text></g>
+        <g class="node" id="n5"><rect x="80" y="526" width="560" height="72" rx="14" fill="#0c1c22" stroke="#22D3EE" stroke-width="1.4"/>
+          <text x="360" y="562" fill="#22D3EE" font-size="26" font-weight="700">/predict endpoint</text>
+          <text x="360" y="586" fill="#8A97AD" font-size="18">serves the locked model · scales to zero</text></g>
+        <g class="node" id="chp">
+          <rect x="150" y="622" width="220" height="46" rx="12" fill="#0e2018" stroke="#34D399"/>
+          <text x="260" y="651" fill="#34D399" font-size="20" font-weight="800">SIGNAL</text>
+          <rect x="370" y="622" width="200" height="46" rx="12" fill="#241d0a" stroke="#FBBF24"/>
+          <text x="470" y="651" fill="#FBBF24" font-size="20" font-weight="800">ABSTAIN</text>
+        </g>
+      </g>
+      <!-- data pulse: travels the whole pipeline once everything is lit -->
+      <circle class="edge" id="pulse" r="5" fill="#22D3EE" style="filter:drop-shadow(0 0 6px #22D3EE)">
+        <animateMotion dur="2.6s" repeatCount="indefinite" path="M360 146 L360 646"/>
+      </circle>
+      <text class="rv" id="s3cap" x="360" y="700" fill="#8A97AD" font-size="19" text-anchor="middle">Same code scores the research and serves live — no train/serve gap.</text>
+    </svg>
+  </section>
+
+  <!-- S3b under the hood: model / job / endpoint -->
+  <section class="scene" id="s3b" data-t="11500">
+    <svg viewBox="0 0 720 720">
+      <text x="52" y="86" fill="#22D3EE" font-family="var(--mono)" font-size="20" letter-spacing="3">UNDER THE HOOD · SERVERLESS</text>
+      <g font-family="var(--sans)">
+        <g class="rv" id="u1"><rect x="72" y="120" width="576" height="140" rx="16" fill="#151330" stroke="#a78bfa"/>
+          <text x="100" y="162" fill="#a78bfa" font-size="25" font-weight="800">🧠 The model: Llama-3.3-70B</text>
+          <text x="100" y="198" fill="#c9d4e5" font-size="20">reads each post → asset · direction · confidence</text>
+          <text x="100" y="230" fill="#8A97AD" font-size="19">zero-shot, no training · temp 0 = repeatable</text></g>
+        <g class="rv" id="u2"><rect x="72" y="284" width="576" height="140" rx="16" fill="#121826" stroke="#243146"/>
+          <text x="100" y="326" fill="#E8EDF5" font-size="25" font-weight="800">⚙️ The batch Job</text>
+          <text x="100" y="362" fill="#c9d4e5" font-size="20">scores all 8,317 posts vs the S&amp;P 500, then shuts down</text>
+          <text x="100" y="394" fill="#8A97AD" font-size="19">pay only while it runs · cached — reruns cost $0</text></g>
+        <g class="rv" id="u3"><rect x="72" y="448" width="576" height="140" rx="16" fill="#0c1c22" stroke="#22D3EE"/>
+          <text x="100" y="490" fill="#22D3EE" font-size="25" font-weight="800">🌐 The /predict endpoint</text>
+          <text x="100" y="526" fill="#c9d4e5" font-size="20">new post in → verdict out in seconds</text>
+          <text x="100" y="558" fill="#8A97AD" font-size="19">scales to zero · serves the stress-tested model</text></g>
+      </g>
+      <text class="rv" id="u4" x="360" y="656" fill="#E8EDF5" font-size="25" font-weight="800" text-anchor="middle">One brain, two modes: research batch + live API.</text>
+    </svg>
+  </section>
+
+  <!-- S4 validation -->
+  <section class="scene" id="s4" data-t="13000">
+    <svg viewBox="0 0 720 720">
+      <text x="52" y="86" fill="#22D3EE" font-family="var(--mono)" font-size="20" letter-spacing="3">STEP 2 · TRY TO BREAK IT</text>
+      <text class="rv" id="v0" x="52" y="124" fill="#c9d4e5" font-family="var(--sans)" font-size="22" font-weight="700">Is the result real — or just luck? Three checks:</text>
+      <g font-family="var(--sans)">
+        <g class="rv" id="v1"><rect x="80" y="152" width="560" height="96" rx="14" fill="#121826" stroke="#243146"/>
+          <text x="106" y="182" fill="#22D3EE" font-size="17" font-family="var(--mono)">CHECK 1</text>
+          <text x="110" y="212" fill="#E8EDF5" font-size="25" font-weight="700">Score only days the pipeline never saw</text>
+          <text x="110" y="238" fill="#8A97AD" font-size="19">tuned on the past, judged on the future — no peeking</text></g>
+        <g class="rv" id="v2"><rect x="80" y="268" width="560" height="96" rx="14" fill="#121826" stroke="#243146"/>
+          <text x="106" y="298" fill="#22D3EE" font-size="17" font-family="var(--mono)">CHECK 2</text>
+          <text x="110" y="328" fill="#E8EDF5" font-size="25" font-weight="700">Could a random guesser score the same?</text>
+          <text x="110" y="354" fill="#8A97AD" font-size="19">shuffled the answers 1,000 times to find out</text></g>
+        <g class="rv" id="v3"><rect x="80" y="384" width="560" height="96" rx="14" fill="#121826" stroke="#243146"/>
+          <text x="106" y="414" fill="#22D3EE" font-size="17" font-family="var(--mono)">CHECK 3</text>
+          <text x="110" y="444" fill="#E8EDF5" font-size="25" font-weight="700">Ran 63 tests — so raised the bar for all</text>
+          <text x="110" y="470" fill="#8A97AD" font-size="19">try enough things, one "works" by chance — corrected for it</text></g>
+      </g>
+      <text class="rv" id="v4" x="360" y="548" fill="#FBBF24" font-size="30" font-weight="800" text-anchor="middle">Result: 0 of 63 tests survive.</text>
+      <text class="rv" id="v5" x="360" y="588" fill="#8A97AD" font-size="20" text-anchor="middle">If luck could fake it, it's not a finding.</text>
+    </svg>
+  </section>
+
+  <!-- S5 finding -->
+  <section class="scene" id="s5" data-t="13500">
+    <svg viewBox="0 0 720 720">
+      <text x="52" y="86" fill="#22D3EE" font-family="var(--mono)" font-size="20" letter-spacing="3">WHEN DOES A POST MOVE THE MARKET?</text>
+      <g font-family="var(--sans)">
+        <!-- case A: already priced in -->
+        <g class="rv" id="f1"><rect x="72" y="128" width="576" height="118" rx="16" fill="#121826" stroke="#243146"/>
+          <text x="100" y="168" fill="#8A97AD" font-size="18" font-family="var(--mono)">INFO ALREADY IN THE MARKET</text>
+          <text x="100" y="204" fill="#E8EDF5" font-size="26" font-weight="700">Priced in → barely moves</text>
+          <text x="100" y="230" fill="#8A97AD" font-size="18">the news was already known</text>
+          <line class="pin" x1="505" y1="150" x2="505" y2="228" stroke="#a78bfa" stroke-width="1.5" stroke-dasharray="4 4"/>
+          <text class="pin" x="505" y="146" fill="#a78bfa" font-size="12" text-anchor="middle" font-family="var(--mono)">post</text>
+          <path class="spark" d="M470 192 L495 190 L505 191 L525 189 L545 191 L565 189 L585 191 L610 190" fill="none" stroke="#8A97AD" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></g>
+        <!-- case B: genuine surprise -->
+        <g class="rv" id="f2"><rect x="72" y="262" width="576" height="150" rx="16" fill="#1c1708" stroke="#FBBF24"/>
+          <text x="100" y="300" fill="#FBBF24" font-size="18" font-family="var(--mono)">GENUINE SURPRISE · NEW INFO</text>
+          <text x="100" y="338" fill="#FBBF24" font-size="27" font-weight="800">Real, lasting move</text>
+          <text x="100" y="366" fill="#c9d4e5" font-size="18">the 2025 tariff shock: months of selling</text>
+          <text x="100" y="392" fill="#8A97AD" font-size="17">if an edge exists, it lives here</text>
+          <line class="pin" x1="500" y1="286" x2="500" y2="392" stroke="#FBBF24" stroke-width="1.5" stroke-dasharray="4 4"/>
+          <text class="pin" x="500" y="282" fill="#FBBF24" font-size="12" text-anchor="middle" font-family="var(--mono)">post</text>
+          <path class="spark" d="M452 312 L478 312 L500 313 L516 326 L536 344 L558 358 L582 368 L610 372" fill="none" stroke="#FBBF24" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></g>
+      </g>
+      <g font-family="var(--sans)" text-anchor="middle">
+        <text class="rv" id="f3" x="360" y="480" fill="#E8EDF5" font-size="29" font-weight="800">Trade every post → right <tspan fill="#34D399">52.2%</tspan> <tspan fill="#8A97AD" font-size="20">(n=67)</tspan></text>
+        <text class="rv" id="f3b" x="360" y="516" fill="#8A97AD" font-size="22">That's a coin flip. No edge.</text>
+        <text class="rv" id="f4" x="360" y="570" fill="#FBBF24" font-size="22" font-weight="700">Only surprises pay — and the text can't tell you which post is one.</text>
+        <text class="rv" id="f5" x="360" y="622" fill="#8A97AD" font-size="18">So the answer is no — and this pipeline proves it, honestly.</text>
+      </g>
+    </svg>
+  </section>
+
+  <!-- S6 close -->
+  <section class="scene" id="s6" data-t="5000">
+    <svg viewBox="0 0 720 720">
+      <g font-family="var(--sans)" text-anchor="middle">
+        <text class="rv" id="z1" x="360" y="300" fill="#E8EDF5" font-size="34" font-weight="800">Built serverless on Nebius.</text>
+        <text class="rv" id="z2" x="360" y="360" fill="#FBBF24" font-size="26" font-weight="700">🏆 Awesome Serverless · top ~20 of ~300</text>
+        <text class="rv" id="z3" x="360" y="430" fill="#22D3EE" font-size="30" font-weight="800">Proof over promises.</text>
+        <text class="rv" id="z4" x="360" y="500" fill="#8A97AD" font-size="18">Repo + write-up in the first comment</text>
+      </g>
+    </svg>
+  </section>
+
+  <div class="prog" id="prog"></div>
+</div>
+
+<script>
+(() => {
+  "use strict";
+  const reduce=matchMedia("(prefers-reduced-motion:reduce)").matches;
+  const scenes=[...document.querySelectorAll(".scene")];
+  const prog=document.getElementById("prog"), counter=document.getElementById("counter");
+  const NAMES=["question","pipeline","serverless","validation","finding","close"];
+  const $=id=>document.getElementById(id);
+  const show=(id,t)=>setTimeout(()=>{const e=$(id); e&&e.classList.add("show");}, reduce?0:t);
+  const cls=(id,c,t)=>setTimeout(()=>{const e=$(id); e&&(e.classList.remove("lit","dim"),e.classList.add(c));}, reduce?0:t);
+
+  function reset(sc){ sc.querySelectorAll(".rv,.edge").forEach(e=>e.classList.remove("show"));
+    sc.querySelectorAll(".node").forEach(e=>e.classList.remove("lit","dim")); }
+
+  function play(sc){
+    reset(sc);
+    if(sc.id==="s1"){ show("h1a",300); show("h1b",800); show("h1s",500); show("h1c",1800); }
+    if(sc.id==="s3"){
+      cls("n1","lit",1200);
+      show("e1",2800); cls("n1","dim",3000); cls("n2","lit",3000);
+      show("e2",4400); cls("n2","dim",4600); cls("n3","lit",4600);
+      show("e3",6000); cls("n3","dim",6200); cls("n4","lit",6200);
+      show("e4",7600); show("e4l",7600); cls("n4","dim",7800); cls("n5","lit",7800);
+      show("e5a",9200); show("e5b",9200); cls("chp","lit",9400);
+      // settle all
+      ["n1","n2","n3","n4","n5"].forEach(id=>cls(id,"lit",10600));
+      show("pulse",1400);
+      show("s3cap",10800);
+    }
+    if(sc.id==="s3b"){ show("u1",400); show("u2",3400); show("u3",6000); show("u4",8800); }
+    if(sc.id==="s4"){ show("v0",300); show("v1",1400); show("v2",3800); show("v3",6200); show("v4",9000); show("v5",10200); }
+    if(sc.id==="s5"){ show("f1",400); show("f2",2800); show("f3",5800); show("f3b",7000); show("f4",8800); show("f5",11000); }
+    if(sc.id==="s6"){ show("z1",300); show("z2",1300); show("z3",2400); show("z4",3400); }
+  }
+
+  let i=0, progRAF=0;
+  function step(){
+    scenes.forEach((s,k)=>s.classList.toggle("on",k===i));
+    counter.textContent=NAMES[i]||"";
+    play(scenes[i]);
+    const dur=+scenes[i].dataset.t;
+    const t0=performance.now(); cancelAnimationFrame(progRAF);
+    (function p(t){ const k=Math.min((t-t0)/dur,1); prog.style.width=(((i+k)/scenes.length)*100)+"%";
+      if(k<1) progRAF=requestAnimationFrame(p); })(t0);
+    setTimeout(()=>{ i=(i+1)%scenes.length; step(); }, dur);
+  }
+  step();
+})();
+</script>

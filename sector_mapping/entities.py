@@ -52,6 +52,14 @@ _INTC_BARE = (r"(?<!\bus )(?<!\bu\.s\. )(?<!american )(?<!\bthe )(?<!russia )(?<
               r"briefing|assessment|committee|leak|panel|team|warn|driven|agent|comm\b))")
 INTC_GUARDED = rf"{_INTC_BARE}(?=(?s:.)*{_INTC_CTX})|{_INTC_CTX}(?s:.)*?{_INTC_BARE}"
 
+# "apple" appears in idioms far more than the company in a political corpus:
+# "another bite at the apple", "big apple", "apple of my eye", "bad/rotten apple".
+# Precision-first (same call as INTC_GUARDED): block the idioms; the company sense
+# (Tim Cook, "Apple plant", "Apple tariffs") still fires normally.
+APPLE_GUARDED = (r"(?<!bite at the )(?<!big )(?<!the big )(?<!adam's )(?<!adams )"
+                 r"(?<!bad )(?<!rotten )\bapple\b"
+                 r"(?!\s+(?:cart\b|of (?:my|his|her|the)\s+eye))")
+
 # "Goldman" is a common politician surname (Reps. Dan/Craig Goldman), always
 # adjacent to a first name — no lookbehind saves a bare surname without a name
 # DB. Precision-first (same call as the INTC guard): require the FULL bank name.
@@ -83,7 +91,7 @@ ENTITY_TRIGGERS: dict[str, tuple[str, ...]] = {
     "JPM": (r"\bjp ?morgan\b", r"\bjamie dimon\b"), "BAC": (r"\bbank of america\b",),
     "WFC": (r"\bwells fargo\b",), "GS": (GS_GUARDED,),
     "MS": (r"\bmorgan stanley\b",),
-    "AAPL": (r"\bapple\b", r"\btim cook\b"), "MSFT": (r"\bmicrosoft\b",),
+    "AAPL": (APPLE_GUARDED, r"\btim cook\b"), "MSFT": (r"\bmicrosoft\b",),
     "NVDA": (r"\bnvidia\b",), "AMD": (r"\bamd\b",), "AVGO": (r"\bbroadcom\b",),
     "BA": (r"\bboeing\b",), "CAT": (r"\bcaterpillar\b",), "GE": (r"\bgeneral electric\b",),
     "RTX": (r"\braytheon\b",), "UNP": (r"\bunion pacific\b",),
@@ -160,6 +168,12 @@ POLICY_TRIGGERS: tuple[tuple[str, str, tuple[str, ...]], ...] = (
      "chip trade curbs", ("INTC", "MU", "TSM", "GFS", "TXN")),
     (r"\bsemiconductor (?:subsid\w+|manufacturing incentives?)\b",
      "semi subsidies", ("INTC", "MU", "TSM", "GFS", "TXN")),
+    # Space/NASA program tweets touch the aerospace-defense primes (NASA contracts,
+    # SpaceX-vs-Boeing rivalry), NOT Tesla — even when Musk is named. A "Musk"
+    # mention still links TSLA (its own trigger); this ADDS the real market names.
+    (r"\b(?:nasa|starliner|astronauts?|spacex|artemis|space station|"
+     r"moon (?:mission|landing))\b",
+     "space/NASA program", ("BA", "LMT", "NOC")),
 )
 
 TIERED_TRIGGERS: dict[str, dict[str, tuple[str, ...]]] = {

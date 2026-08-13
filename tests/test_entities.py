@@ -6,7 +6,35 @@ it manufactured a fake INTC event from "US intel secretly flagged..." posts.
 
 import pytest
 
-from sector_mapping.entities import is_direct_mention
+from sector_mapping.entities import entity_matches, is_direct_mention
+
+APPLE_THE_IDIOM = [
+    "Robert Mueller should not be given another bite at the apple",
+    "New York, the Big Apple, is a disaster under this Mayor",
+    "She is the apple of my eye",
+]
+APPLE_THE_COMPANY = [
+    "Today I opened a major Apple Manufacturing plant in Texas",
+    "Looking forward to my meeting with Tim Cook of Apple",
+    "Apple will not be given Tariff waivers",
+]
+
+
+@pytest.mark.parametrize("text", APPLE_THE_IDIOM)
+def test_apple_idiom_does_not_link_aapl(text: str) -> None:
+    assert not is_direct_mention(text, "AAPL"), f"idiom mislinked to AAPL: {text[:50]!r}"
+
+
+@pytest.mark.parametrize("text", APPLE_THE_COMPANY)
+def test_apple_the_company_still_links_aapl(text: str) -> None:
+    assert is_direct_mention(text, "AAPL"), f"real Apple mention lost: {text[:50]!r}"
+
+
+def test_space_program_links_aerospace_primes_not_only_tesla() -> None:
+    # A NASA/SpaceX tweet touches the aerospace-defense primes (BA/LMT/NOC), not
+    # just Tesla via "Musk". This is the relationship edge the sector map was missing.
+    m = entity_matches("Stranded NASA astronauts thank Musk and Trump")
+    assert {"BA", "LMT", "NOC"} <= set(m), f"space edge missing: {sorted(m)}"
 
 INTEL_NOT_THE_COMPANY = [
     "Obama Intel Chief James Clapper told NSA head...",
